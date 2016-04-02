@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="BankAPI:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/BankAPI_war</output-path>
+    <root id="archive" name="Bankaroo.war">
+      <element id="artifact" artifact-name="BankAPI:war exploded" />
+    </root>
+  </artifact>
+</component>
