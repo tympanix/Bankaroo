@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="BankAPI" />
+        <module name="Bankaroo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="BankAPI" target="1.5" />
+      <module name="Bankaroo" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
