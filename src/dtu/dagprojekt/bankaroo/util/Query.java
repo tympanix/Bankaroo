@@ -51,8 +51,7 @@ public class Query {
             writer.endObject();
         }
         writer.endArray();
-        writer.close();
-        out.flush();
+        writer.flush();
     }
 
     public StreamingOutput toJson(){
@@ -62,6 +61,7 @@ public class Query {
                 try {
                     Writer out = new BufferedWriter(new OutputStreamWriter(os));
                     writeJson(out);
+                    out.flush();
                     close();
                 } catch (SQLException e) {
                     e.printStackTrace();
