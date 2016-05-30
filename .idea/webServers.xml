@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="0691630b-b942-4a53-b3bd-d09e2190a115" name="IBM DALLAB" url="http://192.86.32.54">
+        <fileTransfer host="192.86.32.54" port="21" rootFolder="/u/wlp/usr/servers/server1/dropins/" password="dfecdfebdfeddffadf98df9adf9bdf9c" username="DTU24">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

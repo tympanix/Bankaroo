@@ -1,0 +1,23 @@
+{
+  "name": "Bankaroo",
+  "homepage": "https://github.com/Tympanix/Bankaroo",
+  "authors": [
+    "Mathias Mortensen",
+    "Simon Pileborg",
+    "Gustav Madslund"
+  ],
+  "description": "A netbank developed for IBM mainframe at DTU",
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "semantic": "^2.1.8"
+  }
+}
