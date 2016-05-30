@@ -1,12 +1,12 @@
 package dtu.dagprojekt.bankaroo.util;
 
+import dtu.dagprojekt.bankaroo.models.Customer;
+
 import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.UUID;
 
 public class DB {
 
@@ -95,21 +95,35 @@ public class DB {
         return query.toJson();
     }
 
-    public static void addNewCustomer(int cpr, String name, String password) throws SQLException, NoSuchAlgorithmException {
+    public static void addNewCustomer(int cpr, String name, String password) throws SQLException {
+        String salt = Utils.newSalt();
+        String hashPass = Utils.hashPassword(password, salt);
 
-        byte[] pass = password.getBytes(StandardCharsets.UTF_8);
-        byte[] salt = Utils.newSalt();
-        byte[] saltpass = Utils.concat(pass, salt);
+        Customer customer = new Customer(cpr, name, salt, hashPass, 1);
+        insertCustomer(customer);
+    }
 
-        String strhash = Utils.bytesToHex(salt);
-        String hashpass = Utils.bytesToHex(Utils.sha256(saltpass));
-
+    private static void insertCustomer(Customer c) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
-
-        int updated = statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Customer\" VALUES("+cpr+" ,'" + name + "', '" + strhash + "', '" + hashpass + "', '1')");
-
+        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Customer\" VALUES("+c.getCpr()+" ,'"+c.getName()+"', '"+c.getSalt()+"', '"+c.getPassword()+"', "+c.getAdvisor()+")");
         statement.close();
         DB.getConnection().commit();
     }
 
+    public static Customer login(int cpr, String password) throws SQLException {
+        Customer customer = getCustomerByCPR(cpr);
+        String hashpass = Utils.hashPassword(password, customer.getSalt());
+        if (hashpass.equals(customer.getPassword())){
+            return customer;
+        } else {
+            throw new SQLException("Incorrect username/password");
+        }
+    }
+
+    public static Customer getCustomerByCPR(int cpr) throws SQLException {
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Customer\" WHERE \"CustomerID\" = "+cpr+"");
+        ResultSet res = query.getResultSet();
+        if (!res.next()) throw new SQLException("No user");
+        return new Customer(res);
+    }
 }

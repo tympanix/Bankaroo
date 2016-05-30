@@ -6,6 +6,10 @@ import java.sql.SQLException;
 public class NewCustomerTest {
 
     public static void main(String[] args) throws SQLException, NoSuchAlgorithmException {
-        DB.addNewCustomer(110793, "Henning", "password123");
+        try{
+            DB.addNewCustomer(110793, "Bjørn", "password123");
+        } catch (Exception e){
+            System.out.println("Opps!" + e.getMessage());
+        }
     }
 }

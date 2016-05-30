@@ -11,6 +11,7 @@
           <element id="library" level="project" name="db2jcc_license_cisuz" />
           <element id="library" level="project" name="db2jcc" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.6.2" />
+          <element id="library" level="project" name="Maven: com.auth0:java-jwt:2.1.0" />
         </element>
       </element>
     </root>

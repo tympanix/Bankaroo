@@ -1,6 +1,9 @@
 package dtu.dagprojekt.bankaroo;
 
+import dtu.dagprojekt.bankaroo.models.Customer;
 import dtu.dagprojekt.bankaroo.util.DB;
+import dtu.dagprojekt.bankaroo.util.Secured;
+import dtu.dagprojekt.bankaroo.util.Token;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
@@ -19,6 +22,7 @@ public class HelloWorld extends Application {
 //    DataSource ds1;
 
     @GET
+    @Secured
     @Path("/employees")
     public Response getEmployees() throws IOException, SQLException {
         return Response.ok(DB.getEmployees(), MediaType.APPLICATION_JSON).build();
@@ -58,5 +62,11 @@ public class HelloWorld extends Application {
     @Path("/transactions")
     public Response getTransactions() throws IOException, SQLException {
         return Response.ok(DB.getTransactions(), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/login")
+    public Response login() throws IOException, SQLException {
+        return Token.tokenResponse(new Customer(111, null, null, null, 1));
     }
 }

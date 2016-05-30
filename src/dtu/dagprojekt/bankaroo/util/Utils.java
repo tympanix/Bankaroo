@@ -1,5 +1,6 @@
 package dtu.dagprojekt.bankaroo.util;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -27,16 +28,27 @@ public class Utils {
         return c;
     }
 
-    public static byte[] newSalt(){
+    public static String newSalt(){
         final Random r = new SecureRandom();
         byte[] salt = new byte[32];
         r.nextBytes(salt);
-        return salt;
+        return bytesToHex(salt);
     }
 
-    public static byte[] sha256(byte[] array) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(array);
-        return hash;
+    public static byte[] sha256(byte[] array) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return digest.digest(array);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String hashPassword(String password, String hash) {
+        byte[] salt = hash.getBytes(StandardCharsets.UTF_8);
+        byte[] pass = password.getBytes(StandardCharsets.UTF_8);
+        byte[] saltPass = Utils.concat(pass, salt);
+        return Utils.bytesToHex(Utils.sha256(saltPass));
     }
 }
