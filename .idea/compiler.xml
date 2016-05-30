@@ -23,12 +23,18 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="BankAPI" />
+      </profile>
+      <profile default="false" name="Annotation profile for Bankaroo" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="Bankaroo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="BankAPI" target="1.5" />
-      <module name="Bankaroo" target="1.5" />
+      <module name="Bankaroo" target="1.6" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -6,10 +6,7 @@
         <element id="directory" name="classes">
           <element id="module-output" name="Bankaroo" />
         </element>
-        <element id="directory" name="lib">
-          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-bundle:1.18.3" />
-          <element id="library" level="project" name="Maven: javax.ws.rs:jsr311-api:1.1.1" />
-        </element>
+        <element id="directory" name="lib" />
       </element>
       <element id="javaee-facet-resources" facet="Bankaroo/web/Web" />
     </root>
