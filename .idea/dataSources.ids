@@ -1362,12 +1362,12 @@
     <table name="Customer" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="CustomerID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="CustomerName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
-      <column name="Salt" sqlType="CHAR" precision="36" scale="0" nullable="false" jdbcType="1"/>
-      <column name="Password" sqlType="CHAR" precision="36" scale="0" nullable="false" jdbcType="1"/>
+      <column name="Salt" sqlType="CHAR" precision="64" scale="0" nullable="false" jdbcType="1"/>
+      <column name="Password" sqlType="CHAR" precision="64" scale="0" nullable="false" jdbcType="1"/>
       <column name="EmployeeID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key columns="CustomerID"/>
       <foreign-key name="CustomerGotEmployee" columns="EmployeeID" ref-table="Employee" ref-schema="DTUGRP09" ref-catalog="" ref-columns="EmployeeID" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="Customer_#_P05" unique="true" columns="CustomerID"/>
+      <index name="Customer_#_U32" unique="true" columns="CustomerID"/>
       <index name="Customer_PK" unique="true" columns="CustomerID"/>
     </table>
     <table name="Employee" schema="DTUGRP09" catalog="" type="TABLE">
