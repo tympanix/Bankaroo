@@ -20,7 +20,6 @@ public class AccountTest {
     public void A_init() {
         try {
             DB.deleteAccount(ID);
-            CustomerTest.B_createCustomer();
         } catch (SQLException e) {
             e.printStackTrace();
         }

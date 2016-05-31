@@ -17,11 +17,12 @@ import java.util.Map;
 public class Token {
 
     private final static String SECRET = "YMETTJyBLY2WYX8kEtlNKHogUK78A0qktJuPl3MxuMFn7pwN4IYYo8luZf5fmVbc";
+    private final static int EXPIRE = 3600;
 
     public static Response tokenResponse(Customer customer) {
         JWTSigner signer = new JWTSigner(SECRET);
         JWTSigner.Options options = new JWTSigner.Options();
-        options.setExpirySeconds(3600);
+        options.setExpirySeconds(EXPIRE);
 
         HashMap<String, Object> payload = new HashMap<String, Object>();
         payload.put("id", customer.getCpr());

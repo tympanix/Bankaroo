@@ -10,6 +10,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.util.Map;
 
 @Secured
 @Provider
@@ -32,7 +33,8 @@ public class Authentication implements ContainerRequestFilter {
         String token = authorizationHeader.substring("Bearer".length()).trim();
 
         try {
-            Token.authenticate(token);
+            Map<String, Object> map = Token.authenticate(token);
+            requestContext.setSecurityContext(new AuthContext((Integer) map.get("id")));
         } catch (Exception e) {
             requestContext.abortWith(
                     Response.status(Response.Status.UNAUTHORIZED).build());

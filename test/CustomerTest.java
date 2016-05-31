@@ -19,7 +19,7 @@ public class CustomerTest {
     private static final int ADVISOR = 1;
 
     @Test
-    public static void A_init(){
+    public void A_init(){
         try {
             DB.deleteCustomer(CPR);
         } catch (SQLException e) {
@@ -28,20 +28,20 @@ public class CustomerTest {
     }
 
     @Test
-    public static void B_createCustomer() throws SQLException {
+    public void B_createCustomer() throws SQLException {
         Customer customer = new Customer(CPR, NAME, PASSWORD, ADVISOR);
         DB.insertCustomer(customer);
     }
 
     @Test
-    public static void C_findCustomer() throws SQLException {
+    public void C_findCustomer() throws SQLException {
         Customer customer = DB.getCustomerByCPR(CPR);
         assertEquals(customer.getCpr(), CPR);
         assertEquals(customer.getName(), NAME);
     }
 
     @Test
-    public static void D_loginCustomer() throws SQLException {
+    public void D_loginCustomer() throws SQLException {
         Credentials credentials = new Credentials(CPR, PASSWORD);
         Customer customer = DB.login(credentials);
         assertEquals(customer.getCpr(), CPR);
@@ -49,19 +49,19 @@ public class CustomerTest {
     }
 
     @Test(expected=SQLException.class)
-    public static void E_cantLogin() throws SQLException {
+    public void E_cantLogin() throws SQLException {
         Credentials credentials = new Credentials(CPR, "wrong_password");
         Customer customer = DB.login(credentials);
         assertNull(customer);
     }
 
     @Test
-    public static void E_removeCustomer() throws SQLException {
+    public void E_removeCustomer() throws SQLException {
         DB.deleteCustomer(CPR);
     }
 
     @Test(expected=SQLException.class)
-    public static void F_cannotFindCustomer() throws SQLException {
+    public void F_cannotFindCustomer() throws SQLException {
         DB.getCustomerByCPR(CPR);
     }
 }

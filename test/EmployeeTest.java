@@ -17,8 +17,12 @@ public class EmployeeTest {
     private static final String PASSWORD = "don123";
 
     @Test
-    public void A_init() throws SQLException {
-
+    public void A_init() {
+        try {
+            DB.deleteEmployee(ID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

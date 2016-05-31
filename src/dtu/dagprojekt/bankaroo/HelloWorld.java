@@ -9,10 +9,7 @@ import dtu.dagprojekt.bankaroo.util.Secured;
 import dtu.dagprojekt.bankaroo.util.Token;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -29,7 +26,9 @@ public class HelloWorld extends Application {
     @GET
     @Secured
     @Path("/employees")
-    public Response getEmployees() throws IOException, SQLException {
+    public Response getEmployees(@Context SecurityContext s) throws IOException, SQLException {
+        String id = s.getUserPrincipal().getName();
+        System.out.println("ID: " + id);
         return Response.ok(DB.getEmployees(), MediaType.APPLICATION_JSON).build();
     }
 
