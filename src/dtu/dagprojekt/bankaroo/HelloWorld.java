@@ -1,6 +1,7 @@
 package dtu.dagprojekt.bankaroo;
 
 import com.sun.xml.internal.ws.client.ResponseContext;
+import dtu.dagprojekt.bankaroo.models.Account;
 import dtu.dagprojekt.bankaroo.models.Customer;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 import dtu.dagprojekt.bankaroo.util.DB;
@@ -72,12 +73,25 @@ public class HelloWorld extends Application {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(Credentials credentials) throws IOException, SQLException {
+    public Response login(Credentials credentials) {
         try {
-            Customer customer = DB.login(credentials.getCpr(), credentials.getPassword());
+            Customer customer = DB.login(credentials);
             return Token.tokenResponse(customer);
         } catch (Exception e){
             return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+    }
+
+    @POST
+    @Path("/new/account")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response newAccount(Account account) {
+        try {
+            DB.insertAccount(account);
+            return Response.ok("Account creation completed!").build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
     }
 }

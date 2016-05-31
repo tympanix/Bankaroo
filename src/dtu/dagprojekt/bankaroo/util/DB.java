@@ -1,11 +1,12 @@
 package dtu.dagprojekt.bankaroo.util;
 
+import dtu.dagprojekt.bankaroo.models.Account;
 import dtu.dagprojekt.bankaroo.models.Customer;
+import dtu.dagprojekt.bankaroo.models.Employee;
+import dtu.dagprojekt.bankaroo.param.Credentials;
 
 import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class DB {
@@ -95,29 +96,69 @@ public class DB {
         return query.toJson();
     }
 
-    public static void addNewCustomer(int cpr, String name, String password) throws SQLException {
-        String salt = Utils.newSalt();
-        String hashPass = Utils.hashPassword(password, salt);
-
-        Customer customer = new Customer(cpr, name, salt, hashPass, 1);
-        insertCustomer(customer);
-    }
-
-    private static void insertCustomer(Customer c) throws SQLException {
+    public static void insertCustomer(Customer c) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Customer\" VALUES("+c.getCpr()+" ,'"+c.getName()+"', '"+c.getSalt()+"', '"+c.getPassword()+"', "+c.getAdvisor()+")");
+        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Customer\" VALUES("+c.getCpr()+" ,'"+c.getName()+"', '"+c.getSalt()+"', '"+c.getHashPassword()+"', "+c.getAdvisor()+")");
         statement.close();
         DB.getConnection().commit();
     }
 
-    public static Customer login(int cpr, String password) throws SQLException {
-        Customer customer = getCustomerByCPR(cpr);
-        String hashpass = Utils.hashPassword(password, customer.getSalt());
-        if (hashpass.equals(customer.getPassword())){
+    public static void insertAccount(Account a) throws SQLException {
+        Statement statement = DB.getConnection().createStatement();
+        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Account\" VALUES("+a.getId()+" ,'"+a.getName()+"', '"+a.getBalance()+"', '"+a.getCustomer()+"', '"+a.getAccountType()+"', '"+a.getCurrency()+"')");
+        statement.close();
+        DB.getConnection().commit();
+    }
+
+    public static void insertEmployee(Employee e) throws SQLException {
+        Statement statement = DB.getConnection().createStatement();
+        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Employee\" VALUES("+e.getId()+" ,'"+e.getName()+"', '"+e.getSalt()+"', '"+e.getHashPassword()+"')");
+        statement.close();
+        DB.getConnection().commit();
+    }
+
+    public static Customer login(Credentials c) throws SQLException {
+        Customer customer = getCustomerByCPR(c.getId());
+        String hashPass = Utils.hashPassword(c.getPassword(), customer.getSalt());
+        if (hashPass.equals(customer.getHashPassword())){
             return customer;
         } else {
             throw new SQLException("Incorrect username/password");
         }
+    }
+
+    public static void deleteCustomer(int cpr) throws SQLException {
+        Statement statement = DB.getConnection().createStatement();
+        statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Customer\" WHERE \"CustomerID\" = '"+cpr+"'");
+        statement.close();
+        DB.getConnection().commit();
+    }
+
+    public static void deleteCustomer(Customer c) throws SQLException {
+        deleteCustomer(c.getCpr());
+    }
+
+    public static void deleteEmployee(int id) throws SQLException {
+        Statement statement = DB.getConnection().createStatement();
+        statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Employee\" WHERE \"EmployeeID\" = '"+id+"'");
+        statement.close();
+        DB.getConnection().commit();
+    }
+
+    public static void deleteEmployee(Employee e) throws SQLException {
+        deleteEmployee(e.getId());
+    }
+
+    public static void deleteAccount(int id) throws SQLException {
+        Statement statement = DB.getConnection().createStatement();
+        statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Account\" WHERE \"AccountID\" = '"+id+"'");
+        statement.close();
+        DB.getConnection().commit();
+    }
+
+    public static void deleteAccount(Account a) throws SQLException {
+        int id = Integer.parseInt(a.getId());
+        deleteAccount(id);
     }
 
     public static Customer getCustomerByCPR(int cpr) throws SQLException {
