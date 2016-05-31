@@ -1,14 +1,15 @@
 package dtu.dagprojekt.bankaroo;
 
+import com.sun.xml.internal.ws.client.ResponseContext;
 import dtu.dagprojekt.bankaroo.models.Customer;
+import dtu.dagprojekt.bankaroo.param.Credentials;
 import dtu.dagprojekt.bankaroo.util.DB;
 import dtu.dagprojekt.bankaroo.util.Secured;
 import dtu.dagprojekt.bankaroo.util.Token;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -17,6 +18,9 @@ import java.sql.SQLException;
 @ApplicationPath("api")
 @Path("/")
 public class HelloWorld extends Application {
+
+    @Context
+    ResponseContext context;
 
 //    @Resource(name = "jdbc/exampleDS")
 //    DataSource ds1;
@@ -64,9 +68,16 @@ public class HelloWorld extends Application {
         return Response.ok(DB.getTransactions(), MediaType.APPLICATION_JSON).build();
     }
 
-    @GET
+    @POST
     @Path("/login")
-    public Response login() throws IOException, SQLException {
-        return Token.tokenResponse(new Customer(111, null, null, null, 1));
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(Credentials credentials) throws IOException, SQLException {
+        try {
+            Customer customer = DB.login(credentials.getCpr(), credentials.getPassword());
+            return Token.tokenResponse(customer);
+        } catch (Exception e){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
     }
 }

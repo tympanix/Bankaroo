@@ -38,5 +38,4 @@ public class Authentication implements ContainerRequestFilter {
                     Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }
-
 }
