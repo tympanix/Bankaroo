@@ -9,12 +9,13 @@
   <!-- Site Properties -->
   <title>Bankaroo</title>
 
+  <!-- build:css css/semantic.css -->
   <link rel="stylesheet" href="bower_components/semantic/dist/semantic.min.css">
-  <link rel="stylesheet" href="css/index.css">
+  <!-- endbuild -->
 
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="bower_components/semantic/dist/semantic.min.js"></script>
-  <script src="js/menu.js"></script>
+  <!-- build:css css/index.css -->
+  <link rel="stylesheet" href="css/index.css">
+  <!-- endbuild -->
 
 </head>
 <body>
@@ -75,7 +76,6 @@
       <h2 class="ui text inverted">A bank your can trust.</h2>
       <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div>
     </div>
-
   </div>
 
 
@@ -138,6 +138,15 @@
     </div>
   </div>
 </div>
+
+<!-- build:js scripts/vendor.js -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/semantic/dist/semantic.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:js scripts/menu.js -->
+<script src="js/menu.js"></script>
+<!-- endbuild -->
 
 </body>
 

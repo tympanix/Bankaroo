@@ -172,4 +172,18 @@ public class DB {
         if (!res.next()) throw new SQLException("No user");
         return new Customer(res);
     }
+
+    public static StreamingOutput getHistory(int id) throws SQLException, IOException {
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"HistoryView\" WHERE \"CustomerID\" = "+id+"");
+        return query.toJson();
+    }
+
+    public static void transaction(double amount, String currency, int accountFrom, int accountTo, String messageFrom, String messageTo) throws SQLException {
+        Statement statement = DB.getConnection().createStatement();
+//        statement.execute("SET SCHEMA DTUGRP09");
+//        statement.execute("SET CURRENT SQLID = 'DTUGRP09'");
+        statement.execute("CALL TRANSACTION("+amount+", '"+currency+"', "+accountFrom+", "+accountTo+", '"+messageFrom+"', '"+messageTo+"')");
+        statement.close();
+        DB.getConnection().commit();
+    }
 }

@@ -9,8 +9,13 @@
     <!-- Site Properties -->
     <title>Bankaroo</title>
 
+    <!-- build:css css/semantic.css -->
     <link rel="stylesheet" href="bower_components/semantic/dist/semantic.min.css">
+    <!-- endbuild -->
+
+    <!-- build:css css/bank.css -->
     <link rel="stylesheet" href="css/bank.css">
+    <!-- endbuild -->
 
 </head>
 <body>
@@ -33,17 +38,19 @@
 
 </div>
 
-
 <!-- Scripts -->
+<!-- build:js scripts/vendor.js -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/semantic/dist/semantic.min.js"></script>
+<!-- endbuild -->
 
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-resource/angular-resource.js"></script>
-<script src="bower_components/angular-route/angular-route.js"></script>
-
+<!-- build:js scripts/bank.js -->
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-resource/angular-resource.min.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="app.js"></script>
 <script src="controllers/detailsController.js"></script>
+<!-- endbuild -->
 
 </body>
 

@@ -28,7 +28,7 @@ public class UserEndpoints {
     @Secured
     @Path("/history")
     public Response getHistory(@Context AuthContext s) throws IOException, SQLException {
-        return Response.ok(DB.getAccounts(s.getId()), MediaType.APPLICATION_JSON).build();
+        return Response.ok(DB.getHistory(s.getId()), MediaType.APPLICATION_JSON).build();
     }
 
 }
