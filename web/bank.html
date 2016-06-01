@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="bankaroo">
+<head>
+    <!-- Standard Meta -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Site Properties -->
+    <title>Bankaroo</title>
+
+    <link rel="stylesheet" href="bower_components/semantic/dist/semantic.min.css">
+    <link rel="stylesheet" href="css/bank.css">
+
+</head>
+<body>
+
+
+<!-- Page Contents -->
+<div class="ui vertical masthead center aligned segment">
+    <div class="ui container">
+        <div class="ui large secondary menu">
+            <a class="item active">Accounts</a>
+            <a class="item">Settings</a>
+            <a class="item">About</a>
+            <div class="right item">
+                <a class="ui button" href="login.html">Log out</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ui container main" ng-view>
+
+</div>
+
+
+<!-- Scripts -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/semantic/dist/semantic.min.js"></script>
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+
+<script src="app.js"></script>
+<script src="controllers/detailsController.js"></script>
+
+</body>
+
+</html>

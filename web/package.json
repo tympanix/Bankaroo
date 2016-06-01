@@ -1,0 +1,29 @@
+{
+  "name": "bankaroo",
+  "version": "1.0.0",
+  "description": "A simpel web bank running on IBM mainframe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tympanix/Bankaroo.git"
+  },
+  "keywords": [
+    "bankaroo",
+    "DTU",
+    "IBM"
+  ],
+  "author": "Mathias Mortensen, Simon Pileborg, Gustav Madslund",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tympanix/Bankaroo/issues"
+  },
+  "homepage": "https://github.com/Tympanix/Bankaroo#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^4.0.0",
+    "gulp-watch": "^4.3.6"
+  }
+}

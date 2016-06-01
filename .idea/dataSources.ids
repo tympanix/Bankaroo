@@ -1342,48 +1342,48 @@
       <column name="AccountID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="AccountName" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
       <column name="Balance" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
-      <column name="CustomerID" sqlType="DECIMAL" precision="10" scale="0" nullable="false" jdbcType="3"/>
+      <column name="CustomerID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="AccountTypeName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <column name="Currency" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
       <primary-key columns="AccountID"/>
       <foreign-key name="AccountIsType" columns="AccountTypeName" ref-table="AccountType" ref-schema="DTUGRP09" ref-catalog="" ref-columns="AccountTypeName" update-rule="3" delete-rule="0" deferrability="2"/>
       <foreign-key name="CustomerAccount" columns="CustomerID" ref-table="Customer" ref-schema="DTUGRP09" ref-catalog="" ref-columns="CustomerID" update-rule="3" delete-rule="0" deferrability="2"/>
       <foreign-key name="AccountExchange" columns="Currency" ref-table="Exchange" ref-schema="DTUGRP09" ref-catalog="" ref-columns="Currency" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="AccountA_#_IYY" unique="true" columns="AccountID"/>
+      <index name="AccountA_#_7XB" unique="true" columns="AccountID"/>
       <index name="Account_PK" unique="true" columns="AccountID"/>
     </table>
     <table name="AccountType" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="AccountTypeName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <column name="Interest" sqlType="DOUBLE" precision="53" scale="0" nullable="false" jdbcType="8"/>
       <primary-key columns="AccountTypeName"/>
-      <index name="AccountT_#_ZMC" unique="true" columns="AccountTypeName"/>
+      <index name="AccountT_#_3DF" unique="true" columns="AccountTypeName"/>
       <index name="AccountType_PK" unique="true" columns="AccountTypeName"/>
     </table>
     <table name="Customer" schema="DTUGRP09" catalog="" type="TABLE">
-      <column name="CustomerID" sqlType="DECIMAL" precision="10" scale="0" nullable="false" jdbcType="3"/>
+      <column name="CustomerID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4" def="SURFTlRJVFkgR0VORVJBVEVEIEJZIERFRkFVTFQ="/>
       <column name="CustomerName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <column name="Salt" sqlType="CHAR" precision="64" scale="0" nullable="false" jdbcType="1"/>
       <column name="Password" sqlType="CHAR" precision="64" scale="0" nullable="false" jdbcType="1"/>
       <column name="EmployeeID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key columns="CustomerID"/>
       <foreign-key name="CustomerGotEmployee" columns="EmployeeID" ref-table="Employee" ref-schema="DTUGRP09" ref-catalog="" ref-columns="EmployeeID" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="Customer_#_VYG" unique="true" columns="CustomerID"/>
+      <index name="Customer_#_ZXK" unique="true" columns="CustomerID"/>
       <index name="Customer_PK" unique="true" columns="CustomerID"/>
     </table>
     <table name="Employee" schema="DTUGRP09" catalog="" type="TABLE">
-      <column name="EmployeeID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="EmployeeID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4" def="SURFTlRJVFkgR0VORVJBVEVEIEJZIERFRkFVTFQ="/>
       <column name="EmployeeName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
-      <column name="Salt" sqlType="CHAR" precision="36" scale="0" nullable="false" jdbcType="1"/>
-      <column name="Password" sqlType="CHAR" precision="36" scale="0" nullable="false" jdbcType="1"/>
+      <column name="Salt" sqlType="CHAR" precision="64" scale="0" nullable="false" jdbcType="1"/>
+      <column name="Password" sqlType="CHAR" precision="64" scale="0" nullable="false" jdbcType="1"/>
       <primary-key columns="EmployeeID"/>
       <index name="Empleyee_PK" unique="true" columns="EmployeeID"/>
-      <index name="Employee_#_FYK" unique="true" columns="EmployeeID"/>
+      <index name="Employee_#_Y6P" unique="true" columns="EmployeeID"/>
     </table>
     <table name="Exchange" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="Currency" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
       <column name="Rate" sqlType="DOUBLE" precision="53" scale="0" nullable="false" jdbcType="8"/>
       <primary-key columns="Currency"/>
-      <index name="Exchange_#_5KO" unique="true" columns="Currency"/>
+      <index name="Exchange_#_FKT" unique="true" columns="Currency"/>
       <index name="Exchange_PK" unique="true" columns="Currency"/>
     </table>
     <table name="History" schema="DTUGRP09" catalog="" type="TABLE">
@@ -1395,21 +1395,8 @@
       <column name="Message" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
       <primary-key columns="TransactionID,AccountID"/>
       <foreign-key name="AccountHistory" columns="AccountID" ref-table="Account" ref-schema="DTUGRP09" ref-catalog="" ref-columns="AccountID" update-rule="3" delete-rule="0" deferrability="2"/>
-      <foreign-key name="HistoryTransaction" columns="TransactionID" ref-table="Transaction" ref-schema="DTUGRP09" ref-catalog="" ref-columns="TransactionID" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="HistoryA_#_MXS" unique="true" columns="TransactionID,AccountID"/>
+      <index name="HistoryA_#_8EC" unique="true" columns="TransactionID,AccountID"/>
       <index name="History_PK" unique="true" columns="TransactionID,AccountID"/>
-    </table>
-    <table name="Transaction" schema="DTUGRP09" catalog="" type="TABLE">
-      <column name="TransactionID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4" def="SURFTlRJVFkgR0VORVJBVEVEIEJZIERFRkFVTFQ="/>
-      <column name="TransactionTime" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
-      <column name="AccountIDFrom" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="AccountIDTo" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="AmountForeign" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
-      <column name="Currency" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
-      <primary-key columns="TransactionID"/>
-      <foreign-key name="TransactionExchange" columns="Currency" ref-table="Exchange" ref-schema="DTUGRP09" ref-catalog="" ref-columns="Currency" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="Transact_#_62W" unique="true" columns="TransactionID"/>
-      <index name="Transaction_PK" unique="true" columns="TransactionID"/>
     </table>
     <table name="SAMPLE" schema="DTUGRP10" catalog="" type="TABLE">
       <column name="STUDENT_NUMBER" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
@@ -5297,13 +5284,12 @@
     </procedure>
     <procedure name="LOGTRANSACTION" schema="DTUGRP09" catalog="" type="1">
       <prototype>
-        <parameter name="VTRANSACTIONID" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="1"/>
-        <parameter name="VACCOUNTIDFROM" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="2"/>
-        <parameter name="VACCOUNTIDTO" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="3"/>
-        <parameter name="VTRANSACTIONMESSAGEFROM" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" type="1" index="4"/>
-        <parameter name="VTRANSACTIONMESSAGETO" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" type="1" index="5"/>
-        <parameter name="VAMOUNTFOREIGN" sqlType="DECIMAL" precision="12" scale="4" nullable="true" jdbcType="3" type="1" index="6"/>
-        <parameter name="VCURRENCY" sqlType="CHAR" precision="3" scale="0" nullable="true" jdbcType="1" type="1" index="7"/>
+        <parameter name="VAMOUNTFOREIGN" sqlType="DECIMAL" precision="12" scale="4" nullable="true" jdbcType="3" type="1" index="1"/>
+        <parameter name="VCURRENCY" sqlType="CHAR" precision="3" scale="0" nullable="true" jdbcType="1" type="1" index="2"/>
+        <parameter name="VACCOUNTIDFROM" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="3"/>
+        <parameter name="VACCOUNTIDTO" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="4"/>
+        <parameter name="VTRANSACTIONMESSAGEFROM" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" type="1" index="5"/>
+        <parameter name="VTRANSACTIONMESSAGETO" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" type="1" index="6"/>
       </prototype>
     </procedure>
     <procedure name="DB2CON_LIC" schema="SYSIBM" catalog="" type="1">

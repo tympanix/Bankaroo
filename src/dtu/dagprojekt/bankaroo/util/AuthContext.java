@@ -2,13 +2,18 @@ package dtu.dagprojekt.bankaroo.util;
 
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
+import java.util.Map;
 
 public class AuthContext implements SecurityContext {
 
-    private int id;
+    private Map<String, Object> map;
 
-    public AuthContext(int id){
-        this.id = id;
+    public AuthContext(Map<String, Object> map){
+        this.map = map;
+    }
+
+    public int getId(){
+        return Integer.parseInt(map.get("id").toString());
     }
 
     @Override
@@ -16,7 +21,7 @@ public class AuthContext implements SecurityContext {
         return new Principal() {
             @Override
             public String getName() {
-                return String.valueOf(id);
+                return String.valueOf(map.get("id"));
             }
         };
     }

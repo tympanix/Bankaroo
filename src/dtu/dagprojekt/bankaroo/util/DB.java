@@ -96,6 +96,11 @@ public class DB {
         return query.toJson();
     }
 
+    public static StreamingOutput getAccounts(int id) throws SQLException {
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Account\" WHERE \"CustomerID\" = "+id+"");
+        return query.toJson();
+    }
+
     public static void insertCustomer(Customer c) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
         statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Customer\" VALUES("+c.getCpr()+" ,'"+c.getName()+"', '"+c.getSalt()+"', '"+c.getHashPassword()+"', "+c.getAdvisor()+")");
