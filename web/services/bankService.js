@@ -1,5 +1,10 @@
 angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'localStorageService', function ($resource, $http, localStorageService) {
 
+    var resource = {
+        accounts: null
+    };
+
+    this.accounts = resource.accounts;
 
     this.getAccounts = function () {
         console.log("Token:", getToken());
@@ -54,12 +59,12 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'local
                 'Authorization': getToken()
             }
         };
-
         return $http(req)
     }
 
     function getToken(){
         return localStorageService.get('token');
     }
+
 
 }]);

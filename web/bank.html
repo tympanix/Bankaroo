@@ -24,9 +24,9 @@
 <div class="ui vertical masthead center aligned segment">
     <div class="ui container">
         <div class="ui large secondary menu">
-            <a class="item active">Accounts</a>
+            <a class="item active" href="#/">Accounts</a>
             <a class="item">Settings</a>
-            <a class="item">About</a>
+            <a class="item" href="#/admin">Administration</a>
             <div class="right item">
                 <a class="ui button" href="login.html">Log out</a>
             </div>
@@ -43,23 +43,27 @@
 <script src="bower_components/semantic/dist/semantic.min.js"></script>
 <!-- endbuild -->
 
-<!-- build:js scripts/bank.js -->
+<!-- build:js scripts/angular.js -->
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/angular-resource/angular-resource.min.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
+<!-- endbuild -->
 
+<!-- build:js scripts/bank.js -->
 <script src="app.js"></script>
 
 <script src="controllers/detailsController.js"></script>
 <script src="controllers/loginController.js"></script>
 <script src="controllers/mainController.js"></script>
 <script src="controllers/accountController.js"></script>
+<script src="controllers/adminController.js"></script>
 
 <script src="filters/currencyFilter.js"></script>
 
 <script src="services/bankService.js"></script>
 <script src="services/loginService.js"></script>
+<script src="services/adminService.js"></script>
 <!-- endbuild -->
 
 </body>

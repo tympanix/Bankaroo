@@ -1,4 +1,9 @@
-angular.module('bankaroo').controller("accountController", ["$scope", "$http", "$window", "bankService", function($scope, $http, $window, bankService){
+angular.module('bankaroo').controller("accountController", ["$scope", "$http", "$window", "bankService", function ($scope, $http, $window, bankService) {
+
+    // Form parameters
+    $scope.accountName = null;
+    $scope.accountType = null;
+    $scope.accountCurrency = null;
 
     // Get exchanges
     bankService.getExchange()
@@ -12,7 +17,7 @@ angular.module('bankaroo').controller("accountController", ["$scope", "$http", "
     // Get account types
     bankService.getAccountTypes()
         .then(function (data) {
-           $scope.accountTypes = data.data;
+            $scope.accountTypes = data.data;
         })
         .catch(function (err) {
             console.log("Error", err)
@@ -30,5 +35,6 @@ angular.module('bankaroo').controller("accountController", ["$scope", "$http", "
             .catch(function (err) {
                 console.log("Error new account", err)
             })
-    }
+    };
+
 }]);

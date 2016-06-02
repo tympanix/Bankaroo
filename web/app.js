@@ -17,6 +17,14 @@ bankaroo.config(function($routeProvider){
             templateUrl: "views/account.html",
             controller: "accountController"
         })
+        .when("/admin", {
+            templateUrl: "views/admin.html",
+            controller: "adminController"
+        })
+        .when("/admin/:id", {
+            templateUrl: "views/adminsettings.html",
+            controller: "adminController"
+        })
 });
 
 bankaroo.config(function (localStorageServiceProvider) {

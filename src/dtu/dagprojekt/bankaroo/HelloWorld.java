@@ -34,8 +34,8 @@ public class HelloWorld extends Application {
 
     @GET
     @Path("/customers")
-    public Response getCustomers() throws IOException, SQLException {
-        return Response.ok(DB.getCustomers(), MediaType.APPLICATION_JSON).build();
+    public Response getCustomers(@QueryParam("name") String name) throws IOException, SQLException {
+        return Response.ok(DB.getCustomers(name), MediaType.APPLICATION_JSON).build();
     }
 
     @GET

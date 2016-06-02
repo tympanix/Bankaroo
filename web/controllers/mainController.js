@@ -11,4 +11,5 @@ angular.module('bankaroo').controller("mainController", ["$scope", "$http", "ban
     };
 
     $scope.getAccounts();
+
 }]);

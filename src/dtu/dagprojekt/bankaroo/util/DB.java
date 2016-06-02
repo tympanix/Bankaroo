@@ -71,8 +71,8 @@ public class DB {
         return query.toJson();
     }
 
-    public static StreamingOutput getCustomers() throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Customer\"");
+    public static StreamingOutput getCustomers(String name) throws SQLException, IOException {
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Customer\" WHERE UPPER(\"CustomerName\") LIKE UPPER('%"+name+"%')");
         return query.toJson();
     }
 

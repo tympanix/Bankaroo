@@ -17,7 +17,7 @@ import java.util.Map;
 public class Token {
 
     private final static String SECRET = "YMETTJyBLY2WYX8kEtlNKHogUK78A0qktJuPl3MxuMFn7pwN4IYYo8luZf5fmVbc";
-    private final static int EXPIRE = 3600;
+    private final static int EXPIRE = 3600*24;
 
     public static Response tokenResponse(Customer customer) {
         JWTSigner signer = new JWTSigner(SECRET);
@@ -32,7 +32,6 @@ public class Token {
     }
 
     public static Map<String, Object> authenticate(String token) throws SignatureException, NoSuchAlgorithmException, JWTVerifyException, InvalidKeyException, IOException {
-        System.out.println(token);
         return new JWTVerifier(SECRET).verify(token);
     }
 }
