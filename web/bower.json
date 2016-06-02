@@ -21,6 +21,7 @@
     "semantic": "^2.1.8",
     "angular-route": "^1.5.6",
     "angular-resource": "^1.5.6",
-    "angular": "^1.5.6"
+    "angular": "^1.5.6",
+    "angular-local-storage": "^0.2.7"
   }
 }

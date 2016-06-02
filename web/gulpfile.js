@@ -8,7 +8,7 @@ const imagemin = require('gulp-imagemin');
 const watch = require('gulp-watch');
 const runSequence = require('run-sequence');
 
-var proxy = proxyMiddleware('/api', {target: 'http://localhost:9080/Bank'});
+var proxy = proxyMiddleware('/api', {target: 'http://localhost:9080/BankWar'});
 
 gulp.task('serve', function() {
     browsersync.init({
@@ -49,7 +49,7 @@ gulp.task('build', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['./*.html', 'css/*.css', '*.js'], ['build:concat']);
+    gulp.watch(['./*.html', 'css/*.css', '*.js', './services/*.js', './controllers/*.js'], ['build:concat']);
     gulp.watch(['./views/*.html'], ['build:views']);
 });
 

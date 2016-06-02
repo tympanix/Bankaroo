@@ -173,17 +173,16 @@ public class DB {
         return new Customer(res);
     }
 
-    public static StreamingOutput getHistory(int id) throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"HistoryView\" WHERE \"CustomerID\" = "+id+"");
+    public static StreamingOutput getHistory(int accountId) throws SQLException, IOException {
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"HistoryView\" WHERE \"AccountID\" = "+accountId+"");
         return query.toJson();
     }
 
     public static void transaction(double amount, String currency, int accountFrom, int accountTo, String messageFrom, String messageTo) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
-//        statement.execute("SET SCHEMA DTUGRP09");
-//        statement.execute("SET CURRENT SQLID = 'DTUGRP09'");
         statement.execute("CALL TRANSACTION("+amount+", '"+currency+"', "+accountFrom+", "+accountTo+", '"+messageFrom+"', '"+messageTo+"')");
         statement.close();
         DB.getConnection().commit();
     }
+
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="bankaroo">
 <head>
     <!-- Standard Meta -->
     <meta charset="utf-8"/>
@@ -9,11 +9,9 @@
     <!-- Site Properties -->
     <title>Login Bankaroo</title>
 
+    <!-- build:css css/semantic.css -->
     <link rel="stylesheet" href="bower_components/semantic/dist/semantic.min.css">
-
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/semantic/dist/semantic.min.js"></script>
-
+    <!-- endbuild -->
 
     <style type="text/css">
         body {
@@ -32,46 +30,8 @@
             max-width: 450px;
         }
     </style>
-    <script>
-        $(document)
-                .ready(function () {
-                    $('.ui.form')
-                            .form({
-                                fields: {
-                                    email: {
-                                        identifier: 'email',
-                                        rules: [
-                                            {
-                                                type: 'empty',
-                                                prompt: 'Please enter your e-mail'
-                                            },
-                                            {
-                                                type: 'email',
-                                                prompt: 'Please enter a valid e-mail'
-                                            }
-                                        ]
-                                    },
-                                    password: {
-                                        identifier: 'password',
-                                        rules: [
-                                            {
-                                                type: 'empty',
-                                                prompt: 'Please enter your password'
-                                            },
-                                            {
-                                                type: 'length[6]',
-                                                prompt: 'Your password must be at least 6 characters'
-                                            }
-                                        ]
-                                    }
-                                }
-                            })
-                    ;
-                })
-        ;
-    </script>
 </head>
-<body>
+<body ng-controller="loginController">
 
 <div class="ui middle aligned center aligned grid">
     <div class="column">
@@ -85,16 +45,16 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="user icon"></i>
-                        <input type="text" name="email" placeholder="E-mail address">
+                        <input type="text" name="email" ng-model="id" placeholder="E-mail address">
                     </div>
                 </div>
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="lock icon"></i>
-                        <input type="password" name="password" placeholder="Password">
+                        <input type="password" name="password" placeholder="Password" ng-model="pass">
                     </div>
                 </div>
-                <div class="ui fluid large teal submit button">Login</div>
+                <div class="ui fluid large teal submit button" ng-click="login()">Login</div>
             </div>
 
             <div class="ui error message"></div>
@@ -106,6 +66,17 @@
         </div>
     </div>
 </div>
+
+<!-- build:js scripts/vendor.js -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/semantic/dist/semantic.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:js scripts/login.js -->
+<script src="js/login.js"></script>
+<!-- endbuild -->
+
+<script src="scripts/bank.js"></script>
 
 </body>
 

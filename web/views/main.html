@@ -1,0 +1,48 @@
+<h2>Accounts</h2>
+<div class="ui cards">
+    <div class="card" ng-repeat="account in accounts">
+        <div class="content">
+            <div class="header">
+                {{account.AccountName}}
+            </div>
+            <div class="meta">
+                {{account.AccountTypeName}}
+            </div>
+            <div class="description">
+                {{account.Balance}}
+                <span>{{account.Currency}}</span>
+            </div>
+        </div>
+        <div class="extra content">
+            <div class="ui two buttons">
+                <a ng-href="#/details/{{account.AccountID}}" class="ui basic green button">Manage</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="content">
+            <div class="header">
+                New Account
+            </div>
+            <div class="description">
+                Want to create a new account?
+            </div>
+        </div>
+        <div class="extra content">
+            <div class="ui two buttons">
+                <div class="ui green button">New Account</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui two column stackable grid">
+    <div class="column">
+        <h2>User</h2>
+
+    </div>
+    <div class="column">
+
+    </div>
+</div>

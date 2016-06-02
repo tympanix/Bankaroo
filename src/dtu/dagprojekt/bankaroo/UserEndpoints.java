@@ -4,9 +4,7 @@ import dtu.dagprojekt.bankaroo.util.AuthContext;
 import dtu.dagprojekt.bankaroo.util.DB;
 import dtu.dagprojekt.bankaroo.util.Secured;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -27,8 +25,8 @@ public class UserEndpoints {
     @GET
     @Secured
     @Path("/history")
-    public Response getHistory(@Context AuthContext s) throws IOException, SQLException {
-        return Response.ok(DB.getHistory(s.getId()), MediaType.APPLICATION_JSON).build();
+    public Response getHistory(@Context AuthContext s, @DefaultValue("-1") @QueryParam("account") int accountId) throws IOException, SQLException {
+        return Response.ok(DB.getHistory(accountId), MediaType.APPLICATION_JSON).build();
     }
 
 }

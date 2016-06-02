@@ -5303,14 +5303,9 @@
         <parameter name="VSTATUS" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" type="4" index="5"/>
       </prototype>
     </procedure>
-    <procedure name="EXECUTEANDLOGTRANSACTION" schema="DTUGRP09" catalog="" type="1">
+    <procedure name="PROCEDURE1" schema="DTUGRP09" catalog="" type="1">
       <prototype>
-        <parameter name="VAMOUNTFOREIGN" sqlType="DECIMAL" precision="12" scale="4" nullable="true" jdbcType="3" type="1" index="1"/>
-        <parameter name="VCURRENCY" sqlType="CHAR" precision="3" scale="0" nullable="true" jdbcType="1" type="1" index="2"/>
-        <parameter name="VACCOUNTIDFROM" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="3"/>
-        <parameter name="VACCOUNTIDTO" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="4"/>
-        <parameter name="VTRANSACTIONMESSAGEFROM" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" type="1" index="5"/>
-        <parameter name="VTRANSACTIONMESSAGETO" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" type="1" index="6"/>
+        <parameter name="VVAR" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="1"/>
       </prototype>
     </procedure>
     <procedure name="TRANSACTION" schema="DTUGRP09" catalog="" type="1">

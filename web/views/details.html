@@ -1,22 +1,21 @@
 <h1>{{hello}}</h1>
+
 <div class="ui two column stackable grid">
     <div class="column four wide sidebar">
         <div class="ui vertical fluid menu">
             <a class="active teal item">
-                Inbox
-                <div class="ui teal pointing left label">1</div>
+                History
+                <div class="ui teal left label">{{history.length}}</div>
             </a>
             <a class="item">
-                Spam
-                <div class="ui label">51</div>
+                New Transaction
             </a>
             <a class="item">
-                Updates
-                <div class="ui label">1</div>
+                Settings
             </a>
             <div class="item">
                 <div class="ui transparent icon input">
-                    <input type="text" placeholder="Search mail...">
+                    <input type="text" placeholder="Search history...">
                     <i class="search icon"></i>
                 </div>
 
@@ -27,30 +26,23 @@
         <table class="ui single line selectable table">
             <thead>
             <tr>
-                <th>Name!</th>
-                <th>Registration Date</th>
-                <th>E-mail address</th>
-                <th>Premium Plan</th>
+                <th>Message</th>
+                <th>Transaction Amount</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Balance</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>John Lilki</td>
-                <td>September 14, 2013</td>
-                <td>jhlilk22@yahoo.com</td>
-                <td>No</td>
+            <tr ng-if="history == null">
+                <td>Loading</td>
             </tr>
-            <tr>
-                <td>Jamie Harington</td>
-                <td>January 11, 2014</td>
-                <td>jamieharingonton@yahoo.com</td>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <td>Jill Lewis</td>
-                <td>May 11, 2014</td>
-                <td>jilsewris22@yahoo.com</td>
-                <td>Yes</td>
+            <tr ng-repeat="history in history">
+                <td>{{history.Message}}</td>
+                <td>{{history.AmountLocal}}</td>
+                <td>{{history.TransactionType}}</td>
+                <td>{{history.TransactionTime}}</td>
+                <td>{{history.Balance}}</td>
             </tr>
             </tbody>
         </table>
