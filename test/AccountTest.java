@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class AccountTest {
 
     private static final int ID = 11;
-    private static final String NAME = "My new account 2";
+    private static final String NAME = "My new account 3";
     private static final double BALANCE = 199;
     private static final int CUSTOMER = 110793;
     private static final String TYPE = "Savings";
@@ -27,8 +27,8 @@ public class AccountTest {
 
     @Test
     public void B_newAccount() throws SQLException {
-        Account account = new Account(ID, NAME, BALANCE, CUSTOMER, TYPE, CURRENCY);
-        DB.insertAccount(account);
+        Account a = new Account(0, NAME, BALANCE, CUSTOMER, TYPE, CURRENCY);
+        DB.insertAccount(a);
     }
 
     @Test

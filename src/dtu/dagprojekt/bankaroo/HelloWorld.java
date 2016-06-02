@@ -80,17 +80,4 @@ public class HelloWorld extends Application {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
     }
-
-    @POST
-    @Path("/new/account")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response newAccount(Account account) {
-        try {
-            DB.insertAccount(account);
-            return Response.ok("Account creation completed!").build();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.NO_CONTENT).build();
-        }
-    }
 }

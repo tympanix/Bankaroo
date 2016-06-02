@@ -21,4 +21,8 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
 
     $scope.getHistory();
 
+    $scope.showModal = function () {
+        $('.ui.modal').modal('show');
+    }
+
 }]);

@@ -13,6 +13,10 @@ bankaroo.config(function($routeProvider){
             templateUrl: "/views/details.html",
             controller: "detailsController"
         })
+        .when("/new/account", {
+            templateUrl: "views/account.html",
+            controller: "accountController"
+        })
 });
 
 bankaroo.config(function (localStorageServiceProvider) {

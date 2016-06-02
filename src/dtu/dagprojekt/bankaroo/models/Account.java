@@ -45,7 +45,7 @@ public class Account {
     public Account(){}
 
     public String getId() {
-        if (id < 0){
+        if (id <= 0){
             return "DEFAULT";
         } else {
             return String.valueOf(id);
@@ -70,5 +70,30 @@ public class Account {
 
     public String getCurrency() {
         return currency;
+    }
+
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void setCustomer(int customer) {
+        this.customer = customer;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 }

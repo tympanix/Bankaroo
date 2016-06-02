@@ -39,10 +39,10 @@
             </tr>
             <tr ng-repeat="history in history">
                 <td>{{history.Message}}</td>
-                <td>{{history.AmountLocal}}</td>
+                <td>{{history.AmountLocal | currency}}</td>
                 <td>{{history.TransactionType}}</td>
                 <td>{{history.TransactionTime}}</td>
-                <td>{{history.Balance}}</td>
+                <td>{{history.Balance | currency}}</td>
             </tr>
             </tbody>
         </table>

@@ -9,7 +9,7 @@
                 {{account.AccountTypeName}}
             </div>
             <div class="description">
-                {{account.Balance}}
+                {{account.Balance | currency}}
                 <span>{{account.Currency}}</span>
             </div>
         </div>
@@ -31,7 +31,7 @@
         </div>
         <div class="extra content">
             <div class="ui two buttons">
-                <div class="ui green button">New Account</div>
+                <a class="ui green button" href="#/new/account">New Account</a>
             </div>
         </div>
     </div>

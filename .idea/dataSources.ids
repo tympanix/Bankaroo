@@ -1339,7 +1339,7 @@
       <column name="STUDENT_TYPE" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
     </table>
     <table name="Account" schema="DTUGRP09" catalog="" type="TABLE">
-      <column name="AccountID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="AccountID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4" def="SURFTlRJVFkgR0VORVJBVEVEIEJZIERFRkFVTFQ="/>
       <column name="AccountName" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
       <column name="Balance" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
       <column name="CustomerID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
@@ -1349,14 +1349,14 @@
       <foreign-key name="AccountIsType" columns="AccountTypeName" ref-table="AccountType" ref-schema="DTUGRP09" ref-catalog="" ref-columns="AccountTypeName" update-rule="3" delete-rule="0" deferrability="2"/>
       <foreign-key name="CustomerAccount" columns="CustomerID" ref-table="Customer" ref-schema="DTUGRP09" ref-catalog="" ref-columns="CustomerID" update-rule="3" delete-rule="0" deferrability="2"/>
       <foreign-key name="AccountExchange" columns="Currency" ref-table="Exchange" ref-schema="DTUGRP09" ref-catalog="" ref-columns="Currency" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="AccountA_#_8EW" unique="true" columns="AccountID"/>
+      <index name="AccountA_#_UX0" unique="true" columns="AccountID"/>
       <index name="Account_PK" unique="true" columns="AccountID"/>
     </table>
     <table name="AccountType" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="AccountTypeName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <column name="Interest" sqlType="DOUBLE" precision="53" scale="0" nullable="false" jdbcType="8"/>
       <primary-key columns="AccountTypeName"/>
-      <index name="AccountT_#_2W0" unique="true" columns="AccountTypeName"/>
+      <index name="AccountT_#_9T5" unique="true" columns="AccountTypeName"/>
       <index name="AccountType_PK" unique="true" columns="AccountTypeName"/>
     </table>
     <table name="Customer" schema="DTUGRP09" catalog="" type="TABLE">
@@ -1367,7 +1367,7 @@
       <column name="EmployeeID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key columns="CustomerID"/>
       <foreign-key name="CustomerGotEmployee" columns="EmployeeID" ref-table="Employee" ref-schema="DTUGRP09" ref-catalog="" ref-columns="EmployeeID" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="Customer_#_3Q5" unique="true" columns="CustomerID"/>
+      <index name="Customer_#_9A9" unique="true" columns="CustomerID"/>
       <index name="Customer_PK" unique="true" columns="CustomerID"/>
     </table>
     <table name="Employee" schema="DTUGRP09" catalog="" type="TABLE">
@@ -1377,13 +1377,13 @@
       <column name="Password" sqlType="CHAR" precision="64" scale="0" nullable="false" jdbcType="1"/>
       <primary-key columns="EmployeeID"/>
       <index name="Empleyee_PK" unique="true" columns="EmployeeID"/>
-      <index name="Employee_#_ZLX" unique="true" columns="EmployeeID"/>
+      <index name="Employee_#_CYB" unique="true" columns="EmployeeID"/>
     </table>
     <table name="Exchange" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="Currency" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
       <column name="Rate" sqlType="DOUBLE" precision="53" scale="0" nullable="false" jdbcType="8"/>
       <primary-key columns="Currency"/>
-      <index name="Exchange_#_K2B" unique="true" columns="Currency"/>
+      <index name="Exchange_#_85G" unique="true" columns="Currency"/>
       <index name="Exchange_PK" unique="true" columns="Currency"/>
     </table>
     <table name="History" schema="DTUGRP09" catalog="" type="TABLE">
@@ -1396,16 +1396,8 @@
       <primary-key columns="TransactionID,AccountID"/>
       <foreign-key name="AccountHistory" columns="AccountID" ref-table="Account" ref-schema="DTUGRP09" ref-catalog="" ref-columns="AccountID" update-rule="3" delete-rule="0" deferrability="2"/>
       <foreign-key name="HistoryTransaction" columns="TransactionID" ref-table="Transaction" ref-schema="DTUGRP09" ref-catalog="" ref-columns="TransactionID" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="HistoryA_#_OXG" unique="true" columns="TransactionID,AccountID"/>
+      <index name="HistoryA_#_UJK" unique="true" columns="TransactionID,AccountID"/>
       <index name="History_PK" unique="true" columns="TransactionID,AccountID"/>
-    </table>
-    <table name="HistoryView" schema="DTUGRP09" catalog="" type="VIEW">
-      <column name="AccountID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="Balance" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
-      <column name="AmountLocal" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
-      <column name="TransactionType" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1"/>
-      <column name="Message" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
-      <column name="TransactionTime" sqlType="TIMESTAMP" precision="22" scale="2" nullable="false" jdbcType="93"/>
     </table>
     <table name="Transaction" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="TransactionID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4" def="SURFTlRJVFkgR0VORVJBVEVEIEJZIERFRkFVTFQ="/>
@@ -1416,7 +1408,7 @@
       <column name="Currency" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
       <primary-key columns="TransactionID"/>
       <foreign-key name="TransactionExchange" columns="Currency" ref-table="Exchange" ref-schema="DTUGRP09" ref-catalog="" ref-columns="Currency" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="Transact_#_ITL" unique="true" columns="TransactionID"/>
+      <index name="Transact_#_BGP" unique="true" columns="TransactionID"/>
       <index name="Transaction_PK" unique="true" columns="TransactionID"/>
     </table>
     <table name="SAMPLE" schema="DTUGRP10" catalog="" type="TABLE">

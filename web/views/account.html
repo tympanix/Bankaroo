@@ -1,0 +1,27 @@
+<h1>New Account</h1>
+
+<div class="ui form">
+    <div class="field">
+        <label>Account Name</label>
+        <input ng-model="accountName" type="text" placeholder="Account Name">
+    </div>
+    <div class="ui two fields">
+        <div class="field">
+            <label>Account Type</label>
+            <select ng-model="accountType" class="ui select dropdown">
+                <option value="">Select Type</option>
+                <option value="Savings">Savings</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Currency</label>
+            <select ng-model="accountCurrency" class="ui select dropdown">
+                <option value="">Select Currency</option>
+                <option value="DKK">DKK</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+            </select>
+        </div>
+    </div>
+    <button ng-click="show()" class="ui green button fluid big" type="submit">Create Account</button>
+</div>
