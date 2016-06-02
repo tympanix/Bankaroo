@@ -3,19 +3,36 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'local
 
     this.getAccounts = function () {
         console.log("Token:", getToken());
-        return api('/user/accounts');
+        return apiGet('/user/accounts');
     };
 
     this.getHistory = function (accountId) {
-        return api('/user/history', {account: accountId})
+        return apiGet('/user/history', {account: accountId})
     };
 
     this.newAccount = function (accountName, accountType, accountCurrency) {
         return apiPost('/user/new/account', {name: accountName, type: accountType, currency: accountCurrency})
     };
 
+    this.getExchange = function () {
+        return apiPub('/exchange')
+    };
 
-    function api(url, params){
+    this.getAccountTypes = function () {
+        return apiPub('/accounttypes')
+    };
+
+    function apiPub(url){
+        var req = {
+            method: 'GET',
+            url: '/api' + url
+        };
+
+        return $http(req)
+    }
+
+
+    function apiGet(url, params){
         var req = {
             method: 'GET',
             params: params,

@@ -10,18 +10,16 @@
             <label>Account Type</label>
             <select ng-model="accountType" class="ui select dropdown">
                 <option value="">Select Type</option>
-                <option value="Savings">Savings</option>
+                <option ng-repeat="type in accountTypes" value="{{type.AccountTypeName}}">{{type.AccountTypeName}}</option>
             </select>
         </div>
         <div class="field">
             <label>Currency</label>
             <select ng-model="accountCurrency" class="ui select dropdown">
                 <option value="">Select Currency</option>
-                <option value="DKK">DKK</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
+                <option ng-repeat="exchange in exchanges" value="{{exchange.Currency}}">{{exchange.Currency}}</option>
             </select>
         </div>
     </div>
-    <button ng-click="show()" class="ui green button fluid big" type="submit">Create Account</button>
+    <button ng-click="addAccount()" class="ui green button fluid big" type="submit">Create Account</button>
 </div>
