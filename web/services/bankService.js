@@ -1,14 +1,21 @@
 angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'localStorageService', function ($resource, $http, localStorageService) {
 
-    var resource = {
-        accounts: null
-    };
+    var accounts = [];
 
-    this.accounts = resource.accounts;
+    // Getters
+    this.accounts = function () {
+        return accounts;
+    };
 
     this.getAccounts = function () {
         console.log("Token:", getToken());
-        return apiGet('/user/accounts');
+        var req = apiGet('/user/accounts');
+
+        req.then(function (data) {
+            accounts = data.data;
+        });
+
+        return req;
     };
 
     this.getHistory = function (accountId) {
