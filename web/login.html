@@ -18,6 +18,11 @@
             background-color: #DADADA;
         }
 
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../img/hero.jpg") no-repeat center !important;
+            background-size: cover !important;
+        }
+
         body > .grid {
             height: 100%;
         }
@@ -35,17 +40,17 @@
 
 <div class="ui middle aligned center aligned grid">
     <div class="column">
-        <h2 class="ui teal image header">
-            <div class="content">
-                Login to your Bankaroo account
-            </div>
-        </h2>
-        <form class="ui large form">
-            <div class="ui stacked segment">
+        <div class="ui stacked segment">
+            <h2 class="ui blue image header">
+                <div class="content">
+                    Bankaroo Account Login
+                </div>
+            </h2>
+            <form class="ui large form" ng-submit="login()" action="" method="" onsubmit="return false;">
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="user icon"></i>
-                        <input type="text" name="email" ng-model="id" placeholder="E-mail address">
+                        <input type="text" name="number" ng-model="id" placeholder="CPR Number">
                     </div>
                 </div>
                 <div class="field">
@@ -54,15 +59,11 @@
                         <input type="password" name="password" placeholder="Password" ng-model="pass">
                     </div>
                 </div>
-                <div class="ui fluid large teal submit button" ng-click="login()">Login</div>
-            </div>
+                <button type="submit" class="ui fluid large blue submit button">Login</button>
 
-            <div class="ui error message"></div>
+                <div class="ui error message"></div>
 
-        </form>
-
-        <div class="ui message">
-            New to us? <a href="#">Sign Up</a>
+            </form>
         </div>
     </div>
 </div>

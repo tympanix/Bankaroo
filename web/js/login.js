@@ -1,19 +1,24 @@
 $(document).ready(function () {
     $('.ui.form').form({
         fields: {
-            email: {
-                identifier: 'email',
+            number: {
+                identifier: 'number',
                 rules: [
                     {
                         type: 'empty',
-                        prompt: 'Please enter your e-mail'
+                        prompt: 'You CPR number is required'
                     },
                     {
-                        type: 'email',
-                        prompt: 'Please enter a valid e-mail'
+                        type: 'number',
+                        prompt: 'Please enter a number'
+                    },
+                    {
+                        type: "length[6]",
+                        prompt: "You CPR number is too short"
                     }
                 ]
             },
+
             password: {
                 identifier: 'password',
                 rules: [
