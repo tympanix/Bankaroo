@@ -5,7 +5,7 @@
 
             <div class="ui active centered inline loader" ng-show="accounts.length == 0"></div>
 
-            <table class="ui segment single line selectable table" ng-show="accounts.length != 0">
+            <table class="ui segment single line table" ng-show="accounts.length != 0">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -15,7 +15,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="account in accounts" ng-click="gotoCustomer(customer.CustomerID)">
+                <tr ng-repeat="account in accounts">
                     <td>{{account.AccountName}}</td>
                     <td>{{account.AccountTypeName}}</td>
                     <td>{{account.Balance | currency}}</td>
