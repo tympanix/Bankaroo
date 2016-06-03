@@ -68,12 +68,17 @@
     .ui.fixed.menu {
         display: none !important;
     }
-    .secondary.menu .item,
-    .secondary.menu .menu {
-        display: none;
+    /*.secondary.menu .item,*/
+    /*.secondary.menu .menu {*/
+        /*display: none; !important*/
+    /*}*/
+
+    .secondary.menu .menu.item {
+        display: none; !important
     }
+
     .secondary.menu .toc.item {
-        display: block;
+        display: block; !important
     }
     .masthead.segment {
         min-height: 350px;

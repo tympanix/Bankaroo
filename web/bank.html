@@ -17,24 +17,36 @@
     <link rel="stylesheet" href="css/bank.css">
     <!-- endbuild -->
 
+    <link rel="stylesheet" href="css/index.css">
+
 </head>
 <body>
+<!-- Sidebar -->
+<div class="ui vertical sidebar labeled icon menu left">
+    <a class="menu item active" href="#/"><i class="archive icon"></i>Accounts</a>
+    <a class="menu item"><i class="settings icon"></i>Settings</a>
+    <a class="menu item" href="#/admin"><i class="cubes icon"></i>Administration</a>
+</div>
 
 <!-- Page Contents -->
-<div class="ui vertical masthead center aligned segment">
-    <div class="ui container">
-        <div class="ui large secondary menu">
-            <a class="item active" href="#/">Accounts</a>
-            <a class="item">Settings</a>
-            <a class="item" href="#/admin">Administration</a>
-            <div class="right item">
-                <a class="ui button" href="login.html">Log out</a>
+<div class="pusher">
+    <div class="ui vertical segment mainmenu">
+        <div class="ui container">
+            <div class="ui large secondary menu">
+                <a class="toc item"><i class="sidebar icon"></i></a>
+                <a class="menu item active" href="#/">Accounts</a>
+                <a class="menu item">Settings</a>
+                <a class="menu item" href="#/admin">Administration</a>
+                <div class="right item">
+                    <a class="ui button" href="login.html">Log out</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="ui container main" ng-view>
 
+    <div class="ui container main" ng-view>
+
+    </div>
 </div>
 
 <!-- Scripts -->
@@ -42,6 +54,9 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/semantic/dist/semantic.min.js"></script>
 <!-- endbuild -->
+
+<!-- Precompiled scripts -->
+<script src="scripts/menu.js"></script>
 
 <!-- build:js scripts/angular.js -->
 <script src="bower_components/angular/angular.min.js"></script>
