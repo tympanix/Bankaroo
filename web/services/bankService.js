@@ -1,6 +1,6 @@
 angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'localStorageService', function ($resource, $http, localStorageService) {
 
-    var accounts = [];
+    var accounts = null;
 
     // Getters
     this.accounts = function () {

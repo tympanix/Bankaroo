@@ -5,3 +5,7 @@
 .sidebar {
     position: relative;
 }
+
+.clickable {
+    cursor: pointer;
+}

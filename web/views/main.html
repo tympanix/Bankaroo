@@ -1,8 +1,8 @@
 <h2>Accounts</h2>
 
-<div class="ui active centered large inline loader" ng-show="accounts.length == 0"></div>
+<div class="ui active centered large inline loader" ng-show="!accounts"></div>
 
-<div class="ui four cards stackable" ng-show="accounts.length > 0">
+<div class="ui four cards stackable" ng-show="accounts">
     <div class="ui card" ng-repeat="account in accounts">
         <div class="content">
             <div class="header">

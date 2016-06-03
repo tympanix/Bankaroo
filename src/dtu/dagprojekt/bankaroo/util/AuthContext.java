@@ -12,8 +12,8 @@ public class AuthContext implements SecurityContext {
         this.map = map;
     }
 
-    public int getId(){
-        return Integer.parseInt(map.get("id").toString());
+    public long getId(){
+        return Long.parseLong(map.get("id").toString());
     }
 
     @Override

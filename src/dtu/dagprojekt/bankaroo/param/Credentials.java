@@ -8,19 +8,19 @@ import java.io.Serializable;
 public class Credentials implements Serializable {
 
     @XmlElement(name="id")
-    private int id;
+    private long id;
 
     @XmlElement(name="password")
     private String password;
 
-    public Credentials(int id, String password){
+    public Credentials(long id, String password){
         this.id = id;
         this.password = password;
     }
 
     public Credentials(){}
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

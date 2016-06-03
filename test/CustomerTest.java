@@ -13,9 +13,9 @@ import static org.junit.Assert.assertNull;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CustomerTest {
 
-    private static final int CPR = 110793;
+    private static final int CPR = 1107931111;
     private static final String NAME = "Bjørn";
-    private static final String PASSWORD = "password123";
+    private static final String PASSWORD = "123";
     private static final int ADVISOR = 1;
 
     @Test

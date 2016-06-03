@@ -11,7 +11,7 @@ public class Account {
     @XmlElement(name="id", required = false) private int id;
     @XmlElement(name="name", required = true) private String name;
     @XmlElement(name="balance", required = false) private double balance;
-    @XmlElement(name="customer", required = true) private int customer;
+    @XmlElement(name="customer", required = true) private long customer;
     @XmlElement(name="type", required = true) private String accountType;
     @XmlElement(name="currency", required = true) private String currency;
 
@@ -60,7 +60,7 @@ public class Account {
         return balance;
     }
 
-    public int getCustomer() {
+    public long getCustomer() {
         return customer;
     }
 
@@ -89,7 +89,7 @@ public class Account {
         this.balance = balance;
     }
 
-    public void setCustomer(int customer) {
+    public void setCustomer(long customer) {
         this.customer = customer;
     }
 

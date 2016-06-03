@@ -76,6 +76,11 @@ public class DB {
         return query.toJson();
     }
 
+    public static StreamingOutput getCustomers(long id) throws SQLException, IOException {
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Customer\" WHERE \"CustomerID\" = "+id+"");
+        return query.toJson();
+    }
+
     public static StreamingOutput getExchanges() throws SQLException, IOException {
         Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Exchange\"");
         return query.toJson();
@@ -96,7 +101,7 @@ public class DB {
         return query.toJson();
     }
 
-    public static StreamingOutput getAccounts(int id) throws SQLException {
+    public static StreamingOutput getAccounts(long id) throws SQLException {
         Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Account\" WHERE \"CustomerID\" = "+id+"");
         return query.toJson();
     }
@@ -132,7 +137,7 @@ public class DB {
         }
     }
 
-    public static void deleteCustomer(int cpr) throws SQLException {
+    public static void deleteCustomer(long cpr) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
         statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Customer\" WHERE \"CustomerID\" = '"+cpr+"'");
         statement.close();
@@ -143,7 +148,7 @@ public class DB {
         deleteCustomer(c.getCpr());
     }
 
-    public static void deleteEmployee(int id) throws SQLException {
+    public static void deleteEmployee(long id) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
         statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Employee\" WHERE \"EmployeeID\" = '"+id+"'");
         statement.close();
@@ -166,7 +171,7 @@ public class DB {
         deleteAccount(id);
     }
 
-    public static Customer getCustomerByCPR(int cpr) throws SQLException {
+    public static Customer getCustomerByCPR(long cpr) throws SQLException {
         Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Customer\" WHERE \"CustomerID\" = "+cpr+"");
         ResultSet res = query.getResultSet();
         if (!res.next()) throw new SQLException("No user");
@@ -181,6 +186,15 @@ public class DB {
     public static void transaction(double amount, String currency, int accountFrom, int accountTo, String messageFrom, String messageTo) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
         statement.execute("CALL TRANSACTION("+amount+", '"+currency+"', "+accountFrom+", "+accountTo+", '"+messageFrom+"', '"+messageTo+"')");
+        statement.close();
+        DB.getConnection().commit();
+    }
+
+    public static void changePassword(long cpr, String password) throws SQLException {
+        String salt = Utils.newSalt();
+        String hashedPassword = Utils.hashPassword(password, salt);
+        Statement statement = DB.getConnection().createStatement();
+        statement.executeUpdate("UPDATE \"DTUGRP09\".\"Customer\" SET \"Salt\" = '"+salt+"', \"Password\" = '"+hashedPassword+"' WHERE \"CustomerID\" = '"+cpr+"';");
         statement.close();
         DB.getConnection().commit();
     }

@@ -10,7 +10,7 @@
     <div class="results"></div>
 </div>
 
-<table class="ui single line selectable table" ng-show="customers.length != 0">
+<table class="ui single line selectable clickable table" ng-show="customers">
     <thead>
     <tr>
         <th>Name</th>
@@ -18,7 +18,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="customer in customers" ng-click="gotoCustomer(customer.CustomerID)">
+    <tr ng-repeat="customer in customers" ng-click="gotoCustomer($index)">
         <td>{{customer.CustomerName}}</td>
         <td>{{customer.CustomerID}}</td>
     </tr>

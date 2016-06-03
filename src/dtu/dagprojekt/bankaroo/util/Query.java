@@ -4,6 +4,8 @@ import com.google.gson.stream.JsonWriter;
 
 import javax.ws.rs.core.StreamingOutput;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;

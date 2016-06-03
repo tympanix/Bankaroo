@@ -10,7 +10,7 @@ import java.sql.SQLException;
 @XmlRootElement
 public class Customer {
 
-    @XmlElement(name="cpr") private int cpr;
+    @XmlElement(name="cpr") private long cpr;
     @XmlElement(name="name") private String name;
     @XmlElement(name="salt", required = false) private String salt;
     @XmlElement(name="advisor") private int advisor;
@@ -36,7 +36,7 @@ public class Customer {
         this.advisor = advisor;
     }
 
-    public int getCpr() {
+    public long getCpr() {
         return cpr;
     }
 

@@ -1,34 +1,144 @@
-<div class="ui two columns grid">
-    <div class="row">
+<div class="ui two columns stackable grid">
+    <div class="ui active centered large inline loader" ng-show="!accounts || !selectedCustomer">
+        <div class="ui text loader">Loading Customer</div>
+    </div>
+
+    <div class="row" ng-hide="!accounts || !selectedCustomer">
         <div class="column">
-            <h1>Accounts</h1>
+            <h2 class="ui header">
+                <i class="archive icon"></i>
+                <div class="content">
+                    Accounts
+                    <div class="sub header">A list of accounts</div>
+                </div>
+            </h2>
 
-            <div class="ui active centered inline loader" ng-show="accounts.length == 0"></div>
-
-            <table class="ui segment single line table" ng-show="accounts.length != 0">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Balance</th>
-                    <th>Currency</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="account in accounts">
-                    <td>{{account.AccountName}}</td>
-                    <td>{{account.AccountTypeName}}</td>
-                    <td>{{account.Balance | currency}}</td>
-                    <td>{{account.Currency}}</td>
-                </tr>
-                </tbody>
-            </table>
+            <!--<table class="ui segment single line table" ng-show="accounts.length != 0">-->
+            <!--<thead>-->
+            <!--<tr>-->
+            <!--<th>Name</th>-->
+            <!--<th>Type</th>-->
+            <!--<th>Balance</th>-->
+            <!--<th>Currency</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr ng-repeat="account in accounts">-->
+            <!--<td>{{account.AccountName}}</td>-->
+            <!--<td>{{account.AccountTypeName}}</td>-->
+            <!--<td>{{account.Balance | currency}}</td>-->
+            <!--<td>{{account.Currency}}</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+            <!--</table>-->
+            <div class="ui segment">
+                <h2 class="ui centered header">
+                    <div class="sub header" ng-show="accounts.length == 0">The user has no accounts yet</div>
+                </h2>
+                <table class="ui very basic celled table" ng-hide="accounts.length == 0">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Balance</th>
+                        <th>Currency</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="account in accounts">
+                        <td>{{account.AccountName}}</td>
+                        <td>{{account.AccountTypeName}}</td>
+                        <td>{{account.Balance | currency}}</td>
+                        <td>{{account.Currency}}</td>
+                        <td><a class="ui tiny basic button"
+                               ng-click="showDelAccountModal($index)">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="column">
-            <h1>User Settings</h1>
-            <div class="ui segment">
-                User setings here
+            <h2 class="ui header">
+                <i class="settings icon"></i>
+                <div class="content">
+                    Settings
+                    <div class="sub header">Manage preferences</div>
+                </div>
+            </h2>
+            <div class="ui fluid card">
+                <div class="content">
+                    <div class="header">
+                        {{selectedCustomer.CustomerName}}
+                    </div>
+                    <div class="description">
+                        Customer details
+                    </div>
+                </div>
+                <div class="extra content">
+                    <div class="ui three buttons">
+                        <div class="ui basic green button">Edit Customer</div>
+                        <div class="ui basic yellow button" ng-click="showPassModal()">Change Password</div>
+                        <div class="ui red button">Delete Customer</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Change password modal -->
+<div class="ui small modal" id="changePassModal" ng-init="initPassModal()">
+    <i class="close icon"></i>
+    <div class="header">
+        Change Password
+    </div>
+    <div class="content">
+        <form class="ui form" id="changePassForm" ng-init="initValidation()" ng-submit="formChangePass()"
+              onsubmit="return false;">
+            <div class="field">
+                <label>Password</label>
+                <input type="password" name="password" ng-model="passFormPassword" placeholder="Password...">
+            </div>
+            <div class="field">
+                <label>Repeat password</label>
+                <input type="password" name="password_rep" placeholder="Repeat password...">
+            </div>
+            <div class="ui error message"></div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Cancel
+        </div>
+        <button type="submit" form="changePassForm" class="ui positive right labeled icon button">
+            Change
+            <i class="checkmark icon"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Delete Bank Account modal -->
+<div class="ui basic small modal" id="deleteAccountModal" ng-init="initDelAccountModal()">
+    <i class="close icon"></i>
+    <div class="ui icon header">
+        <i class="archive icon"></i>
+        Delete Account
+    </div>
+    <div class="content">
+            <p>The account will be deleted and all currency will be lost</p>
+    </div>
+    <div class="actions">
+        <div class="ui deny red inverted button">
+            <i class="remove icon"></i>
+            No
+        </div>
+        <div class="ui ok green inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+        </div>
+    </div>
+</div>
+
+
