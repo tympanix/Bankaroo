@@ -11,4 +11,9 @@ angular.module('bankaroo').controller("mainController", ["$scope", "$http", "ban
         $scope.accounts = newValue;
     });
 
+    $scope.openModal = function () {
+        console.log("Open modal");
+        $('.ui.modal').modal('show');
+    }
+
 }]);

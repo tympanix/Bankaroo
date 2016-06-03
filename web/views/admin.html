@@ -1,9 +1,13 @@
-<div class="ui left icon input">
-    <input type="text" ng-model="customerSearch"
-           ng-change="getCustomers()"
-           ng-model-options="{debounce: 250}"
-           placeholder="Search users...">
-    <i class="users icon"></i>
+<div class="ui category search">
+    <div class="ui icon input" ng-class="{loading: searching}">
+        <input class="prompt" type="text"
+               ng-model="customerSearch"
+               ng-change="getCustomers()"
+               ng-model-options="{debounce: 250}"
+               placeholder="Search customers...">
+        <i class="search icon"></i>
+    </div>
+    <div class="results"></div>
 </div>
 
 <table class="ui single line selectable table" ng-show="customers.length != 0">

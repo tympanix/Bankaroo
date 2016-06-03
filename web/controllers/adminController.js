@@ -1,7 +1,8 @@
 angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$routeParams", "$window", "adminService", function($scope, $http, $routeParams, $window, adminService){
 
     // Customer search form
-    $scope.customerSearch = "";
+    $scope.customerSearch = adminService.customerSearch();
+    $scope.searching = false;
 
     $scope.customerId = $routeParams.id;
 
@@ -9,16 +10,21 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
     $scope.accounts = [];
 
     $scope.getCustomers = function () {
+        if ($scope.searching) return;
+        $scope.searching = true;
         console.log("Changed!", $scope.customerSearch);
         adminService.getCustomers($scope.customerSearch)
-            .then(function (data) {
-                $scope.customers = data.data;
-                console.log("UPDATE!", data.data)
+            .then(function () {
+                $scope.searching = false;
             })
-            .catch(function (err) {
-                console.log("Error", err)
-            })
+        adminService.customerSearch($scope.customerSearch);
     };
+
+    $scope.$watch(function(){
+        return adminService.customers();
+    }, function (newValue) {
+        $scope.customers = newValue;
+    });
 
     $scope.getAccounts = function () {
         adminService.getAccounts($routeParams.id)

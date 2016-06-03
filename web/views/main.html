@@ -1,6 +1,8 @@
 <h2>Accounts</h2>
 
-<div class="ui four cards stackable">
+<div class="ui active centered large inline loader" ng-show="accounts.length == 0"></div>
+
+<div class="ui four cards stackable" ng-show="accounts.length > 0">
     <div class="ui card" ng-repeat="account in accounts">
         <div class="content">
             <div class="header">
@@ -39,13 +41,37 @@
 
 </div>
 
+<div class="ui section divider"></div>
 
 <div class="ui two column stackable grid">
     <div class="column">
         <h2>User</h2>
-
+        <a class="ui fluid black basic button" ng-click="openModal()">Open</a>
     </div>
     <div class="column">
 
+    </div>
+</div>
+
+<div class="ui modal" id="newAccount">
+    <i class="close icon"></i>
+    <div class="header">
+        New Account
+    </div>
+    <div class="content">
+        <div class="description">
+            <div class="ui header">Account creation coming soon.</div>
+            <p>We're working hard on getting everything ready for you</p>
+            <p>Coming soon.</p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Cancel
+        </div>
+        <div class="ui positive right labeled icon button">
+            Add Account
+            <i class="checkmark icon"></i>
+        </div>
     </div>
 </div>
