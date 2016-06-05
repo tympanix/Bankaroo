@@ -37,13 +37,16 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
     };
 
     $scope.getCustomerByID = function (id) {
+        $scope.loadingCustomer = true;
         adminService.getCustomerByID(id)
             .then(function (data) {
                 console.log("Selected customer", data.data[0]);
                 $scope.selectedCustomer = data.data[0];
+                $scope.loadingCustomer = false;
             })
             .catch(function (err) {
-                console.log("Error", err)
+                console.log("Error", err);
+                $scope.loadingCustomer = false;
             })
     };
 
@@ -110,6 +113,7 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
     };
 
     $scope.formEditUser = function () {
+        $scope.loadingCustomer = true;
         var modal = $('#editUserModal');
         modal.modal('refresh');
         var isValid = $('#editUserForm').form('is valid');
@@ -117,13 +121,15 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
             console.error("FORM IS NOT VALID");
             return false;
         }
-        //adminService.changePassword($scope.selectedCustomer.UserID, $scope.passForm.password)
-        //    .then(function (data) {
-        //        modal.modal('hide');
-        //    })
-        //    .catch(function (err) {
-        //        $('#editUserForm').form('add errors', ['Could not change password'])
-        //    });
+        adminService.updateUser($scope.selectedCustomer.UserID, $scope.getEditFormInputs())
+            .then(function (data) {
+                $scope.getCustomerByID($routeParams.id);
+                modal.modal('hide');
+            })
+            .catch(function (err) {
+                $('#editUserForm').form('add errors', ['Could not edit user'])
+            });
+
     };
 
     $scope.getEditFormInputs = function () {
@@ -140,8 +146,12 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
         return fields;
     };
 
-    $scope.saveForm = function(form) {
+    $scope.saveForm = function (form) {
         $scope.editUserForm = form;
+    };
+
+    $scope.updateUser = function () {
+        adminService.updateUser($scope.selectedCustomer.UserID, $scope.getEditFormInputs())
     };
 
 

@@ -36,6 +36,12 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
         return req;
     };
 
+    this.updateUser = function (id, params) {
+        params.cpr = id;
+        var req = apiPost("/admin/update/user", params);
+        return req;
+    };
+
     this.getCustomerByID = function (id) {
         var req = apiGet("/admin/customers", {id: id});
         return req;

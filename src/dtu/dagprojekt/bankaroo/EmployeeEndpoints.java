@@ -63,6 +63,7 @@ public class EmployeeEndpoints {
     }
 
     @POST
+    @Secured
     @Path("/update/user")
     public Response updateUser(User user){
         try {

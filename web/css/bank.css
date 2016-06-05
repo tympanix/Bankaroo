@@ -13,3 +13,8 @@
 .mainmenu {
     overflow: hidden;
 }
+
+.ui.segment.thin {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

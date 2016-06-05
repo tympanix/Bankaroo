@@ -67,16 +67,43 @@
                     <div class="sub header">Manage preferences</div>
                 </div>
             </h2>
-            <div class="ui fluid card">
-                <div class="content">
-                    <div class="header">
+            <div class="ui segments">
+                <div class="ui segment" ng-class="{loading: loadingCustomer}">
+                    <h3 class="header">
                         {{selectedCustomer.UserName}}
-                    </div>
-                    <div class="description">
-                        Customer details
+                    </h3>
+                    <div class="ui horizontal list">
+                        <div class="item">
+                            <i class="privacy icon"></i>
+                            <div class="content">
+                                <div class="header">CPR Number</div>
+                                <div class="description">{{selectedCustomer.UserID}}</div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <i class="mail icon"></i>
+                            <div class="content">
+                                <div class="header">Email</div>
+                                <div class="description">{{selectedCustomer.Email}}</div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <i class="home icon"></i>
+                            <div class="content">
+                                <div class="header">Address</div>
+                                <div class="description">{{selectedCustomer.Address}}, {{selectedCustomer.PostalCode}}</div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <i class="phone icon"></i>
+                            <div class="content">
+                                <div class="header">Phone</div>
+                                <div class="description">{{selectedCustomer.Phone}}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="extra content">
+                <div class="ui thin segment">
                     <div class="ui three buttons">
                         <div class="ui basic green button" ng-click="showEditModal()">Edit Customer</div>
                         <div class="ui basic yellow button" ng-click="showPassModal()">Change Password</div>
