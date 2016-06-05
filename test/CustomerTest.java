@@ -1,4 +1,4 @@
-import dtu.dagprojekt.bankaroo.models.Customer;
+import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 import dtu.dagprojekt.bankaroo.util.DB;
 import org.junit.FixMethodOrder;
@@ -14,14 +14,17 @@ import static org.junit.Assert.assertNull;
 public class CustomerTest {
 
     private static final int CPR = 1107931111;
-    private static final String NAME = "Bjørn";
-    private static final String PASSWORD = "123";
-    private static final int ADVISOR = 1;
+    private static final String NAME = "Bjoern";
+    private static final int ZIP = 4000;
+    private static final String ADDRESS = "Strandparken 10";
+    private static final int PHONE = 28513125;
+    private static final String EMAIL = "bjoern@email.com";
+    private static final String PASSWORD = "password";
 
     @Test
     public void A_init(){
         try {
-            DB.deleteCustomer(CPR);
+            DB.deleteUser(CPR);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -29,39 +32,39 @@ public class CustomerTest {
 
     @Test
     public void B_createCustomer() throws SQLException {
-        Customer customer = new Customer(CPR, NAME, PASSWORD, ADVISOR);
-        DB.insertCustomer(customer);
+        User user = new User(CPR, NAME, ZIP, ADDRESS, PHONE, EMAIL, PASSWORD);
+        DB.insertUser(user);
     }
 
     @Test
     public void C_findCustomer() throws SQLException {
-        Customer customer = DB.getCustomerByCPR(CPR);
-        assertEquals(customer.getCpr(), CPR);
-        assertEquals(customer.getName(), NAME);
+        User user = DB.getUserByCPR(CPR);
+        assertEquals(user.getCpr(), CPR);
+        assertEquals(user.getName(), NAME);
     }
 
     @Test
     public void D_loginCustomer() throws SQLException {
         Credentials credentials = new Credentials(CPR, PASSWORD);
-        Customer customer = DB.login(credentials);
-        assertEquals(customer.getCpr(), CPR);
-        assertEquals(customer.getName(), NAME);
+        User user = DB.login(credentials);
+        assertEquals(user.getCpr(), CPR);
+        assertEquals(user.getName(), NAME);
     }
 
     @Test(expected=SQLException.class)
     public void E_cantLogin() throws SQLException {
         Credentials credentials = new Credentials(CPR, "wrong_password");
-        Customer customer = DB.login(credentials);
-        assertNull(customer);
+        User user = DB.login(credentials);
+        assertNull(user);
     }
 
     @Test
     public void E_removeCustomer() throws SQLException {
-        DB.deleteCustomer(CPR);
+        DB.deleteUser(CPR);
     }
 
     @Test(expected=SQLException.class)
     public void F_cannotFindCustomer() throws SQLException {
-        DB.getCustomerByCPR(CPR);
+        DB.getUserByCPR(CPR);
     }
 }

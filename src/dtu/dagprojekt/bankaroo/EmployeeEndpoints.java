@@ -21,9 +21,9 @@ public class EmployeeEndpoints {
     public Response getCustomers(@DefaultValue("") @QueryParam("name") String name, @DefaultValue("-1") @QueryParam("id") long id) throws IOException, SQLException {
         StreamingOutput out;
         if (id > 0){
-            out = DB.getCustomers(id);
+            out = DB.getUser(id);
         } else {
-            out = DB.getCustomers(name);
+            out = DB.getUser(name);
         }
         return Response.ok(out, MediaType.APPLICATION_JSON).build();
     }
@@ -60,5 +60,4 @@ public class EmployeeEndpoints {
             return Response.status(Response.Status.CONFLICT).build();
         }
     }
-
 }

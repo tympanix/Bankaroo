@@ -1,7 +1,7 @@
 package dtu.dagprojekt.bankaroo.util;
 
 import dtu.dagprojekt.bankaroo.models.Account;
-import dtu.dagprojekt.bankaroo.models.Customer;
+import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.models.Employee;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 
@@ -71,13 +71,13 @@ public class DB {
         return query.toJson();
     }
 
-    public static StreamingOutput getCustomers(String name) throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Customer\" WHERE UPPER(\"CustomerName\") LIKE UPPER('%"+name+"%')");
+    public static StreamingOutput getUser(String name) throws SQLException, IOException {
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"User\" WHERE UPPER(\"UserName\") LIKE UPPER('%"+name+"%')");
         return query.toJson();
     }
 
-    public static StreamingOutput getCustomers(long id) throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Customer\" WHERE \"CustomerID\" = "+id+"");
+    public static StreamingOutput getUser(long id) throws SQLException, IOException {
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"User\" WHERE \"UserID\" = "+id+"");
         return query.toJson();
     }
 
@@ -102,13 +102,13 @@ public class DB {
     }
 
     public static StreamingOutput getAccounts(long id) throws SQLException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Account\" WHERE \"CustomerID\" = "+id+"");
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Account\" WHERE \"UserID\" = "+id+"");
         return query.toJson();
     }
 
-    public static void insertCustomer(Customer c) throws SQLException {
+    public static void insertUser(User c) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Customer\" VALUES("+c.getCpr()+" ,'"+c.getName()+"', '"+c.getSalt()+"', '"+c.getHashPassword()+"', "+c.getAdvisor()+")");
+        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"User\" VALUES("+c.getCpr()+" ,'"+c.getName()+"', '"+c.getZip()+"', '"+c.getAddress()+"', '"+c.getPhone()+"', '"+c.getEmail()+"', '"+c.getSalt()+"', '"+c.getHashPassword()+"')");
         statement.close();
         DB.getConnection().commit();
     }
@@ -127,25 +127,25 @@ public class DB {
         DB.getConnection().commit();
     }
 
-    public static Customer login(Credentials c) throws SQLException {
-        Customer customer = getCustomerByCPR(c.getId());
-        String hashPass = Utils.hashPassword(c.getPassword(), customer.getSalt());
-        if (hashPass.equals(customer.getHashPassword())){
-            return customer;
+    public static User login(Credentials c) throws SQLException {
+        User user = getUserByCPR(c.getId());
+        String hashPass = Utils.hashPassword(c.getPassword(), user.getSalt());
+        if (hashPass.equals(user.getHashPassword())){
+            return user;
         } else {
             throw new SQLException("Incorrect username/password");
         }
     }
 
-    public static void deleteCustomer(long cpr) throws SQLException {
+    public static void deleteUser(long cpr) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Customer\" WHERE \"CustomerID\" = '"+cpr+"'");
+        statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"User\" WHERE \"UserID\" = '"+cpr+"'");
         statement.close();
         DB.getConnection().commit();
     }
 
-    public static void deleteCustomer(Customer c) throws SQLException {
-        deleteCustomer(c.getCpr());
+    public static void deleteUser(User c) throws SQLException {
+        deleteUser(c.getCpr());
     }
 
     public static void deleteEmployee(long id) throws SQLException {
@@ -171,11 +171,11 @@ public class DB {
         deleteAccount(id);
     }
 
-    public static Customer getCustomerByCPR(long cpr) throws SQLException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Customer\" WHERE \"CustomerID\" = "+cpr+"");
+    public static User getUserByCPR(long cpr) throws SQLException {
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"User\" WHERE \"UserID\" = "+cpr+"");
         ResultSet res = query.getResultSet();
         if (!res.next()) throw new SQLException("No user");
-        return new Customer(res);
+        return new User(res);
     }
 
     public static StreamingOutput getHistory(int accountId) throws SQLException, IOException {
@@ -194,9 +194,10 @@ public class DB {
         String salt = Utils.newSalt();
         String hashedPassword = Utils.hashPassword(password, salt);
         Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("UPDATE \"DTUGRP09\".\"Customer\" SET \"Salt\" = '"+salt+"', \"Password\" = '"+hashedPassword+"' WHERE \"CustomerID\" = '"+cpr+"';");
+        int updated = statement.executeUpdate("UPDATE \"DTUGRP09\".\"User\" SET \"Salt\" = '"+salt+"', \"Password\" = '"+hashedPassword+"' WHERE \"UserID\" = '"+cpr+"';");
         statement.close();
         DB.getConnection().commit();
+        if (updated == 0) throw new SQLException("User was not found");
     }
 
 }

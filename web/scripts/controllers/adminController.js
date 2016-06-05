@@ -57,7 +57,7 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
     $scope.gotoCustomer = function (id) {
         var customer = $scope.customers[id];
         adminService.selectedCustomer(customer);
-        $window.location.href = '#/admin/' + customer.CustomerID;
+        $window.location.href = '#/admin/' + customer.UserID;
     };
 
     function deleteAccount(){
@@ -103,7 +103,7 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
             return false;
         }
         console.log("CHANGE PASS!");
-        adminService.changePassword($scope.selectedCustomer.CustomerID, $scope.passFormPassword)
+        adminService.changePassword($scope.selectedCustomer.UserID, $scope.passFormPassword)
             .then(function (data) {
                 console.log("PASS WAS CHANGED");
                 modal.modal('hide');

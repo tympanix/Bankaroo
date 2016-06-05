@@ -54,7 +54,7 @@ gulp.task('build', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['./*.html', 'css/*.css', '*.js', 'js/*.js', './services/*.js', './controllers/*.js'], ['build:concat']);
+    gulp.watch(['./*.html', 'css/*.css', 'app.js', 'scripts/**/*.js'], ['build:concat']);
     gulp.watch(['./views/*.html'], ['build:views']);
 });
 
