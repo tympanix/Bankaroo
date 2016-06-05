@@ -11,10 +11,12 @@ import java.sql.*;
 
 public class DB {
 
-    static final String url = "jdbc:db2://192.86.32.54:5040/DALLASB";
-    static final String driver = "COM.ibm.db2os390.sqlj.jdbc.DB2SQLJDriver";
-    static final String user = "DTU24";
-    static final String password = "FAGP2016";
+    static final String URL = "jdbc:db2://192.86.32.54:5040/DALLASB";
+    static final String DRIVER = "COM.ibm.db2os390.sqlj.jdbc.DB2SQLJDriver";
+    static final String USER = "DTU24";
+    static final String PASSWORD = "FAGP2016";
+
+    public static final String TABLE = "DTUGRP09";
 
     static private Connection con;
 
@@ -28,12 +30,12 @@ public class DB {
 
     private static Connection newConnection(){
         try {
-            // Load the driver
-            Class.forName(driver);
+            // Load the DRIVER
+            Class.forName(DRIVER);
             System.out.println("**** Loaded the JDBC driver");
 
             // Create the connection using the IBM Data Server Driver for JDBC and SQLJ
-            con = DriverManager.getConnection(url, user, password);
+            con = DriverManager.getConnection(URL, USER, PASSWORD);
 
             // Commit changes manually
             con.setAutoCommit(false);
@@ -161,9 +163,10 @@ public class DB {
 
     public static void deleteAccount(int id) throws SQLException {
         Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Account\" WHERE \"AccountID\" = '"+id+"'");
+        int updated = statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Account\" WHERE \"AccountID\" = '"+id+"'");
         statement.close();
         DB.getConnection().commit();
+        if (updated == 0) throw new SQLException("No account found");
     }
 
     public static void deleteAccount(Account a) throws SQLException {
@@ -198,6 +201,15 @@ public class DB {
         statement.close();
         DB.getConnection().commit();
         if (updated == 0) throw new SQLException("User was not found");
+    }
+
+    public static void updateUser(User user) throws SQLException {
+        UpdateQuery q = new UpdateQuery();
+        q.schema(Schema.User);
+        q.set(user.getUpdateFields());
+        q.where("\"UserID\" = " + user.getCpr());
+        q.execute();
+        q.expect(1);
     }
 
 }

@@ -19,7 +19,7 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
     };
 
     this.changePassword = function (cpr, password) {
-        var req = apiPost("/admin/change/password", {id: cpr, password: password})
+        var req = apiPost("/admin/change/password", {id: cpr, password: password});
         return req;
     };
 

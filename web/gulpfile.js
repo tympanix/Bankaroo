@@ -33,7 +33,7 @@ gulp.task('build:concat', function () {
 });
 
 gulp.task('build:views', function () {
-    return gulp.src('./views/*.html')
+    return gulp.src('./views/**/*.html')
         .pipe(gulp.dest('./dist/views'))
         .pipe(browsersync.reload({ stream:true }))
 });

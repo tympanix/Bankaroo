@@ -1,5 +1,6 @@
 package dtu.dagprojekt.bankaroo;
 
+import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 import dtu.dagprojekt.bankaroo.util.DB;
 import dtu.dagprojekt.bankaroo.util.Secured;
@@ -54,6 +55,18 @@ public class EmployeeEndpoints {
     public Response changePassword(Credentials credentials){
         try {
             DB.changePassword(credentials.getId(), credentials.getPassword());
+            return Response.ok().build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
+    @POST
+    @Path("/update/user")
+    public Response updateUser(User user){
+        try {
+            DB.updateUser(user);
             return Response.ok().build();
         } catch (SQLException e) {
             e.printStackTrace();

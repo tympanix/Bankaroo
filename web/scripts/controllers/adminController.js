@@ -6,7 +6,17 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
     $scope.searching = false;
 
     // Form
-    $scope.passFormPassword = "";
+    $scope.passForm = {
+        password: ""
+    };
+
+    $scope.editForm = {
+        name: "",
+        address: "",
+        zip: "",
+        email: "",
+        phone: ""
+    };
 
     var deleteAccountIndex = -1;
 
@@ -60,26 +70,13 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
         $window.location.href = '#/admin/' + customer.UserID;
     };
 
-    function deleteAccount(){
+    $scope.deleteAccount = function () {
         var id = deleteAccountIndex;
         console.log("ID!!!!", id);
         console.log("DELETE THIS!!", $scope.accounts[id]);
         var accountId = $scope.accounts[id].AccountID;
         adminService.deleteAccount(accountId)
-            .then(function () {
-                $scope.accounts.splice(id, 1);
-            })
-            .catch(function () {
 
-            })
-    }
-
-    $scope.deleteAccount = function (deleteId) {
-        var id = $scope.deleteAccountIndex;
-        console.log("ID!!!!", id);
-        console.log("DELETE THIS!!", $scope.accounts[id]);
-        var accountId = $scope.accounts[id].AccountID;
-        adminService.deleteAccount(accountId)
             .then(function () {
                 $scope.accounts.splice(id, 1);
             })
@@ -87,7 +84,6 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
 
             })
     };
-
 
     if ($routeParams.id) {
         $scope.getCustomerByID($routeParams.id);
@@ -103,7 +99,7 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
             return false;
         }
         console.log("CHANGE PASS!");
-        adminService.changePassword($scope.selectedCustomer.UserID, $scope.passFormPassword)
+        adminService.changePassword($scope.selectedCustomer.UserID, $scope.passForm.password)
             .then(function (data) {
                 console.log("PASS WAS CHANGED");
                 modal.modal('hide');
@@ -113,77 +109,172 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
             });
     };
 
+    $scope.formEditUser = function () {
+        var modal = $('#editUserModal');
+        modal.modal('refresh');
+        var isValid = $('#editUserForm').form('is valid');
+        if (!isValid) {
+            console.error("FORM IS NOT VALID");
+            return false;
+        }
+        //adminService.changePassword($scope.selectedCustomer.UserID, $scope.passForm.password)
+        //    .then(function (data) {
+        //        modal.modal('hide');
+        //    })
+        //    .catch(function (err) {
+        //        $('#editUserForm').form('add errors', ['Could not change password'])
+        //    });
+    };
+
+    $scope.getEditFormInputs = function () {
+        console.log("Form", $scope.editUserForm);
+        var f = $scope.editUserForm;
+        var fields = {};
+        if (f.name.$dirty) fields.name = $scope.editForm.name;
+        if (f.address.$dirty) fields.address = $scope.editForm.address;
+        if (f.zip.$dirty) fields.zip = $scope.editForm.zip;
+        if (f.email.$dirty) fields.email = $scope.editForm.email;
+        if (f.phone.$dirty) fields.phone = $scope.editForm.phone;
+
+        console.log("fields", fields);
+        return fields;
+    };
+
+    $scope.saveForm = function(form) {
+        $scope.editUserForm = form;
+    };
+
+
+    $scope.showDelAccountModal = function (id) {
+        deleteAccountIndex = id;
+        $('#deleteAccountModal').modal('show');
+    };
+
     $scope.showPassModal = function () {
         $('#changePassModal').modal('show');
     };
 
-    $scope.initPassModal = function () {
-        $('#changePassModal').modal({
-            onDeny: function () {
-                console.log("NO!");
-                return true;
+    $scope.showEditModal = function () {
+        console.log('Showing user', $scope.selectedCustomer.UserName);
+        $('#editUserForm').form('set values', {
+            formEditName: $scope.selectedCustomer.UserName,
+            formEditAddress: $scope.selectedCustomer.Address,
+            formEditZip: $scope.selectedCustomer.PostalCode,
+            formEditEmail: $scope.selectedCustomer.Email,
+            formEditPhone: $scope.selectedCustomer.Phone
+        });
+        $('#editUserModal').modal('show');
+    };
+
+    $scope.changePassValidation = {
+        fields: {
+            password: {
+                identifier: 'password',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter your password'
+                    },
+                    {
+                        type: 'length[6]',
+                        prompt: 'Your password must be at least 6 characters'
+                    }
+                ]
             },
-            onApprove: function () {
-                //$scope.formChangePass();
-                return false;
+
+            passwordRep: {
+                identifier: 'password_rep',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please repeat your password'
+                    },
+                    {
+                        type: 'match[password]',
+                        prompt: "The passwords does not match"
+                    }
+                ]
             }
-        });
+        }
     };
 
-    $scope.initValidation = function () {
-        console.log("UPDATE FORM VALIDATION!");
-        $('#changePassForm').form({
-            fields: {
-                password: {
-                    identifier: 'password',
-                    rules: [
-                        {
-                            type: 'empty',
-                            prompt: 'Please enter your password'
-                        },
-                        {
-                            type: 'length[6]',
-                            prompt: 'Your password must be at least 6 characters'
-                        }
-                    ]
-                },
-
-                passwordRep: {
-                    identifier: 'password_rep',
-                    rules: [
-                        {
-                            type: 'empty',
-                            prompt: 'Please repeat your password'
-                        },
-                        {
-                            type: 'match[password]',
-                            prompt: "The passwords does not match"
-                        }
-                    ]
-                }
-            }
-        });
-    };
-
-    $scope.showDelAccountModal = function (id) {
-        deleteAccountIndex = id;
-        console.log("Delete Index", deleteAccountIndex);
-        console.log("Accounts", $scope.accounts);
-        $('#deleteAccountModal').modal('show');
-        $scope.initDelAccountModal();
-    };
-
-    $scope.initDelAccountModal = function () {
-        $('#deleteAccountModal').modal({
-            onDeny: function () {
-                console.log("NO!");
-                return true;
+    $scope.editFormValidation = {
+        inline: true,
+        fields: {
+            name: {
+                identifier: 'name',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a name'
+                    },
+                    {
+                        type: 'length[2]',
+                        prompt: 'You name is too short'
+                    }
+                ]
             },
-            onApprove: function () {
-                deleteAccount();
-                return true;
+
+            address: {
+                identifier: 'address',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter an address'
+                    },
+                    {
+                        type: 'length[4]',
+                        prompt: "Your address is too short"
+                    }
+                ]
+            },
+
+            zip: {
+                identifier: 'zip',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a zip code'
+                    },
+                    {
+                        type: 'length[4]',
+                        prompt: "Your zip code is too short"
+                    }
+                ]
+            },
+
+            email: {
+                identifier: 'email',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter an email'
+                    },
+                    {
+                        type: 'email',
+                        prompt: "Please enter a valid email"
+                    }
+                ]
+            },
+
+            phone: {
+                identifier: 'phone',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a phone number'
+                    },
+                    {
+                        type: 'number',
+                        prompt: "Please enter a valid phone number"
+                    },
+                    {
+                        type: 'length[8]',
+                        prompt: "Your phone number is too short"
+                    }
+                ]
             }
-        });
-    }
+        }
+    };
 
 }]);

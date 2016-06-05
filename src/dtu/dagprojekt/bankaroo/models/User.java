@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 
 @XmlRootElement
 public class User {
@@ -19,6 +20,9 @@ public class User {
     @XmlElement(name="salt", required = false) private String salt;
     @XmlElement(name="password") private String plainPassword;
     private String hashPassword;
+
+    public User() {
+    }
 
     public User(ResultSet resultSet) throws SQLException {
         this.cpr = resultSet.getInt("UserID");
@@ -85,5 +89,17 @@ public class User {
     @Override
     public String toString() {
         return "Customer: " + this.name + " (" + this.cpr + ")";
+    }
+
+    public LinkedHashMap<String, Object> getUpdateFields(){
+        LinkedHashMap<String, Object> params = new LinkedHashMap<String, Object>();
+
+        if (!(this.name == null)) params.put("UserName", this.name);
+        if (!(this.zip == 0)) params.put("PostalCode", this.zip);
+        if (!(this.address == null)) params.put("Address", this.address);
+        if (!(this.phone == 0)) params.put("Phone", this.phone);
+        if (!(this.email == null)) params.put("Email", this.email);
+
+        return params;
     }
 }
