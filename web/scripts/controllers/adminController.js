@@ -113,7 +113,6 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
     };
 
     $scope.formEditUser = function () {
-        $scope.loadingCustomer = true;
         var modal = $('#editUserModal');
         modal.modal('refresh');
         var isValid = $('#editUserForm').form('is valid');
@@ -121,15 +120,23 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
             console.error("FORM IS NOT VALID");
             return false;
         }
+        var pristine = $scope.editUserForm.$pristine;
+        if (pristine){
+            console.log("No changes to form");
+            return true;
+
+        }
+
+        $scope.loadingCustomer = true;
         adminService.updateUser($scope.selectedCustomer.UserID, $scope.getEditFormInputs())
             .then(function (data) {
                 $scope.getCustomerByID($routeParams.id);
                 modal.modal('hide');
             })
             .catch(function (err) {
-                $('#editUserForm').form('add errors', ['Could not edit user'])
+                $('#editUserForm').form('add errors', ['Could not edit user']);
+                $scope.loadingCustomer = false;
             });
-
     };
 
     $scope.getEditFormInputs = function () {
@@ -177,6 +184,7 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
     };
 
     $scope.changePassValidation = {
+        inline: true,
         fields: {
             password: {
                 identifier: 'password',

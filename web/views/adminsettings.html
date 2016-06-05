@@ -72,33 +72,49 @@
                     <h3 class="header">
                         {{selectedCustomer.UserName}}
                     </h3>
-                    <div class="ui horizontal list">
-                        <div class="item">
-                            <i class="privacy icon"></i>
-                            <div class="content">
-                                <div class="header">CPR Number</div>
-                                <div class="description">{{selectedCustomer.UserID}}</div>
+                    <div class="ui two column grid">
+                        <div class="row">
+                            <div class="column">
+                                <h5 class="ui header">
+                                    <i class="privacy icon"></i>
+                                    <div class="content">
+                                        CPR Number
+                                        <div class="sub header">{{selectedCustomer.UserID}}</div>
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="column">
+                                <h5 class="ui header">
+                                    <i class="mail icon"></i>
+                                    <div class="content">
+                                        Email
+                                        <div class="sub header">{{selectedCustomer.Email}}</div>
+                                    </div>
+                                </h5>
                             </div>
                         </div>
-                        <div class="item">
-                            <i class="mail icon"></i>
-                            <div class="content">
-                                <div class="header">Email</div>
-                                <div class="description">{{selectedCustomer.Email}}</div>
+                        <div class="row">
+                            <div class="column">
+                                <h5 class="ui header">
+                                    <i class="home icon"></i>
+                                    <div class="content">
+                                        Address
+                                        <div class="sub header">
+                                            {{selectedCustomer.Address}},
+                                            {{selectedCustomer.PostalCode}},
+                                            {{selectedCustomer.City}}
+                                        </div>
+                                    </div>
+                                </h5>
                             </div>
-                        </div>
-                        <div class="item">
-                            <i class="home icon"></i>
-                            <div class="content">
-                                <div class="header">Address</div>
-                                <div class="description">{{selectedCustomer.Address}}, {{selectedCustomer.PostalCode}}</div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <i class="phone icon"></i>
-                            <div class="content">
-                                <div class="header">Phone</div>
-                                <div class="description">{{selectedCustomer.Phone}}</div>
+                            <div class="column">
+                                <h5 class="ui header">
+                                    <i class="phone icon"></i>
+                                    <div class="content">
+                                        Phone
+                                        <div class="sub header">{{selectedCustomer.Phone}}</div>
+                                    </div>
+                                </h5>
                             </div>
                         </div>
                     </div>
@@ -116,21 +132,23 @@
 </div>
 
 <modal title="Change Password"" approve="formChangePass()" deny="" id="changePassModal" template-url="/views/modals/basic.html">
-    <form class="ui form" id="changePassForm" validation="changePassValidation" novalidate onsubmit="return false;">
-        <div class="field">
-            <label>Password</label>
-            <input type="password" name="password" ng-model="passForm.password" placeholder="Password...">
-        </div>
-        <div class="field">
-            <label>Repeat password</label>
-            <input type="password" name="password_rep" placeholder="Repeat password...">
-        </div>
-        <div class="ui error message"></div>
-    </form>
+<form class="ui form" id="changePassForm" validation="changePassValidation" novalidate onsubmit="return false;">
+    <div class="field">
+        <label>Password</label>
+        <input type="password" name="password" ng-model="passForm.password" placeholder="Password...">
+    </div>
+    <div class="field">
+        <label>Repeat password</label>
+        <input type="password" name="password_rep" placeholder="Repeat password...">
+    </div>
+    <div class="ui error message"></div>
+</form>
 </modal>
 
-<modal title="Edit Customer" approve="formEditUser()" deny="" id="editUserModal" template-url="/views/modals/basic.html">
-    <form class="ui form" id="editUserForm" name="editUserForm" validation="editFormValidation" novalidate onsubmit="return false;">
+<modal title="Edit Customer" approve="formEditUser()" deny="" id="editUserModal"
+       template-url="/views/modals/basic.html">
+    <form class="ui form" id="editUserForm" name="editUserForm" validation="editFormValidation" novalidate
+          onsubmit="return false;">
         <div ng-init="saveForm(editUserForm)"></div>
         <div class="field">
             <label>Name</label>
@@ -139,7 +157,8 @@
         <div class="two fields">
             <div class="field">
                 <label>Address</label>
-                <input id="formEditAddress" type="text" name="address" ng-model="editForm.address" placeholder="Address...">
+                <input id="formEditAddress" type="text" name="address" ng-model="editForm.address"
+                       placeholder="Address...">
             </div>
             <div class="field">
                 <label>Zip Code</label>
@@ -160,7 +179,7 @@
 </modal>
 
 <modal title="Delete Account" approve="deleteAccount()" deny="" id="deleteAccountModal"
-               template-url="/views/modals/confirm.html">
+       template-url="/views/modals/confirm.html">
     <p>The account will be deleted and all currency will be lost</p>
 </modal>
 

@@ -14,7 +14,7 @@ public class UpdateQuery {
         this.sql = new StringBuilder();
     }
 
-    public UpdateQuery schema(Schema schema){
+    public UpdateQuery update(Schema schema){
         sql.append("UPDATE \"").append(DB.TABLE).append("\"");
         sql.append(".\"").append(schema.toString()).append("\" ");
         return this;
@@ -33,8 +33,13 @@ public class UpdateQuery {
         return this;
     }
 
-    public UpdateQuery where(String where){
-        sql.append(" WHERE ").append(where);
+    public UpdateQuery where(String field){
+        sql.append(" WHERE ").append("\"").append(field).append("\" ");
+        return this;
+    }
+
+    public UpdateQuery equal(Object value){
+        sql.append("= ").append("'").append(value).append("' ");
         return this;
     }
 

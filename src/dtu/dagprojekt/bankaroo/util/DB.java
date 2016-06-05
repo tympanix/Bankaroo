@@ -79,7 +79,7 @@ public class DB {
     }
 
     public static StreamingOutput getUser(long id) throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"User\" WHERE \"UserID\" = "+id+"");
+        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"UserView\" WHERE \"UserID\" = "+id+"");
         return query.toJson();
     }
 
@@ -205,9 +205,9 @@ public class DB {
 
     public static void updateUser(User user) throws SQLException {
         UpdateQuery q = new UpdateQuery();
-        q.schema(Schema.User);
+        q.update(Schema.User);
         q.set(user.getUpdateFields());
-        q.where("\"UserID\" = " + user.getCpr());
+        q.where("UserID").equal(user.getCpr());
         q.execute();
         q.expect(1);
     }
