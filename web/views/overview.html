@@ -149,10 +149,16 @@
        template-url="/views/modals/basic.html">
     <form class="ui form" id="editUserForm" name="editUserForm" validation="editFormValidation" novalidate
           onsubmit="return false;">
-        <div ng-init="saveForm(editUserForm)"></div>
-        <div class="field">
-            <label>Name</label>
-            <input id="formEditName" type="text" name="name" ng-model="editForm.name" placeholder="Name...">
+        <div ng-init="saveEditForm(editUserForm)"></div>
+        <div class="two fields">
+            <div class="field">
+                <label>Name</label>
+                <input id="formEditName" type="text" name="name" ng-model="editForm.name" placeholder="Name...">
+            </div>
+            <div class="disabled field">
+                <label>CPR Number</label>
+                <input id="formEditCPR" type="number" name="cpr" ng-model="editForm.cpr" placeholder="CPR...">
+            </div>
         </div>
         <div class="two fields">
             <div class="field">

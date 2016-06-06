@@ -22,8 +22,8 @@ bankaroo.config(function($routeProvider){
             controller: "adminController"
         })
         .when("/admin/:id", {
-            templateUrl: "views/adminsettings.html",
-            controller: "adminController"
+            templateUrl: "views/overview.html",
+            controller: "overviewController"
         })
 });
 

@@ -1,13 +1,20 @@
-<div class="ui category search">
-    <div class="ui icon input" ng-class="{loading: searching}">
-        <input class="prompt" type="text"
-               ng-model="customerSearch"
-               ng-change="getCustomers()"
-               ng-model-options="{debounce: 250}"
-               placeholder="Search customers...">
-        <i class="search icon"></i>
+<div class="ui two column grid">
+    <div class="ui column left floated">
+        <div class="ui category search">
+            <div class="ui icon input" ng-class="{loading: searching}">
+                <input class="prompt" type="text"
+                       ng-model="customerSearch"
+                       ng-change="getCustomers()"
+                       ng-model-options="{debounce: 250}"
+                       placeholder="Search customers...">
+                <i class="search icon"></i>
+            </div>
+            <div class="results"></div>
+        </div>
     </div>
-    <div class="results"></div>
+    <div class="ui column right floated">
+        <a class="ui button green right floated" ng-click="showNewUserModal()">Add New Customer</a>
+    </div>
 </div>
 
 <table class="ui single line unstackable selectable clickable table" ng-show="customers">
@@ -24,3 +31,41 @@
     </tr>
     </tbody>
 </table>
+
+<modal title="Add New Customer" approve="newCustomer()" deny="" id="newUserModal"
+       template-url="/views/modals/basic.html">
+    <form class="ui form" id="newUserForm" name="newUserForm" validation="editFormValidation" novalidate
+          onsubmit="return false;">
+        <div class="two fields">
+            <div class="field">
+                <label>Name</label>
+                <input id="formNewName" type="text" name="name" ng-model="newForm.name" placeholder="Name...">
+            </div>
+            <div class="field">
+                <label>CPR Number</label>
+                <input id="formNewCPR" type="number" name="cpr" ng-model="newForm.cpr" placeholder="CPR...">
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>Address</label>
+                <input id="formNewAddress" type="text" name="address" ng-model="newForm.address"
+                       placeholder="Address...">
+            </div>
+            <div class="field">
+                <label>Zip Code</label>
+                <input id="formNewZip" type="number" name="zip" ng-model="newForm.zip" placeholder="Zip...">
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>Email</label>
+                <input id="formNewEmail" type="email" name="email" ng-model="newForm.email" placeholder="Email...">
+            </div>
+            <div class="field">
+                <label>Phone Number</label>
+                <input id="formNewPhone" type="number" name="phone" ng-model="newForm.phone" placeholder="Phone...">
+            </div>
+        </div>
+    </form>
+</modal>

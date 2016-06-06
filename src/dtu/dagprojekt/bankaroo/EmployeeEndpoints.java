@@ -65,9 +65,22 @@ public class EmployeeEndpoints {
     @POST
     @Secured
     @Path("/update/user")
-    public Response updateUser(User user){
+    public Response updateUser(@QueryParam("id") long id, User user){
         try {
-            DB.updateUser(user);
+            DB.updateUser(id, user);
+            return Response.ok().build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
+    @POST
+    @Secured
+    @Path("/new/user")
+    public Response newUser(User user){
+        try {
+            DB.insertUser(user);
             return Response.ok().build();
         } catch (SQLException e) {
             e.printStackTrace();

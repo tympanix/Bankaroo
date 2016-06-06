@@ -1,9 +1,8 @@
-angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$routeParams", "$window", "adminService", function ($scope, $http, $routeParams, $window, adminService) {
+angular.module('bankaroo').controller("overviewController", ["$scope", "$http", "$routeParams", "$window", "adminService", function ($scope, $http, $routeParams, $window, adminService) {
 
-    // Customer search form
-    $scope.customerSearch = adminService.customerSearch();
     $scope.selectedCustomer = null;
-    $scope.searching = false;
+    $scope.customers = null;
+    $scope.accounts = null;
 
     // Form
     $scope.passForm = {
@@ -32,24 +31,11 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
 
     $scope.customerId = $routeParams.id;
 
-    $scope.customers = null;
-    $scope.accounts = null;
-
-    $scope.getCustomers = function () {
-        if ($scope.searching) return;
-        $scope.searching = true;
-        console.log("Changed!", $scope.customerSearch);
-        adminService.getCustomers($scope.customerSearch)
-            .then(function () {
-                $scope.searching = false;
-            });
-        adminService.customerSearch($scope.customerSearch);
-    };
-
     $scope.getCustomerByID = function (id) {
         $scope.loadingCustomer = true;
         adminService.getCustomerByID(id)
             .then(function (data) {
+                console.log("Scope", $scope);
                 console.log("Selected customer", data.data[0]);
                 $scope.selectedCustomer = data.data[0];
                 $scope.loadingCustomer = false;
@@ -59,12 +45,6 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
                 $scope.loadingCustomer = false;
             })
     };
-
-    $scope.$watch(function () {
-        return adminService.customers();
-    }, function (newValue) {
-        $scope.customers = newValue;
-    });
 
     $scope.newCustomer = function () {
         var f = $('#newUserForm');
@@ -101,12 +81,6 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
             .catch(function (err) {
                 console.log("ACCOUNTS err", err)
             })
-    };
-
-    $scope.gotoCustomer = function (id) {
-        var customer = $scope.customers[id];
-        adminService.selectedCustomer(customer);
-        $window.location.href = '#/admin/' + customer.UserID;
     };
 
     $scope.deleteAccount = function () {
@@ -165,8 +139,9 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
 
         console.log("Starting update...");
         $scope.loadingCustomer = true;
-        adminService.updateUser($scope.selectedCustomer.UserID, $scope.getEditFormInputs())
+        adminService.updateUser($routeParams.id, $scope.getEditFormInputs())
             .then(function (data) {
+                console.log("Scope", $scope);
                 $scope.getCustomerByID($routeParams.id);
                 modal.modal('hide');
             })
@@ -220,13 +195,13 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
 
     $scope.showEditModal = function () {
         console.log('Showing user', $scope.selectedCustomer);
-        if ($scope.selectedCustomer){
+        if ($scope.selectedCustomer) {
             populateEditForm();
         }
         $('#editUserModal').modal('show');
     };
 
-    function populateEditForm(){
+    function populateEditForm() {
         $('#editUserForm').form('set values', {
             formEditCPR: $scope.selectedCustomer.UserID,
             formEditName: $scope.selectedCustomer.UserName,

@@ -23,6 +23,10 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
         return req;
     };
 
+    this.newCustomer = function (params) {
+        return apiPost("/admin/new/user", params)
+    };
+
     this.getCustomers = function (name) {
         customerSearch = name;
         var req = apiGet("/admin/customers", {name: name});
@@ -37,8 +41,7 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
     };
 
     this.updateUser = function (id, params) {
-        params.cpr = id;
-        var req = apiPost("/admin/update/user", params);
+        var req = apiPost("/admin/update/user", params, {id: id});
         return req;
     };
 
@@ -85,10 +88,11 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
         return $http(req)
     }
 
-    function apiPost(url, data) {
+    function apiPost(url, data, params) {
         var req = {
             method: 'POST',
             data: data,
+            params: params,
             url: '/api' + url,
             headers: {
                 'Authorization': getToken()
