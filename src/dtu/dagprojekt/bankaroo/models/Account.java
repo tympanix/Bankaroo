@@ -8,6 +8,10 @@ import java.sql.SQLException;
 @XmlRootElement
 public class Account {
 
+    public enum Field {
+        AccountID, AccountName, Balance, UserID, AccountTypeName, Currency, All
+    }
+
     @XmlElement(name="id", required = false) private int id;
     @XmlElement(name="name", required = true) private String name;
     @XmlElement(name="balance", required = false) private double balance;

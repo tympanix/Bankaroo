@@ -182,28 +182,45 @@ public class DB {
     }
 
     public static StreamingOutput getHistory(int accountId) throws SQLException, IOException {
+        StreamingOutput output;
+
+        UpdateQuery q = new UpdateQuery();
+        q.select(Account.Field.All);
+        q.from(Schema.HistoryView);
+        q.where(Account.Field.AccountID).equals(accountId);
+        output = q.execute();
+        q.expect(1);
+
+
+
+
         Query query = new Query("SELECT * FROM \"DTUGRP09\".\"HistoryView\" WHERE \"AccountID\" = "+accountId+"");
         return query.toJson();
+        // Lav new execute
     }
 
-    public static void transaction(double amount, String currency, int accountFrom, int accountTo, String messageFrom, String messageTo) throws SQLException {
-        Statement statement = DB.getConnection().createStatement();
-        statement.execute("CALL TRANSACTION("+amount+", '"+currency+"', "+accountFrom+", "+accountTo+", '"+messageFrom+"', '"+messageTo+"')");
-        statement.close();
-        DB.getConnection().commit();
+    public static UpdateQuery transaction(double amount, String currency, int accountFrom, int accountTo, String messageFrom, String messageTo) throws SQLException {
+        UpdateQuery q = new UpdateQuery();
+        q.call(Procedure.Transaction);
+        q.params(amount,currency,accountFrom,accountTo,messageFrom,messageTo);
+        q.execute();
+        q.expect(1);
     }
 
-    public static void changePassword(long cpr, String password) throws SQLException {
+    public static UpdateQuery changePassword(long cpr, String password) throws SQLException {
         String salt = Utils.newSalt();
         String hashedPassword = Utils.hashPassword(password, salt);
-        Statement statement = DB.getConnection().createStatement();
-        int updated = statement.executeUpdate("UPDATE \"DTUGRP09\".\"User\" SET \"Salt\" = '"+salt+"', \"Password\" = '"+hashedPassword+"' WHERE \"UserID\" = '"+cpr+"';");
-        statement.close();
-        DB.getConnection().commit();
-        if (updated == 0) throw new SQLException("User was not found");
+
+        UpdateQuery q = new UpdateQuery();
+        q.update(Schema.User)
+                .set(User.Field.Salt, salt)
+                .set(User.Field.Password, hashedPassword)
+                .where(User.Field.UserID).equal(cpr);
+        q.execute();
+        q.expect(1);
     }
 
-    public static void updateUser(User user) throws SQLException {
+    public static UpdateQuery updateUser(User user) throws SQLException {
         UpdateQuery q = new UpdateQuery();
         q.update(Schema.User);
         q.set(user.getUpdatedFields());

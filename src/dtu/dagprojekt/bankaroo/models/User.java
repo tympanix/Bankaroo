@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 public class User {
 
     public enum Field {
-        UserID, UserName, Address, PostalCode, Phone, Email, Salt, Password
+        UserID, UserName, Address, PostalCode, Phone, Email, Salt, Password, All
     }
 
     @XmlElement(name="cpr") private long cpr;
@@ -97,14 +97,14 @@ public class User {
         return "Customer: " + this.name + " (" + this.cpr + ")";
     }
 
-    public LinkedHashMap<String, Object> getUpdatedFields(){
-        LinkedHashMap<String, Object> params = new LinkedHashMap<String, Object>();
+    public LinkedHashMap<Enum, Object> getUpdatedFields(){
+        LinkedHashMap<Enum, Object> params = new LinkedHashMap<Enum, Object>();
 
-        if (!(this.name == null)) params.put("UserName", this.name);
-        if (!(this.zip == 0)) params.put("PostalCode", this.zip);
-        if (!(this.address == null)) params.put("Address", this.address);
-        if (!(this.phone == 0)) params.put("Phone", this.phone);
-        if (!(this.email == null)) params.put("Email", this.email);
+        if (!(this.name == null)) params.put(Field.UserName, this.name);
+        if (!(this.zip == 0)) params.put(Field.PostalCode, this.zip);
+        if (!(this.address == null)) params.put(Field.Address, this.address);
+        if (!(this.phone == 0)) params.put(Field.Phone, this.phone);
+        if (!(this.email == null)) params.put(Field.Email, this.email);
 
         return params;
     }
