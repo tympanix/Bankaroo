@@ -1,5 +1,7 @@
 package dtu.dagprojekt.bankaroo.util;
 
+import dtu.dagprojekt.bankaroo.models.User;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashMap;
@@ -38,6 +40,10 @@ public class UpdateQuery {
         return this;
     }
 
+    public UpdateQuery where(Enum field){
+        return where(field.toString());
+    }
+
     public UpdateQuery equal(Object value){
         sql.append("= ").append("'").append(value).append("' ");
         return this;
@@ -57,7 +63,7 @@ public class UpdateQuery {
 
     public UpdateQuery expect(int i) throws SQLException {
         if (updateCount != i){
-            throw new SQLException("No rows were updated");
+            throw new SQLException("Expected " + i + " row(s) to be updated but updated " + updateCount);
         }
         return this;
     }

@@ -11,6 +11,10 @@ import java.util.LinkedHashMap;
 @XmlRootElement
 public class User {
 
+    public enum Field {
+        UserID, UserName, Address, PostalCode, Phone, Email, Salt, Password
+    }
+
     @XmlElement(name="cpr") private long cpr;
     @XmlElement(name="name") private String name;
     @XmlElement(name="zip") private int zip;
@@ -19,8 +23,10 @@ public class User {
     @XmlElement(name="email") private String email;
     @XmlElement(name="salt", required = false) private String salt;
     @XmlElement(name="password") private String plainPassword;
+
     private String hashPassword;
 
+    // Empty constructor for json parsing
     public User() {
     }
 
@@ -91,7 +97,7 @@ public class User {
         return "Customer: " + this.name + " (" + this.cpr + ")";
     }
 
-    public LinkedHashMap<String, Object> getUpdateFields(){
+    public LinkedHashMap<String, Object> getUpdatedFields(){
         LinkedHashMap<String, Object> params = new LinkedHashMap<String, Object>();
 
         if (!(this.name == null)) params.put("UserName", this.name);

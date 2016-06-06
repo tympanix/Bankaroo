@@ -206,8 +206,8 @@ public class DB {
     public static void updateUser(User user) throws SQLException {
         UpdateQuery q = new UpdateQuery();
         q.update(Schema.User);
-        q.set(user.getUpdateFields());
-        q.where("UserID").equal(user.getCpr());
+        q.set(user.getUpdatedFields());
+        q.where(User.Field.UserID).equal(user.getCpr());
         q.execute();
         q.expect(1);
     }
