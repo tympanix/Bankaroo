@@ -27,28 +27,36 @@ public class UpdateQuery {
     }
 
     public UpdateQuery call(Procedure transaction) {
-        sql.append("CALL ")
-                .append(transaction);
+        sql.append("CALL ").append(transaction);
         return this;
     }
 
-    public UpdateQuery params(Object... para) {
+    public UpdateQuery params(Object... param) {
         sql.append("(");
-        for (Object obj : para){
+        for (Object obj : param){
             if (isFirstElement){
                 isFirstElement = false;
             } else {
                 sql.append(", ");
             }
-            sql.append("'")
-                    .append(obj)
-                    .append("'");
+            sql.append("'").append(obj).append("'");
         }
         sql.append(")");
 
         return this;
 
+    }
 
+    public UpdateQuery values(Object... values) {
+        sql.append("VALUES(");
+        String prepend = "";
+        for (Object obj : values){
+            sql.append(prepend);
+            sql.append("'").append(obj).append("'");
+            prepend = ", ";
+        }
+        sql.append(") ");
+        return this;
     }
 
     public UpdateQuery update(Schema schema){
@@ -58,18 +66,31 @@ public class UpdateQuery {
         return this;
     }
 
-    public UpdateQuery select(Enum field) {
-        sql.append("SELECT ");
-
-        if (field.toString().equals("All"))
-        sql.append("* ");
-
-        isSelectStm = true;
+    public UpdateQuery insert(Schema schema) {
+        sql.append("INSERT INTO \"").append(DB.TABLE).append("\"");
+        sql.append(".\"").append(schema.toString()).append("\" ");
+        isSelectStm = false;
         return this;
-
     }
 
-    public UpdateQuery from(Schema schema) {
+    public UpdateQuery delete() {
+        sql.append("DELETE ");
+        isSelectStm = false;
+        return this;
+    }
+
+    public UpdateQuery select() {
+        sql.append("SELECT ");
+        isSelectStm = true;
+        return this;
+    }
+
+    public UpdateQuery all() {
+        sql.append("* ");
+        return this;
+    }
+
+    public UpdateQuery from(Enum schema) {
         sql.append("FROM \"").append(DB.TABLE).append("\"");
         sql.append(".\"").append(schema.toString()).append("\"");
         return this;
@@ -119,14 +140,17 @@ public class UpdateQuery {
     public UpdateQuery execute() throws SQLException {
         statement = DB.getConnection().createStatement();
 
-        if (!isSelectStm){
-            this.updateCount = statement.executeUpdate(sql.toString());
-            statement.close();
-            DB.getConnection().commit();
-        } else {
+        if (isSelectStm){
             this.resultSet = statement.executeQuery(sql.toString());
+        } else {
+            this.updateCount = statement.executeUpdate(sql.toString());
         }
+
         return this;
+    }
+
+    public ResultSet resultSet(){
+        return resultSet;
     }
 
     public StreamingOutput toJson() throws SQLException {
@@ -146,6 +170,7 @@ public class UpdateQuery {
             }
         };
     }
+
     private void writeJson(Writer out) throws IOException, SQLException {
         JsonWriter writer = new JsonWriter(out);
 
@@ -163,17 +188,14 @@ public class UpdateQuery {
         writer.flush();
     }
 
-    public void close() throws SQLException {
-        // Close the ResultSet
-        resultSet.close();
-
-        // Close the Statement
+    public UpdateQuery close() throws SQLException {
+        // Close the Statement (also closes result set)
         statement.close();
 
         // Connection must be on a unit-of-work boundary to allow close
         DB.getConnection().commit();
+        return this;
     }
-
 
 
     public UpdateQuery expect(int i) throws SQLException {
@@ -182,5 +204,4 @@ public class UpdateQuery {
         }
         return this;
     }
-
 }

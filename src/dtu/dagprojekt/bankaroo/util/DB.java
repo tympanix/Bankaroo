@@ -2,7 +2,6 @@ package dtu.dagprojekt.bankaroo.util;
 
 import dtu.dagprojekt.bankaroo.models.Account;
 import dtu.dagprojekt.bankaroo.models.User;
-import dtu.dagprojekt.bankaroo.models.Employee;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 
 import javax.ws.rs.core.StreamingOutput;
@@ -62,12 +61,6 @@ public class DB {
         con.close();
     }
 
-
-    public static StreamingOutput getEmployees() throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Employee\"");
-        return query.toJson();
-    }
-
     public static StreamingOutput getAccounts() throws SQLException, IOException {
         Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Account\"");
         return query.toJson();
@@ -79,54 +72,31 @@ public class DB {
     }
 
     public static StreamingOutput getUser(long id) throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"UserView\" WHERE \"UserID\" = "+id+"");
-        return query.toJson();
+        return new UpdateQuery()
+                .select().all().from(View.UserView)
+                .where(User.Field.UserID).equal(id)
+                .execute().toJson();
     }
 
-    public static StreamingOutput getExchanges() throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Exchange\"");
-        return query.toJson();
+    public StreamingOutput getAccounts(long id) throws SQLException {
+        return new UpdateQuery()
+                .select().all().from(Schema.Account)
+                .where(User.Field.UserID).equal(id)
+                .execute().toJson();
     }
 
-    public static StreamingOutput getHistory() throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"History\"");
-        return query.toJson();
+    public static UpdateQuery insertUser(User c) throws SQLException {
+        return new UpdateQuery()
+                .insert(Schema.User)
+                .values(c.getCpr(), c.getName(), c.getZip(), c.getAddress(), c.getPhone(), c.getEmail(), c.getSalt(), c.getHashPassword())
+                .execute().expect(1).close();
     }
 
-    public static StreamingOutput getTransactions() throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Transaction\"");
-        return query.toJson();
-    }
-
-    public static StreamingOutput getAccountType() throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"AccountType\"");
-        return query.toJson();
-    }
-
-    public static StreamingOutput getAccounts(long id) throws SQLException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Account\" WHERE \"UserID\" = "+id+"");
-        return query.toJson();
-    }
-
-    public static void insertUser(User c) throws SQLException {
-        Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"User\" VALUES("+c.getCpr()+" ,'"+c.getName()+"', '"+c.getZip()+"', '"+c.getAddress()+"', '"+c.getPhone()+"', '"+c.getEmail()+"', '"+c.getSalt()+"', '"+c.getHashPassword()+"')");
-        statement.close();
-        DB.getConnection().commit();
-    }
-
-    public static void insertAccount(Account a) throws SQLException {
-        Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Account\" VALUES("+a.getId()+" ,'"+a.getName()+"', '"+a.getBalance()+"', '"+a.getCustomer()+"', '"+a.getAccountType()+"', '"+a.getCurrency()+"')");
-        statement.close();
-        DB.getConnection().commit();
-    }
-
-    public static void insertEmployee(Employee e) throws SQLException {
-        Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("INSERT INTO \"DTUGRP09\".\"Employee\" VALUES("+e.getId()+" ,'"+e.getName()+"', '"+e.getSalt()+"', '"+e.getHashPassword()+"')");
-        statement.close();
-        DB.getConnection().commit();
+    public static UpdateQuery insertAccount(Account a) throws SQLException {
+        return new UpdateQuery()
+                .insert(Schema.Account)
+                .values(a.getId(), a.getName(), a.getBalance(), a.getCustomer(), a.getAccountType(), a.getCurrency())
+                .execute().expect(1).close();
     }
 
     public static User login(Credentials c) throws SQLException {
@@ -140,33 +110,21 @@ public class DB {
     }
 
     public static void deleteUser(long cpr) throws SQLException {
-        Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"User\" WHERE \"UserID\" = '"+cpr+"'");
-        statement.close();
-        DB.getConnection().commit();
+        new UpdateQuery()
+                .delete().from(Schema.User)
+                .where(User.Field.UserID).equal(cpr)
+                .execute().expect(1).close();
     }
 
     public static void deleteUser(User c) throws SQLException {
         deleteUser(c.getCpr());
     }
 
-    public static void deleteEmployee(long id) throws SQLException {
-        Statement statement = DB.getConnection().createStatement();
-        statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Employee\" WHERE \"EmployeeID\" = '"+id+"'");
-        statement.close();
-        DB.getConnection().commit();
-    }
-
-    public static void deleteEmployee(Employee e) throws SQLException {
-        deleteEmployee(e.getId());
-    }
-
     public static void deleteAccount(int id) throws SQLException {
-        Statement statement = DB.getConnection().createStatement();
-        int updated = statement.executeUpdate("DELETE FROM \"DTUGRP09\".\"Account\" WHERE \"AccountID\" = '"+id+"'");
-        statement.close();
-        DB.getConnection().commit();
-        if (updated == 0) throw new SQLException("No account found");
+        new UpdateQuery()
+                .delete().from(Schema.Account)
+                .where(Account.Field.AccountID).equal(id)
+                .execute().expect(1).close();
     }
 
     public static void deleteAccount(Account a) throws SQLException {
@@ -175,58 +133,51 @@ public class DB {
     }
 
     public static User getUserByCPR(long cpr) throws SQLException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"User\" WHERE \"UserID\" = "+cpr+"");
-        ResultSet res = query.getResultSet();
-        if (!res.next()) throw new SQLException("No user");
-        return new User(res);
+        UpdateQuery q = new UpdateQuery()
+                .select().all().from(Schema.User)
+                .where(User.Field.UserID).equal(cpr)
+                .execute();
+
+        ResultSet result = q.resultSet();
+        if (!result.next()) throw new SQLException("No user");
+        User user = new User(result);
+        q.close();
+        return user;
     }
 
     public static StreamingOutput getHistory(int accountId) throws SQLException, IOException {
-        StreamingOutput output;
-
-        UpdateQuery q = new UpdateQuery();
-        q.select(Account.Field.All);
-        q.from(Schema.HistoryView);
-        q.where(Account.Field.AccountID).equals(accountId);
-        output = q.execute();
-        q.expect(1);
-
-
-
-
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"HistoryView\" WHERE \"AccountID\" = "+accountId+"");
-        return query.toJson();
-        // Lav new execute
+        return new UpdateQuery()
+                .select().all().from(Schema.HistoryView)
+                .where(Account.Field.AccountID).equal(accountId)
+                .execute().toJson();
     }
 
     public static UpdateQuery transaction(double amount, String currency, int accountFrom, int accountTo, String messageFrom, String messageTo) throws SQLException {
-        UpdateQuery q = new UpdateQuery();
-        q.call(Procedure.Transaction);
-        q.params(amount,currency,accountFrom,accountTo,messageFrom,messageTo);
-        q.execute();
-        q.expect(1);
+        return new UpdateQuery()
+                .call(Procedure.Transaction)
+                .params(amount, currency, accountFrom, accountTo, messageFrom, messageTo)
+                .execute().expect(1).close();
+
     }
 
     public static UpdateQuery changePassword(long cpr, String password) throws SQLException {
         String salt = Utils.newSalt();
         String hashedPassword = Utils.hashPassword(password, salt);
 
-        UpdateQuery q = new UpdateQuery();
-        q.update(Schema.User)
+        return new UpdateQuery()
+                .update(Schema.User)
                 .set(User.Field.Salt, salt)
                 .set(User.Field.Password, hashedPassword)
-                .where(User.Field.UserID).equal(cpr);
-        q.execute();
-        q.expect(1);
+                .where(User.Field.UserID).equal(cpr)
+                .execute().expect(1).close();
     }
 
     public static UpdateQuery updateUser(User user) throws SQLException {
-        UpdateQuery q = new UpdateQuery();
-        q.update(Schema.User);
-        q.set(user.getUpdatedFields());
-        q.where(User.Field.UserID).equal(user.getCpr());
-        q.execute();
-        q.expect(1);
+        return new UpdateQuery()
+                .update(Schema.User)
+                .set(user.getUpdatedFields())
+                .where(User.Field.UserID).equal(user.getCpr())
+                .execute().expect(1).close();
     }
 
 }

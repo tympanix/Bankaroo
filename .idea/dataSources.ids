@@ -6,11 +6,7 @@
       <identifier-quote-string>&quot;</identifier-quote-string>
     </database-info>
     <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact"/>
-    <schema name="DTU25" catalog=""/>
     <schema name="DTUGRP09" catalog=""/>
-    <table name="FISK" schema="DTU25" catalog="" type="TABLE">
-      <column name="FiskID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
-    </table>
     <table name="Account" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="AccountID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4" def="SURFTlRJVFkgR0VORVJBVEVEIEFMV0FZUw=="/>
       <column name="AccountName" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
