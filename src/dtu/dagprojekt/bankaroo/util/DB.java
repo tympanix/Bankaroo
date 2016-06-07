@@ -1,10 +1,11 @@
 package dtu.dagprojekt.bankaroo.util;
 
 import dtu.dagprojekt.bankaroo.models.Account;
+import dtu.dagprojekt.bankaroo.models.History;
+import dtu.dagprojekt.bankaroo.models.Transaction;
 import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 
-import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.sql.*;
 
@@ -61,54 +62,54 @@ public class DB {
         con.close();
     }
 
-    public static UpdateQuery getExchanges() throws SQLException, IOException {
-        return new UpdateQuery()
+    public static Query getExchanges() throws SQLException, IOException {
+        return new Query()
                 .select().all().from(Schema.Exchange)
                 .execute();
     }
 
-    public static UpdateQuery getAccountType() throws SQLException, IOException {
-        return new UpdateQuery()
+    public static Query getAccountType() throws SQLException, IOException {
+        return new Query()
                 .select().all().from(Schema.AccountType)
                 .execute();
     }
 
-    public static UpdateQuery getAccounts() throws SQLException, IOException {
-        return new UpdateQuery()
+    public static Query getAccounts() throws SQLException, IOException {
+        return new Query()
                 .select().all().from(Schema.Account)
                 .execute();
     }
 
-    public static UpdateQuery getUser(String name) throws SQLException, IOException {
-        return new UpdateQuery()
+    public static Query getUser(String name) throws SQLException, IOException {
+        return new Query()
                 .select().all().from(Schema.User)
                 .where().upperLike(User.Field.UserName, name)
                 .execute();
     }
 
-    public static UpdateQuery getUser(long id) throws SQLException, IOException {
-        return new UpdateQuery()
+    public static Query getUser(long id) throws SQLException, IOException {
+        return new Query()
                 .select().all().from(Schema.UserView)
                 .where(User.Field.UserID).equal(id)
                 .execute();
     }
 
-    public static UpdateQuery getAccounts(long id) throws SQLException {
-        return new UpdateQuery()
+    public static Query getAccounts(long id) throws SQLException {
+        return new Query()
                 .select().all().from(Schema.Account)
                 .where(User.Field.UserID).equal(id)
                 .execute();
     }
 
-    public static UpdateQuery insertUser(User c) throws SQLException {
-        return new UpdateQuery()
+    public static Query insertUser(User c) throws SQLException {
+        return new Query()
                 .insert(Schema.User)
                 .values(c.getCpr(), c.getName(), c.getZip(), c.getAddress(), c.getPhone(), c.getEmail(), c.getSalt(), c.getHashPassword())
                 .execute().expect(1).close();
     }
 
-    public static UpdateQuery insertAccount(Account a) throws SQLException {
-        return new UpdateQuery()
+    public static Query insertAccount(Account a) throws SQLException {
+        return new Query()
                 .insert(Schema.Account)
                 .values(a.getId(), a.getName(), a.getBalance(), a.getCustomer(), a.getAccountType(), a.getCurrency())
                 .execute().expect(1).close();
@@ -125,7 +126,7 @@ public class DB {
     }
 
     public static void deleteUser(long cpr) throws SQLException {
-        new UpdateQuery()
+        new Query()
                 .delete().from(Schema.User)
                 .where(User.Field.UserID).equal(cpr)
                 .execute().expect(1).close();
@@ -136,7 +137,7 @@ public class DB {
     }
 
     public static void deleteAccount(int id) throws SQLException {
-        new UpdateQuery()
+        new Query()
                 .delete().from(Schema.Account)
                 .where(Account.Field.AccountID).equal(id)
                 .execute().expect(1).close();
@@ -148,7 +149,7 @@ public class DB {
     }
 
     public static User getUserByCPR(long cpr) throws SQLException {
-        UpdateQuery q = new UpdateQuery()
+        Query q = new Query()
                 .select().all().from(Schema.User)
                 .where(User.Field.UserID).equal(cpr)
                 .execute();
@@ -160,26 +161,27 @@ public class DB {
         return user;
     }
 
-    public static UpdateQuery getHistory(int accountId) throws SQLException, IOException {
-        return new UpdateQuery()
+    public static Query getHistory(int accountId) throws SQLException, IOException {
+        return new Query()
                 .select().all().from(Schema.HistoryView)
                 .where(Account.Field.AccountID).equal(accountId)
+                .orderBy(Transaction.Field.TransactionTime, Query.DESC)
                 .execute();
     }
 
-    public static UpdateQuery transaction(double amount, String currency, int accountFrom, int accountTo, String messageFrom, String messageTo) throws SQLException {
-        return new UpdateQuery()
+    public static Query transaction(double amount, String currency, int accountFrom, int accountTo, String messageFrom, String messageTo) throws SQLException {
+        return new Query()
                 .call(Procedure.Transaction)
                 .params(amount, currency, accountFrom, accountTo, messageFrom, messageTo)
                 .execute().expect(1).close();
 
     }
 
-    public static UpdateQuery changePassword(long cpr, String password) throws SQLException {
+    public static Query changePassword(long cpr, String password) throws SQLException {
         String salt = Utils.newSalt();
         String hashedPassword = Utils.hashPassword(password, salt);
 
-        return new UpdateQuery()
+        return new Query()
                 .update(Schema.User)
                 .set(User.Field.Salt, salt)
                 .set(User.Field.Password, hashedPassword)
@@ -187,8 +189,8 @@ public class DB {
                 .execute().expect(1).close();
     }
 
-    public static UpdateQuery updateUser(long id, User user) throws SQLException {
-        return new UpdateQuery()
+    public static Query updateUser(long id, User user) throws SQLException {
+        return new Query()
                 .update(Schema.User)
                 .set(user.getUpdatedFields())
                 .where(User.Field.UserID).equal(id)

@@ -25,4 +25,18 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
         $('.ui.modal').modal('show');
     }
 
+    $scope.labelType = function (history) {
+        var type = history.TransactionType;
+        if (type == 'W') return 'red';
+        else if (type == 'D') return 'green';
+        else return '';
+    };
+
+    $scope.sign = function (history) {
+        var type = history.TransactionType;
+        if (type == 'W') return '-';
+        else if (type == 'D') return '+';
+        else return '';
+    }
+
 }]);

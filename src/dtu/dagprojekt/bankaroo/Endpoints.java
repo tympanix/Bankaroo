@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 @ApplicationPath("api")
 @Path("/")
-public class HelloWorld extends Application {
+public class Endpoints extends Application {
 
     @Context
     ResponseContext context;

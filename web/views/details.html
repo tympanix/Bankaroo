@@ -3,9 +3,8 @@
 <div class="ui two column stackable grid">
     <div class="column four wide sidebar">
         <div class="ui vertical fluid menu">
-            <a class="active teal item">
+            <a class="active item">
                 History
-                <div class="ui teal left label">{{history.length}}</div>
             </a>
             <a class="item">
                 New Transaction
@@ -18,30 +17,31 @@
                     <input type="text" placeholder="Search history...">
                     <i class="search icon"></i>
                 </div>
-
             </div>
         </div>
     </div>
     <div class="column twelve wide">
-        <table class="ui single line selectable table">
+        <div class="ui active centered large inline loader" ng-if="!history">
+            <div class="ui text loader">Loading History</div>
+        </div>
+        <table class="ui single line table" ng-show="history">
             <thead>
             <tr>
                 <th>Message</th>
-                <th>Transaction Amount</th>
-                <th>Type</th>
                 <th>Date</th>
+                <th>Amount</th>
                 <th>Balance</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-if="history == null">
-                <td>Loading</td>
-            </tr>
             <tr ng-repeat="history in history">
                 <td>{{history.Message}}</td>
-                <td>{{history.AmountLocal | currency}}</td>
-                <td>{{history.TransactionType}}</td>
                 <td>{{history.TransactionTime}}</td>
+                <td>
+                    <div class="ui horizontal label" ng-class="labelType(history)">
+                        <span>{{::sign(history)}}</span>{{history.AmountLocal | currency}}
+                    </div>
+                </td>
                 <td>{{history.Balance | currency}}</td>
             </tr>
             </tbody>

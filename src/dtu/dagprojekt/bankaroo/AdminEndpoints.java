@@ -4,24 +4,23 @@ import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 import dtu.dagprojekt.bankaroo.util.DB;
 import dtu.dagprojekt.bankaroo.util.Secured;
-import dtu.dagprojekt.bankaroo.util.UpdateQuery;
+import dtu.dagprojekt.bankaroo.util.Query;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.sql.SQLException;
 
 @ApplicationPath("api")
 @Path("/admin")
-public class EmployeeEndpoints {
+public class AdminEndpoints {
 
     @GET
     @Secured
     @Path("/customers")
     public Response getCustomers(@DefaultValue("") @QueryParam("name") String name, @DefaultValue("-1") @QueryParam("id") long id) throws IOException, SQLException {
-        UpdateQuery out;
+        Query out;
         if (id > 0){
             out = DB.getUser(id);
         } else {
