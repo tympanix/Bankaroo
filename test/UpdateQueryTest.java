@@ -67,8 +67,4 @@ public class UpdateQueryTest {
         System.out.println(q);
     }
 
-
-
-
-
 }

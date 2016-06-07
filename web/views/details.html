@@ -24,27 +24,60 @@
         <div class="ui active centered large inline loader" ng-if="!history">
             <div class="ui text loader">Loading History</div>
         </div>
-        <table class="ui single line table" ng-show="history">
-            <thead>
-            <tr>
-                <th>Message</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Balance</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="history in history">
-                <td>{{history.Message}}</td>
-                <td>{{history.TransactionTime}}</td>
-                <td>
-                    <div class="ui horizontal label" ng-class="labelType(history)">
-                        <span>{{::sign(history)}}</span>{{history.AmountLocal | currency}}
+        <div ng-show="history">
+            <div class="ui button" ng-click="test()">Click me</div>
+            <div class="ui two column grid">
+                <div class="column">
+                    <div dropdown selected="timeMode" class="ui floating labeled icon dropdown button left floated" id="timeDropdown">
+                        <input name="time" type="hidden">
+                        <i class="alarm icon"></i>
+                        <span class="default text">Time</span>
+                        <div class="menu">
+                            <div class="item" data-value="0" ng-click="setTimeMode(0)">
+                                Time Ago
+                            </div>
+                            <div class="item" data-value="1" ng-click="setTimeMode(1)">
+                                Date
+                            </div>
+                        </div>
                     </div>
-                </td>
-                <td>{{history.Balance | currency}}</td>
-            </tr>
-            </tbody>
-        </table>
+                </div>
+                <div class="column">
+                    <div dropdown selected="exchange" class="ui floating labeled icon dropdown button right floated" id="currencyDropdown">
+                        <input name="currency" type="hidden">
+                        <i class="dollar icon"></i>
+                        <span class="default text">Currency</span>
+                        <div class="menu">
+                            <div class="item" ng-repeat="exchange in exchanges" data-value="{{exchange.Currency}}"
+                                 ng-click="setExchange(exchange.Currency)">
+                                {{exchange.Currency}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="ui single line table">
+                <thead>
+                <tr>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="history in history">
+                    <td>{{history.Message}}</td>
+                    <td>{{history.TransactionTime | time: timeMode}}</td>
+                    <td>
+                        <div class="ui horizontal label" ng-class="labelType(history)">
+                            <span>{{::sign(history)}}</span>{{history.AmountLocal | currency : exchange}}
+                        </div>
+                    </td>
+                    <td>{{history.Balance | currency : exchange}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

@@ -1,10 +1,15 @@
 angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'localStorageService', function ($resource, $http, localStorageService) {
 
     var accounts = null;
+    var exchanges = null;
 
     // Getters
     this.accounts = function () {
         return accounts;
+    };
+
+    this.exchanges = function () {
+        return exchanges;
     };
 
     this.getAccounts = function () {
@@ -27,7 +32,25 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'local
     };
 
     this.getExchange = function () {
-        return apiPub('/exchange')
+        var req = apiPub('/exchange');
+        req.then(function (data) {
+                exchanges = data.data;
+            })
+            .catch(function (err) {
+                console.log("Error in exhanges", err);
+            });
+        return req;
+    };
+
+    this.getExchangeRate = function (currency) {
+        var exchange = exchanges.filter(function(obj) {
+            return obj.Currency == currency;
+        });
+        if (exchange[0]){
+            return exchange[0].Rate;
+        } else {
+            return 100;
+        }
     };
 
     this.getAccountTypes = function () {

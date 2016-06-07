@@ -6,13 +6,7 @@ angular.module('bankaroo').controller("accountController", ["$scope", "$http", "
     $scope.accountCurrency = null;
 
     // Get exchanges
-    bankService.getExchange()
-        .then(function (data) {
-            $scope.exchanges = data.data;
-        })
-        .catch(function (err) {
-            console.log("Error", err)
-        });
+    bankService.getExchange();
 
     // Get account types
     bankService.getAccountTypes()
@@ -22,6 +16,13 @@ angular.module('bankaroo').controller("accountController", ["$scope", "$http", "
         .catch(function (err) {
             console.log("Error", err)
         });
+
+    // Watch bank service variables
+    $scope.$watch(function(){
+        return bankService.exchanges();
+    }, function (newValue) {
+        $scope.exchanges = newValue;
+    });
 
     // Add new account function
     $scope.addAccount = function () {

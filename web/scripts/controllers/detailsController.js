@@ -3,11 +3,30 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
     console.log("Params", $routeParams);
     $scope.accountId = $routeParams.id;
     $scope.bank = bankService;
-    $scope.hello = "Hello";
+
+    $scope.exchanges = null;
+    $scope.exchange = null;
+    $scope.timeMode = 0;
 
     $scope.get = function () {
         console.log("Customers!!!")
     };
+
+    $scope.test = function () {
+        $scope.timeMode = '1';
+    };
+
+    bankService.getExchange()
+        .then(function () {
+            $scope.exchange = "DKK";
+        });
+
+    // Watch bank service variables
+    $scope.$watch(function(){
+        return bankService.exchanges();
+    }, function (newValue) {
+        $scope.exchanges = newValue;
+    });
 
     $scope.getHistory = function () {
         bankService.getHistory($scope.accountId)
@@ -19,11 +38,23 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
             })
     };
 
-    $scope.getHistory();
+    $scope.setExchange = function (exchange) {
+        $scope.exchange = exchange;
+    };
 
-    $scope.showModal = function () {
-        $('.ui.modal').modal('show');
-    }
+    $scope.setTimeMode = function (mode) {
+        $scope.timeMode = mode;
+    };
+
+    $scope.setCurrencyDropdown = function (value) {
+        $('#currencyDropdown').dropdown('set selected', value);
+    };
+
+    $scope.setTimeDropdown = function (value) {
+        $('#timeDropdown').dropdown('set selected', value);
+    };
+
+    $scope.getHistory();
 
     $scope.labelType = function (history) {
         var type = history.TransactionType;
