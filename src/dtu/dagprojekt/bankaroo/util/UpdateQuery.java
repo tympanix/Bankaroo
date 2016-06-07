@@ -26,6 +26,11 @@ public class UpdateQuery {
         this.sql = new StringBuilder();
     }
 
+    @Override
+    public String toString() {
+        return sql.toString();
+    }
+
     public UpdateQuery call(Procedure transaction) {
         sql.append("CALL ").append(transaction);
         return this;
@@ -47,12 +52,21 @@ public class UpdateQuery {
 
     }
 
+    private StringBuilder appendValueSQL(StringBuilder sql, Object obj){
+        if (obj.equals("DEFAULT")){
+            sql.append(obj);
+        } else {
+            sql.append("'").append(obj).append("'");
+        }
+        return sql;
+    }
+
     public UpdateQuery values(Object... values) {
         sql.append("VALUES(");
         String prepend = "";
         for (Object obj : values){
             sql.append(prepend);
-            sql.append("'").append(obj).append("'");
+            appendValueSQL(sql, obj);
             prepend = ", ";
         }
         sql.append(") ");
@@ -90,7 +104,7 @@ public class UpdateQuery {
         return this;
     }
 
-    public UpdateQuery from(Enum schema) {
+    public UpdateQuery from(Schema schema) {
         sql.append("FROM \"").append(DB.TABLE).append("\"");
         sql.append(".\"").append(schema.toString()).append("\"");
         return this;

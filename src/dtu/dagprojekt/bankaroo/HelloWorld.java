@@ -23,48 +23,15 @@ public class HelloWorld extends Application {
 //    DataSource ds1;
 
     @GET
-    @Secured
-    @Path("/employees")
-    public Response getEmployees(@Context SecurityContext s) throws IOException, SQLException {
-        String id = s.getUserPrincipal().getName();
-        System.out.println("ID: " + id);
-        return Response.ok(DB.getEmployees(), MediaType.APPLICATION_JSON).build();
-    }
-
-    @GET
-    @Path("/customers")
-    public Response getCustomers(@QueryParam("name") String name) throws IOException, SQLException {
-        return Response.ok(DB.getUser(name), MediaType.APPLICATION_JSON).build();
-    }
-
-    @GET
-    @Path("/accounts")
-    public Response getAccounts() throws IOException, SQLException {
-        return Response.ok(DB.getAccounts(), MediaType.APPLICATION_JSON).build();
-    }
-
-    @GET
-    @Path("/accounttypes")
-    public Response getAccountTypes() throws IOException, SQLException {
-        return Response.ok(DB.getAccountType(), MediaType.APPLICATION_JSON).build();
-    }
-
-    @GET
-    @Path("/history")
-    public Response getHistory() throws IOException, SQLException {
-        return Response.ok(DB.getHistory(), MediaType.APPLICATION_JSON).build();
-    }
-
-    @GET
     @Path("/exchange")
     public Response getExchange() throws IOException, SQLException {
         return Response.ok(DB.getExchanges(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
-    @Path("/transactions")
-    public Response getTransactions() throws IOException, SQLException {
-        return Response.ok(DB.getTransactions(), MediaType.APPLICATION_JSON).build();
+    @Path("/accounttypes")
+    public Response getAccountTypes() throws IOException, SQLException {
+        return Response.ok(DB.getAccountType(), MediaType.APPLICATION_JSON).build();
     }
 
     @POST

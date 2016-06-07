@@ -2,18 +2,14 @@ package dtu.dagprojekt.bankaroo.models;
 
 import dtu.dagprojekt.bankaroo.util.Utils;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User {
-
-    public enum Field {
-        UserID, UserName, Address, PostalCode, Phone, Email, Salt, Password, All
-    }
 
     @XmlElement(name="cpr") private long cpr;
     @XmlElement(name="name") private String name;
@@ -21,10 +17,14 @@ public class User {
     @XmlElement(name="address") private String address;
     @XmlElement(name="phone") private int phone;
     @XmlElement(name="email") private String email;
-    @XmlElement(name="salt", required = false) private String salt;
     @XmlElement(name="password") private String plainPassword;
 
+    private String salt;
     private String hashPassword;
+
+    public enum Field {
+        UserID, UserName, Address, PostalCode, Phone, Email, Salt, Password
+    }
 
     // Empty constructor for json parsing
     public User() {

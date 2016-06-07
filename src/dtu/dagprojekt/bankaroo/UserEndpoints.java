@@ -39,6 +39,7 @@ public class UserEndpoints {
         account.setBalance(0);
 
         try {
+            System.out.println("Insert Account:");
             DB.insertAccount(account);
             return Response.ok().build();
         } catch (SQLException e) {

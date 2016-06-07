@@ -1,16 +1,12 @@
 package dtu.dagprojekt.bankaroo.models;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Account {
-
-    public enum Field {
-        AccountID, AccountName, Balance, UserID, AccountTypeName, Currency, All
-    }
 
     @XmlElement(name="id", required = false) private int id;
     @XmlElement(name="name", required = true) private String name;
@@ -18,6 +14,10 @@ public class Account {
     @XmlElement(name="customer", required = true) private long customer;
     @XmlElement(name="type", required = true) private String accountType;
     @XmlElement(name="currency", required = true) private String currency;
+
+    public enum Field {
+        AccountID, AccountName, Balance, UserID, AccountTypeName, Currency
+    }
 
     public Account(int id, String name, double balance, int customer, String accountType, String currency) {
         this.id = id;

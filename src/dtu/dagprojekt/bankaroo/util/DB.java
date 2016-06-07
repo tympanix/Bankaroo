@@ -61,6 +61,18 @@ public class DB {
         con.close();
     }
 
+    public static StreamingOutput getExchanges() throws SQLException, IOException {
+        return new UpdateQuery()
+                .select().all().from(Schema.Exchange)
+                .execute().toJson();
+    }
+
+    public static StreamingOutput getAccountType() throws SQLException, IOException {
+        return new UpdateQuery()
+                .select().all().from(Schema.AccountType)
+                .execute().toJson();
+    }
+
     public static StreamingOutput getAccounts() throws SQLException, IOException {
         Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Account\"");
         return query.toJson();
@@ -73,12 +85,12 @@ public class DB {
 
     public static StreamingOutput getUser(long id) throws SQLException, IOException {
         return new UpdateQuery()
-                .select().all().from(View.UserView)
+                .select().all().from(Schema.UserView)
                 .where(User.Field.UserID).equal(id)
                 .execute().toJson();
     }
 
-    public StreamingOutput getAccounts(long id) throws SQLException {
+    public static StreamingOutput getAccounts(long id) throws SQLException {
         return new UpdateQuery()
                 .select().all().from(Schema.Account)
                 .where(User.Field.UserID).equal(id)
@@ -172,11 +184,11 @@ public class DB {
                 .execute().expect(1).close();
     }
 
-    public static UpdateQuery updateUser(User user) throws SQLException {
+    public static UpdateQuery updateUser(long id, User user) throws SQLException {
         return new UpdateQuery()
                 .update(Schema.User)
                 .set(user.getUpdatedFields())
-                .where(User.Field.UserID).equal(user.getCpr())
+                .where(User.Field.UserID).equal(id)
                 .execute().expect(1).close();
     }
 

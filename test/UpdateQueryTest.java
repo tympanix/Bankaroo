@@ -50,11 +50,21 @@ public class UpdateQueryTest {
         //Query query = new Query("SELECT * FROM \"DTUGRP09\".\"HistoryView\"
         // WHERE \"AccountID\" = "+accountId+"");
         UpdateQuery q = new UpdateQuery()
-                .select(Account.Field.All)
-                .from(Schema.HistoryView)
+                .select().all().from(Schema.HistoryView)
                 .where(Account.Field.AccountID).equal("1");
 
         System.out.println(q.getQuery());
+    }
+
+    @Test
+    public void test5(){
+        Account a = new Account("My account", 1107931111, "Savings", "DKK");
+
+        UpdateQuery q = new UpdateQuery()
+                .insert(Schema.Account)
+                .values(a.getId(), a.getName(), a.getBalance(), a.getCustomer(), a.getAccountType(), a.getCurrency());
+
+        System.out.println(q);
     }
 
 
