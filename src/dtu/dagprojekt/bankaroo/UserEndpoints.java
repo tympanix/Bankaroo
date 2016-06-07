@@ -20,14 +20,14 @@ public class UserEndpoints {
     @Secured
     @Path("/accounts")
     public Response getAccounts(@Context AuthContext s) throws IOException, SQLException {
-        return Response.ok(DB.getAccounts(s.getId()), MediaType.APPLICATION_JSON).build();
+        return Response.ok(DB.getAccounts(s.getId()).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
     @Secured
     @Path("/history")
     public Response getHistory(@Context AuthContext s, @DefaultValue("-1") @QueryParam("account") int accountId) throws IOException, SQLException {
-        return Response.ok(DB.getHistory(accountId), MediaType.APPLICATION_JSON).build();
+        return Response.ok(DB.getHistory(accountId).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @POST

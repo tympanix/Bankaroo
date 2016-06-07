@@ -137,12 +137,24 @@ public class UpdateQuery {
         return this;
     }
 
+    public UpdateQuery where() {
+        sql.append(" WHERE ");
+        return this;
+    }
+
     public UpdateQuery where(Enum field){
         return where(field.toString());
     }
 
     public UpdateQuery equal(Object value){
         sql.append("= ").append("'").append(value).append("' ");
+        return this;
+    }
+
+    public UpdateQuery upperLike(Enum field, Object value){
+        // UPPER("field") LIKE UPPER('%value%')
+        sql.append("UPPER(\"").append(field).append("\") ");
+        sql.append("LIKE UPPER('%").append(value).append("%') ");
         return this;
     }
 

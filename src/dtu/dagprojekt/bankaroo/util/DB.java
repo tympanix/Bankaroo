@@ -61,40 +61,43 @@ public class DB {
         con.close();
     }
 
-    public static StreamingOutput getExchanges() throws SQLException, IOException {
+    public static UpdateQuery getExchanges() throws SQLException, IOException {
         return new UpdateQuery()
                 .select().all().from(Schema.Exchange)
-                .execute().toJson();
+                .execute();
     }
 
-    public static StreamingOutput getAccountType() throws SQLException, IOException {
+    public static UpdateQuery getAccountType() throws SQLException, IOException {
         return new UpdateQuery()
                 .select().all().from(Schema.AccountType)
-                .execute().toJson();
+                .execute();
     }
 
-    public static StreamingOutput getAccounts() throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"Account\"");
-        return query.toJson();
+    public static UpdateQuery getAccounts() throws SQLException, IOException {
+        return new UpdateQuery()
+                .select().all().from(Schema.Account)
+                .execute();
     }
 
-    public static StreamingOutput getUser(String name) throws SQLException, IOException {
-        Query query = new Query("SELECT * FROM \"DTUGRP09\".\"User\" WHERE UPPER(\"UserName\") LIKE UPPER('%"+name+"%')");
-        return query.toJson();
+    public static UpdateQuery getUser(String name) throws SQLException, IOException {
+        return new UpdateQuery()
+                .select().all().from(Schema.User)
+                .where().upperLike(User.Field.UserName, name)
+                .execute();
     }
 
-    public static StreamingOutput getUser(long id) throws SQLException, IOException {
+    public static UpdateQuery getUser(long id) throws SQLException, IOException {
         return new UpdateQuery()
                 .select().all().from(Schema.UserView)
                 .where(User.Field.UserID).equal(id)
-                .execute().toJson();
+                .execute();
     }
 
-    public static StreamingOutput getAccounts(long id) throws SQLException {
+    public static UpdateQuery getAccounts(long id) throws SQLException {
         return new UpdateQuery()
                 .select().all().from(Schema.Account)
                 .where(User.Field.UserID).equal(id)
-                .execute().toJson();
+                .execute();
     }
 
     public static UpdateQuery insertUser(User c) throws SQLException {
@@ -157,11 +160,11 @@ public class DB {
         return user;
     }
 
-    public static StreamingOutput getHistory(int accountId) throws SQLException, IOException {
+    public static UpdateQuery getHistory(int accountId) throws SQLException, IOException {
         return new UpdateQuery()
                 .select().all().from(Schema.HistoryView)
                 .where(Account.Field.AccountID).equal(accountId)
-                .execute().toJson();
+                .execute();
     }
 
     public static UpdateQuery transaction(double amount, String currency, int accountFrom, int accountTo, String messageFrom, String messageTo) throws SQLException {

@@ -76,7 +76,6 @@ public class Account {
         return currency;
     }
 
-
     public void setCurrency(String currency) {
         this.currency = currency;
     }

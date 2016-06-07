@@ -4,6 +4,7 @@ import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 import dtu.dagprojekt.bankaroo.util.DB;
 import dtu.dagprojekt.bankaroo.util.Secured;
+import dtu.dagprojekt.bankaroo.util.UpdateQuery;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -20,20 +21,20 @@ public class EmployeeEndpoints {
     @Secured
     @Path("/customers")
     public Response getCustomers(@DefaultValue("") @QueryParam("name") String name, @DefaultValue("-1") @QueryParam("id") long id) throws IOException, SQLException {
-        StreamingOutput out;
+        UpdateQuery out;
         if (id > 0){
             out = DB.getUser(id);
         } else {
             out = DB.getUser(name);
         }
-        return Response.ok(out, MediaType.APPLICATION_JSON).build();
+        return Response.ok(out.toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
     @Secured
     @Path("/accounts")
     public Response getAccounts(@QueryParam("id") long id) throws IOException, SQLException {
-        return Response.ok(DB.getAccounts(id), MediaType.APPLICATION_JSON).build();
+        return Response.ok(DB.getAccounts(id).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET

@@ -25,13 +25,13 @@ public class HelloWorld extends Application {
     @GET
     @Path("/exchange")
     public Response getExchange() throws IOException, SQLException {
-        return Response.ok(DB.getExchanges(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(DB.getExchanges().toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
     @Path("/accounttypes")
     public Response getAccountTypes() throws IOException, SQLException {
-        return Response.ok(DB.getAccountType(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(DB.getAccountType().toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
