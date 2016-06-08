@@ -2,7 +2,7 @@ angular.module('bankaroo').service('loginService' , ['$rootScope', '$http', 'loc
 
     this.login = function(id, password){
         var credentials = {id: id, password: password};
-        $http.post('/api/login', credentials)
+        $http.post('/Bankaroo/api/login', credentials)
             .success(function (data) {
                 console.log("We logged in", data);
                 saveToken(data.token);
@@ -18,7 +18,7 @@ angular.module('bankaroo').service('loginService' , ['$rootScope', '$http', 'loc
     }
 
     function gotoApp(){
-        $window.location.href = '/bank.html';
+        $window.location.href = './bank.html';
     }
 
 }]);

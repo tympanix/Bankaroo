@@ -13,7 +13,8 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
     };
 
     $scope.test = function () {
-        $scope.timeMode = '1';
+        $scope.timeMode = 1;
+        $scope.exchange = 'DKK';
     };
 
     bankService.getExchange()
@@ -37,6 +38,13 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
                 console.error("Error", err)
             })
     };
+
+    $scope.$on('currencyUpdate', function(event) {
+        console.log('Dropdown event in controller', event);
+        $('#currencyDropdown').dropdown('refresh');
+        $('#currencyDropdown').dropdown('set selected', 'DKK');
+        $scope.exchange = 'DKK';
+    });
 
     $scope.setExchange = function (exchange) {
         $scope.exchange = exchange;

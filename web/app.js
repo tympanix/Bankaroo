@@ -6,23 +6,23 @@ bankaroo.config(function($routeProvider){
 
     $routeProvider
         .when("/", {
-            templateUrl: "views/main.html",
+            templateUrl: "./views/main.html",
             controller: "mainController"
         })
         .when("/details/:id", {
-            templateUrl: "/views/details.html",
+            templateUrl: "./views/details.html",
             controller: "detailsController"
         })
         .when("/new/account", {
-            templateUrl: "views/account.html",
+            templateUrl: "./views/account.html",
             controller: "accountController"
         })
         .when("/admin", {
-            templateUrl: "views/admin.html",
+            templateUrl: "./views/admin.html",
             controller: "adminController"
         })
         .when("/admin/:id", {
-            templateUrl: "views/overview.html",
+            templateUrl: "./views/overview.html",
             controller: "overviewController"
         })
 });

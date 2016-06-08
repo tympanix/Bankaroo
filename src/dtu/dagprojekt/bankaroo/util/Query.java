@@ -1,15 +1,12 @@
 package dtu.dagprojekt.bankaroo.util;
 
 import com.google.gson.stream.JsonWriter;
-import dtu.dagprojekt.bankaroo.models.Transaction;
 
 
 import javax.ws.rs.core.StreamingOutput;
 import java.io.*;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class Query {
@@ -21,12 +18,29 @@ public class Query {
     private ResultSet resultSet;
 
     private boolean isFirstElement = true;
-    private boolean isSelectStm = false;
-    private Statement statement;
+
+    private boolean isSelectStatement = false;
+    private PreparedStatement statement;
+
+    public LinkedList<Object> getSqlParams() {
+        return sqlParams;
+    }
+
+    public void debugSqlParams() {
+        String seperator = "";
+        for (Object obj : sqlParams){
+            System.out.print(seperator + obj);
+            seperator = ", ";
+        }
+        System.out.println();
+    }
+
+    LinkedList<Object> sqlParams;
 
 
     public Query() {
         this.sql = new StringBuilder();
+        this.sqlParams = new LinkedList<Object>();
     }
 
     @Override
@@ -36,18 +50,17 @@ public class Query {
 
     public Query call(Procedure transaction) {
         sql.append("CALL ").append(transaction);
+        this.isSelectStatement = false;
         return this;
     }
 
     public Query params(Object... param) {
         sql.append("(");
+        String prepend = "";
         for (Object obj : param){
-            if (isFirstElement){
-                isFirstElement = false;
-            } else {
-                sql.append(", ");
-            }
-            sql.append("'").append(obj).append("'");
+            sql.append(prepend);
+            appendValueSQL(sql, obj);
+            prepend = ", ";
         }
         sql.append(")");
 
@@ -59,7 +72,8 @@ public class Query {
         if (obj.equals("DEFAULT")){
             sql.append(obj);
         } else {
-            sql.append("'").append(obj).append("'");
+            sql.append("?");
+            sqlParams.add(obj);
         }
         return sql;
     }
@@ -79,26 +93,26 @@ public class Query {
     public Query update(Schema schema){
         sql.append("UPDATE \"").append(DB.TABLE).append("\"");
         sql.append(".\"").append(schema.toString()).append("\" ");
-        isSelectStm = false;
+        isSelectStatement = false;
         return this;
     }
 
     public Query insert(Schema schema) {
         sql.append("INSERT INTO \"").append(DB.TABLE).append("\"");
         sql.append(".\"").append(schema.toString()).append("\" ");
-        isSelectStm = false;
+        isSelectStatement = false;
         return this;
     }
 
     public Query delete() {
         sql.append("DELETE ");
-        isSelectStm = false;
+        isSelectStatement = false;
         return this;
     }
 
     public Query select() {
         sql.append("SELECT ");
-        isSelectStm = true;
+        isSelectStatement = true;
         return this;
     }
 
@@ -127,10 +141,10 @@ public class Query {
         } else {
             sql.append(", ");
         }
-        String seperator = "";
 
-        sql.append(seperator).append("\"").append(field.toString()).append("\"");
-        sql.append(" = ").append("'").append(value).append("'");
+        sql.append("\"").append(field.toString()).append("\"");
+        sql.append(" = ");
+        appendValueSQL(sql, value);
 
         return this;
     }
@@ -150,14 +164,16 @@ public class Query {
     }
 
     public Query equal(Object value){
-        sql.append("= ").append("'").append(value).append("' ");
+        sql.append("= ").append("?");
+        sqlParams.add(value);
         return this;
     }
 
     public Query upperLike(Enum field, Object value){
         // UPPER("field") LIKE UPPER('%value%')
         sql.append("UPPER(\"").append(field).append("\") ");
-        sql.append("LIKE UPPER('%").append(value).append("%') ");
+        sql.append("LIKE UPPER(?) ");
+        sqlParams.add("%"+value+"%");
         return this;
     }
 
@@ -167,15 +183,34 @@ public class Query {
     }
 
     public Query execute() throws SQLException {
-        statement = DB.getConnection().createStatement();
+        statement = DB.getConnection().prepareStatement(sql.toString());
 
-        if (isSelectStm){
-            this.resultSet = statement.executeQuery(sql.toString());
+        replaceValues(statement);
+
+        if (isSelectStatement){
+            this.resultSet = statement.executeQuery();
         } else {
-            this.updateCount = statement.executeUpdate(sql.toString());
+            this.updateCount = statement.executeUpdate();
         }
 
         return this;
+    }
+
+    private void replaceValues(PreparedStatement statement) throws SQLException {
+        int i = 1;
+        for (Object value : sqlParams){
+            if (value instanceof String){
+                statement.setString(i, String.valueOf(value));
+            } else if (value instanceof Integer){
+                statement.setInt(i, (Integer) value);
+            } else if (value instanceof Double){
+                statement.setDouble(i, (Double) value);
+            } else {
+                statement.setObject(i, value);
+            }
+
+            i++;
+        }
     }
 
     public ResultSet resultSet(){

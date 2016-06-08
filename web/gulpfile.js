@@ -8,7 +8,7 @@ const imagemin = require('gulp-imagemin');
 const watch = require('gulp-watch');
 const runSequence = require('run-sequence');
 
-var proxy = proxyMiddleware('/api', {target: 'http://localhost:9080/BankWar'});
+var proxy = proxyMiddleware('/Bankaroo/api/', {target: 'http://localhost:9080', logLevel: 'debug'});
 
 gulp.task('serve', function() {
     browsersync.init({

@@ -2,7 +2,8 @@ angular.module('bankaroo').directive('dropdown', function() {
     return {
         scope: {
             selected: '=',
-            onChange: '&'
+            onChange: '&',
+            update: '@'
         },
         restrict: 'A',
         link: link
@@ -19,6 +20,12 @@ angular.module('bankaroo').directive('dropdown', function() {
                 console.log("Text", text);
                 console.log("Choice", choice);
             }
+        });
+
+        scope.$on('currencyUpdate', function(event) {
+            console.log('Dropdown event', event);
+            $(element).dropdown('refresh');
+            $(element).dropdown('set selected', 'EUR');
         });
 
         console.log("Dropdown init", scope.selected);

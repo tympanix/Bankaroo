@@ -131,7 +131,7 @@
     </div>
 </div>
 
-<modal title="Change Password"" approve="formChangePass()" deny="" id="changePassModal" template-url="/views/modals/basic.html">
+<modal title="Change Password"" approve="formChangePass()" deny="" id="changePassModal" template-url="./views/modals/basic.html">
 <form class="ui form" id="changePassForm" validation="changePassValidation" novalidate onsubmit="return false;">
     <div class="field">
         <label>Password</label>
@@ -146,7 +146,7 @@
 </modal>
 
 <modal title="Edit Customer" approve="formEditUser()" deny="" id="editUserModal"
-       template-url="/views/modals/basic.html">
+       template-url="./views/modals/basic.html">
     <form class="ui form" id="editUserForm" name="editUserForm" validation="editFormValidation" novalidate
           onsubmit="return false;">
         <div ng-init="saveEditForm(editUserForm)"></div>
@@ -185,7 +185,7 @@
 </modal>
 
 <modal title="Delete Account" approve="deleteAccount()" deny="" id="deleteAccountModal"
-       template-url="/views/modals/confirm.html">
+       template-url="./views/modals/confirm.html">
     <p>The account will be deleted and all currency will be lost</p>
 </modal>
 

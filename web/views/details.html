@@ -25,9 +25,9 @@
             <div class="ui text loader">Loading History</div>
         </div>
         <div ng-show="history">
-            <div class="ui button" ng-click="test()">Click me</div>
             <div class="ui two column grid">
                 <div class="column">
+                    <div class="ui button" ng-click="test()">Reset</div>
                     <div dropdown selected="timeMode" class="ui floating labeled icon dropdown button left floated" id="timeDropdown">
                         <input name="time" type="hidden">
                         <i class="alarm icon"></i>
@@ -43,13 +43,13 @@
                     </div>
                 </div>
                 <div class="column">
-                    <div dropdown selected="exchange" class="ui floating labeled icon dropdown button right floated" id="currencyDropdown">
+                    <div dropdown selected="exchange" update="currencyUpdate" class="ui floating labeled icon dropdown button right floated" id="currencyDropdown">
                         <input name="currency" type="hidden">
                         <i class="dollar icon"></i>
                         <span class="default text">Currency</span>
                         <div class="menu">
                             <div class="item" ng-repeat="exchange in exchanges" data-value="{{exchange.Currency}}"
-                                 ng-click="setExchange(exchange.Currency)">
+                                 ng-click="setExchange(exchange.Currency)" on-finish="currencyUpdate">
                                 {{exchange.Currency}}
                             </div>
                         </div>

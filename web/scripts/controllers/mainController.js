@@ -8,6 +8,8 @@ angular.module('bankaroo').controller("mainController", ["$scope", "$http", "ban
 
     $scope.getAccounts();
 
+    bankService.getExchange();
+
     $scope.$watch(function(){
         return bankService.accounts();
     }, function (newValue) {

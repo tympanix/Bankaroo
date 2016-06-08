@@ -1,5 +1,6 @@
 angular.module('bankaroo').service('adminService', ['$resource', '$http', 'localStorageService', function ($resource, $http, localStorageService) {
 
+    const BASE = "/Bankaroo";
     var selectedCustomer = {};
     var customerSearch = "";
     var customers = null;
@@ -68,7 +69,7 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
     function apiPub(url) {
         var req = {
             method: 'GET',
-            url: '/api' + url
+            url: BASE + '/api' + url
         };
 
         return $http(req)
@@ -79,7 +80,7 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
         var req = {
             method: 'GET',
             params: params,
-            url: '/api' + url,
+            url: BASE + '/api' + url,
             headers: {
                 'Authorization': getToken()
             }
@@ -93,7 +94,7 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
             method: 'POST',
             data: data,
             params: params,
-            url: '/api' + url,
+            url: BASE + './api' + url,
             headers: {
                 'Authorization': getToken()
             }
