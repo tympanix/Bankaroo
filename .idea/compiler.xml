@@ -33,7 +33,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="BankAPI" target="1.5" />
       <module name="Bankaroo" target="1.6" />
     </bytecodeTargetLevel>
   </component>
