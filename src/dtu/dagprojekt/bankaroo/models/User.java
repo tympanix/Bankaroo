@@ -22,6 +22,40 @@ public class User {
     private String salt;
     private String hashPassword;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (getCpr() != user.getCpr()) return false;
+        if (getZip() != user.getZip()) return false;
+        if (getPhone() != user.getPhone()) return false;
+        if (getName() != null ? !getName().equals(user.getName()) : user.getName() != null) return false;
+        if (getAddress() != null ? !getAddress().equals(user.getAddress()) : user.getAddress() != null) return false;
+        if (getEmail() != null ? !getEmail().equals(user.getEmail()) : user.getEmail() != null) return false;
+        if (getPlainPassword() != null ? !getPlainPassword().equals(user.getPlainPassword()) : user.getPlainPassword() != null)
+            return false;
+        if (getSalt() != null ? !getSalt().equals(user.getSalt()) : user.getSalt() != null) return false;
+        return getHashPassword() != null ? getHashPassword().equals(user.getHashPassword()) : user.getHashPassword() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getCpr() ^ (getCpr() >>> 32));
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + getZip();
+        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
+        result = 31 * result + getPhone();
+        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
+        result = 31 * result + (getPlainPassword() != null ? getPlainPassword().hashCode() : 0);
+        result = 31 * result + (getSalt() != null ? getSalt().hashCode() : 0);
+        result = 31 * result + (getHashPassword() != null ? getHashPassword().hashCode() : 0);
+        return result;
+    }
+
     public enum Field {
         UserID, UserName, Address, PostalCode, Phone, Email, Salt, Password
     }
@@ -31,14 +65,14 @@ public class User {
     }
 
     public User(ResultSet resultSet) throws SQLException {
-        this.cpr = resultSet.getInt("UserID");
-        this.name = resultSet.getString("UserName");
-        this.zip = resultSet.getInt("PostalCode");
-        this.address = resultSet.getString("Address");
-        this.phone = resultSet.getInt("Phone");
-        this.email = resultSet.getString("Email");
-        this.salt = resultSet.getString("Salt");
-        this.hashPassword = resultSet.getString("Password");
+        this.cpr = resultSet.getInt(Field.UserID.toString());
+        this.name = resultSet.getString(Field.UserName.toString());
+        this.zip = resultSet.getInt(Field.PostalCode.toString());
+        this.address = resultSet.getString(Field.Address.toString());
+        this.phone = resultSet.getInt(Field.Phone.toString());
+        this.email = resultSet.getString(Field.Email.toString());
+        this.salt = resultSet.getString(Field.Salt.toString());
+        this.hashPassword = resultSet.getString(Field.Password.toString());
     }
 
     public User(long cpr, String name, int zip, String address, int phone, String email, String plainPassword) {

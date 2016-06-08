@@ -45,9 +45,9 @@ public class Utils {
         return null;
     }
 
-    public static String hashPassword(String password, String hash) {
-        byte[] salt = hash.getBytes(StandardCharsets.UTF_8);
-        byte[] pass = password.getBytes(StandardCharsets.UTF_8);
+    public static String hashPassword(String plainPassword, String stringSalt) {
+        byte[] salt = stringSalt.getBytes(StandardCharsets.UTF_8);
+        byte[] pass = plainPassword.getBytes(StandardCharsets.UTF_8);
         byte[] saltPass = Utils.concat(pass, salt);
         return Utils.bytesToHex(Utils.sha256(saltPass));
     }
