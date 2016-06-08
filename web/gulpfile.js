@@ -8,14 +8,25 @@ const imagemin = require('gulp-imagemin');
 const watch = require('gulp-watch');
 const runSequence = require('run-sequence');
 
-var proxy = proxyMiddleware('/Bankaroo/api/', {target: 'http://localhost:9080', logLevel: 'debug'});
+var localProxy = proxyMiddleware('/Bankaroo/api/', {target: 'http://localhost:9080', logLevel: 'debug'});
+var remoteProxy = proxyMiddleware('/Bankaroo/api/', {target: 'http://192.86.32.54:9080', logLevel: 'debug'});
 
 gulp.task('serve', function() {
     browsersync.init({
         port: 3000,
         server: {
             baseDir: "./dist",
-            middleware: [proxy]
+            middleware: [localProxy]
+        }
+    });
+});
+
+gulp.task('serve:remote', function() {
+    browsersync.init({
+        port: 3000,
+        server: {
+            baseDir: "./dist",
+            middleware: [remoteProxy]
         }
     });
 });
@@ -60,6 +71,10 @@ gulp.task('watch', function () {
 
 gulp.task('dev', function () {
     runSequence('build', 'serve', 'watch')
+});
+
+gulp.task('remote', function () {
+    runSequence('build', 'serve:remote', 'watch')
 });
 
 gulp.task('default', ['dev']);
