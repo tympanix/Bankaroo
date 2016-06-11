@@ -5,6 +5,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import javax.xml.bind.ValidationException;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
@@ -44,7 +45,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void D_loginCustomer() throws SQLException {
+    public void D_loginCustomer() throws SQLException, ValidationException {
         Credentials credentials = new Credentials(CPR, PASSWORD);
         User user = DB.login(credentials);
         assertEquals(user.getCpr(), CPR);
@@ -52,7 +53,7 @@ public class CustomerTest {
     }
 
     @Test(expected=SQLException.class)
-    public void E_cantLogin() throws SQLException {
+    public void E_cantLogin() throws SQLException, ValidationException {
         Credentials credentials = new Credentials(CPR, "wrong_password");
         User user = DB.login(credentials);
         assertNull(user);

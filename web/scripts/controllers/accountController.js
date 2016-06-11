@@ -6,7 +6,7 @@ angular.module('bankaroo').controller("accountController", ["$scope", "$http", "
     $scope.accountCurrency = null;
 
     // Get exchanges
-    bankService.getExchange();
+    bankService.apiExchanges();
 
     // Get account types
     bankService.getAccountTypes()

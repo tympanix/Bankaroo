@@ -1,0 +1,36 @@
+<form class="ui form" validation="transactionValidation" id="transactionForm" ng-submit="showTransModal()">
+    <div class="ui two fields">
+        <div class="field">
+            <label>Personal Message</label>
+            <input type="text" ng-model="form.messageFrom" name="messageFrom" placeholder="Personal message...">
+        </div>
+        <div class="field">
+            <label>Recipient Message</label>
+            <input type="text" ng-model="form.messageTo" name="messageTo" placeholder="Recipient message...">
+        </div>
+    </div>
+    <div class="ui two fields">
+        <div class="field">
+            <label>Recipient Account</label>
+            <input type="number" ng-model="form.accountTo" name="accountTo" placeholder="Account number...">
+        </div>
+        <div class="field">
+            <label>Currency</label>
+            <div class="ui right labeled input">
+                <div class="ui label">$</div>
+                <input type="number" ng-model="form.amount" name="amount" placeholder="Amount">
+                <div class="ui basic label">.00</div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="ui positive right labeled icon submit button">
+        Complete Transaction
+        <i class="checkmark icon"></i>
+    </button>
+
+    <div class="ui error message"></div>
+</form>
+
+<modal title="Confirm Transaction" data="form" approve="transaction()" deny="" id="confirmTransModal"
+       template-url="./views/modals/transaction.html">
+</modal>

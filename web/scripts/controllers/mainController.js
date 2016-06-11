@@ -1,14 +1,14 @@
-angular.module('bankaroo').controller("mainController", ["$scope", "$http", "bankService", function($scope, $http, bankService){
+angular.module('bankaroo').controller("mainController", ["$scope", "$http", "$location", "bankService", function($scope, $http, $location, bankService){
 
     $scope.accounts = null;
 
-    $scope.getAccounts = function () {
-        bankService.getAccounts()
+    $scope.apiAccounts = function () {
+        bankService.apiAccounts()
     };
 
-    $scope.getAccounts();
+    $scope.apiAccounts();
 
-    bankService.getExchange();
+    bankService.apiExchanges();
 
     $scope.$watch(function(){
         return bankService.accounts();
@@ -19,6 +19,11 @@ angular.module('bankaroo').controller("mainController", ["$scope", "$http", "ban
     $scope.openModal = function () {
         console.log("Open modal");
         $('.ui.modal').modal('show');
+    };
+
+    $scope.gotoDetails = function (account) {
+        bankService.setSelectedAccount(account);
+        $location.path('/details/' + account.AccountID)
     }
 
 }]);

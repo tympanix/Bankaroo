@@ -1,8 +1,9 @@
-angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'localStorageService', function ($resource, $http, localStorageService) {
+angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 'localStorageService', function ($resource, $http, $q, localStorageService) {
 
     const BASE = '/Bankaroo';
-    var accounts = null;
-    var exchanges = null;
+    var accounts = [];
+    var exchanges = [];
+    var selectedAccount = [];
 
     // Getters
     this.accounts = function () {
@@ -13,7 +14,48 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'local
         return exchanges;
     };
 
-    this.getAccounts = function () {
+    this.getSelectedAccount = function () {
+        return selectedAccount;
+    };
+
+    this.setSelectedAccount = function (account) {
+        selectedAccount = account;
+    };
+
+    function asyncFind(array, compare){
+        return $q(function (resolve, reject) {
+            var found = array.find(compare);
+            if (found !== undefined){
+                console.log("Retrieve async find", found);
+                resolve(found);
+            } else {
+                console.log("Retrieve async find: no result");
+                reject("Array item not found")
+            }
+        })
+    }
+
+    function asyncArray(array){
+        return $q(function (resolve, reject) {
+            if (array === undefined) reject();
+            else if (array.length == 0) reject();
+            else resolve(array);
+        })
+    }
+
+    function accountById(id){
+        return function (account) {
+            return account.AccountID == id;
+        }
+    }
+
+    function exchangeByCurrency(currency){
+        return function (currency) {
+            return currency.Currency == currency;
+        }
+    }
+
+    this.apiAccounts = function () {
         console.log("Token:", getToken());
         var req = apiGet('/user/accounts');
 
@@ -24,6 +66,58 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'local
         return req;
     };
 
+
+    this.getAccount = function (id) {
+        return $fetchElement(accounts, accountById(id), this.apiAccounts);
+    };
+
+    this.getExchange = function (currency) {
+        return $fetchElement(exchanges, exchangeByCurrency(currency), this.apiExchanges())
+    };
+
+    this.getAllExchanges = function (currency) {
+        return $fetchArray(exchanges, this.apiExchanges);
+    };
+
+
+    /*Returns a promise that the requested element will be found in the array
+     * by retrieving it directly or loading it from the external api call*/
+    function $fetch(find, array, compare, apiCall){
+        return $q(function (resolve, reject) {
+            var skip = false;
+            find(array, compare)
+                .then(function (found) {
+                    console.log("Retrieved directly", found);
+                    skip = true;
+                    return $q.when(found)
+                })
+                .catch(function (err) {
+                    console.log("Not found directly", err);
+                    return apiCall()
+                })
+                .then(function (data) {
+                    if (skip) return $q.when(data);
+                    console.log("Retrieve by API");
+                    return find(data.data, compare)
+                })
+                .then(function (found) {
+                    resolve(found)
+                })
+                .catch(function (err) {
+                    console.log("Retrieve failed from API");
+                    reject(err)
+                })
+        });
+    }
+
+    function $fetchElement(array, compare, apiCall) {
+        return $fetch(asyncFind, array, compare, apiCall);
+    }
+
+    function $fetchArray(array, apiCall){
+        return $fetch(asyncArray, array, null, apiCall)
+    }
+
     this.getHistory = function (accountId) {
         return apiGet('/user/history', {account: accountId})
     };
@@ -32,7 +126,7 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'local
         return apiPost('/user/new/account', {name: accountName, type: accountType, currency: accountCurrency})
     };
 
-    this.getExchange = function () {
+    this.apiExchanges = function () {
         var req = apiPub('/exchange');
         req.then(function (data) {
                 exchanges = data.data;
@@ -52,6 +146,19 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', 'local
         } else {
             return 100;
         }
+    };
+
+    this.apiTransaction = function (accountFrom, accountTo, messageFrom, messageTo, amount, currency, password) {
+        var param = {
+            accountFrom: accountFrom,
+            accountTo: accountTo,
+            messageFrom: messageFrom,
+            messageTo: messageTo,
+            amount: amount,
+            currency: currency,
+            password: password
+        };
+        return apiPost('/user/transaction', param)
     };
 
     this.getAccountTypes = function () {

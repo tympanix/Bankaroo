@@ -1,5 +1,9 @@
+body {
+    overflow-y: scroll;
+}
+
 .main {
-    margin-top: 50px;
+    margin-top: 25px;
 }
 
 .sidebar {
@@ -17,4 +21,8 @@
 .ui.segment.thin {
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.ui.input.spaced {
+    margin: 0 .25em 0 .75em;
 }

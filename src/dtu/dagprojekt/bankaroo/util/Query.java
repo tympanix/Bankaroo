@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class Query {
 
+    private static final int TIMEOUT = 5;
+
     public static final String DESC = "DESC";
 
     private StringBuilder sql;
@@ -49,7 +51,8 @@ public class Query {
     }
 
     public Query call(Procedure transaction) {
-        sql.append("CALL ").append(transaction);
+        sql.append("CALL ").append("\"").append(DB.TABLE).append("\".");
+        sql.append(transaction);
         this.isSelectStatement = false;
         return this;
     }
@@ -184,6 +187,7 @@ public class Query {
 
     public Query execute() throws SQLException {
         statement = DB.getConnection().prepareStatement(sql.toString());
+        statement.setQueryTimeout(TIMEOUT);
 
         replaceValues(statement);
 

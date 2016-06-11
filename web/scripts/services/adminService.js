@@ -51,7 +51,7 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
         return req;
     };
 
-    this.getAccounts = function (id) {
+    this.apiAccounts = function (id) {
         return apiGet("/admin/accounts", {id: id})
     };
 
@@ -94,7 +94,7 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
             method: 'POST',
             data: data,
             params: params,
-            url: BASE + './api' + url,
+            url: BASE + '/api' + url,
             headers: {
                 'Authorization': getToken()
             }

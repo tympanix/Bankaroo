@@ -1,12 +1,30 @@
-angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "$routeParams", "bankService", function($scope, $http, $routeParams, bankService){
+angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "$routeParams", "$q", "bankService", function($scope, $http, $routeParams, $q, bankService){
 
     console.log("Params", $routeParams);
     $scope.accountId = $routeParams.id;
-    $scope.bank = bankService;
+
+    $scope.page = "history";
 
     $scope.exchanges = null;
     $scope.exchange = null;
+    $scope.account = null;
     $scope.timeMode = 0;
+
+    $scope.form = {
+        messageFrom: '',
+        messageTo: '',
+        accountTo: '',
+        amount: ''
+    };
+
+    $q.all([
+        bankService.getAccount($scope.accountId),
+        bankService.getAllExchanges()
+    ]).then(function (data) {
+        console.log("Account promise", data[0]);
+        $scope.account = data[0];
+        $scope.exchanges = data[1];
+    });
 
     $scope.get = function () {
         console.log("Customers!!!")
@@ -17,17 +35,13 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
         $scope.exchange = 'DKK';
     };
 
-    bankService.getExchange()
-        .then(function () {
-            $scope.exchange = "DKK";
-        });
+    $scope.gotoPage = function (page) {
+        $scope.page = page;
+    };
 
-    // Watch bank service variables
-    $scope.$watch(function(){
-        return bankService.exchanges();
-    }, function (newValue) {
-        $scope.exchanges = newValue;
-    });
+    $scope.isPage = function (page) {
+        if ($scope.page == page) return 'active';
+    };
 
     $scope.getHistory = function () {
         bankService.getHistory($scope.accountId)
@@ -40,10 +54,11 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
     };
 
     $scope.$on('currencyUpdate', function(event) {
+        if ($scope.account == null) return;
+        var exchange = $scope.account.Currency;
+        console.log("Exchange", exchange);
         console.log('Dropdown event in controller', event);
-        $('#currencyDropdown').dropdown('refresh');
-        $('#currencyDropdown').dropdown('set selected', 'DKK');
-        $scope.exchange = 'DKK';
+        $scope.exchange = exchange;
     });
 
     $scope.setExchange = function (exchange) {
@@ -76,6 +91,117 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
         if (type == 'W') return '-';
         else if (type == 'D') return '+';
         else return '';
+    };
+
+    $scope.showTransModal = function () {
+        var isValid = $('#transactionForm').form('is valid');
+        if (!isValid) {
+            console.error("FORM IS NOT VALID");
+            return false;
+        }
+        $('#confirmTransModal').modal('show');
+    };
+
+    $scope.transaction = function () {
+        var isValid = $('#transactionForm').form('is valid');
+        if (!isValid) {
+            console.error("FORM IS NOT VALID");
+            return false;
+        }
+
+        bankService.apiTransaction(
+            $scope.accountId,
+            $scope.form.accountTo,
+            $scope.form.messageFrom,
+            $scope.form.messageTo,
+            $scope.form.amount, "DKK",
+            $scope.form.password)
+            .then(function (data) {
+                console.log("Transaction complete", data);
+                $('#confirmTransModal').form('hide')
+            })
+            .catch(function (err) {
+                console.error("Transaction error", err);
+            });
+
+        return false;
+    };
+
+    $scope.transactionValidation = {
+        inline: true,
+        fields: {
+            messageFrom: {
+                identifier: 'messageFrom',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a message'
+                    },
+                    {
+                        type: 'length[3]',
+                        prompt: 'Your message is too short'
+                    },
+                    {
+                        type: 'maxLength[45]',
+                        prompt: 'Your message is too long'
+                    }
+                ]
+            },
+
+            messageTo: {
+                identifier: 'messageTo',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter a message'
+                    },
+                    {
+                        type: 'length[3]',
+                        prompt: 'Your message is too short'
+                    },
+                    {
+                        type: 'maxLength[45]',
+                        prompt: 'Your message is too long'
+                    }
+                ]
+            },
+
+            accountTo: {
+                identifier: 'accountTo',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter an account number'
+                    },
+                    {
+                        type: 'number',
+                        prompt: 'The account number must be valid'
+                    },
+                    {
+                        type: 'length[1]',
+                        prompt: 'The account number is too short'
+                    },
+                    {
+                        type: 'not['+$scope.accountId+']',
+                        prompt: 'You can\'t send money to your own account'
+                    }
+                ]
+            },
+
+            amount: {
+                identifier: 'amount',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please supply a currency amount'
+                    },
+                    {
+                        type: 'integer',
+                        prompt: 'Please supply a valid amount'
+                    }
+                ]
+            }
+        }
     }
 
 }]);

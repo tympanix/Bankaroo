@@ -33,7 +33,7 @@ public class AdminEndpoints {
     @Secured
     @Path("/accounts")
     public Response getAccounts(@QueryParam("id") long id) throws IOException, SQLException {
-        return Response.ok(DB.getAccounts(id).toJson(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(DB.getAccountsByUser(id).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET

@@ -1,0 +1,62 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        {{title}}
+    </div>
+    <div class="content">
+        <div class="ui two column stackable grid">
+            <div class="row">
+                <div class="column">
+                    <h5 class="ui header">
+                        <i class="mail icon"></i>
+                        <div class="content">
+                            Personal Message
+                            <div class="sub header">{{data.messageFrom}}</div>
+                        </div>
+                    </h5>
+                </div>
+                <div class="column">
+                    <h5 class="ui header">
+                        <i class="send icon"></i>
+                        <div class="content">
+                            Recipient message
+                            <div class="sub header">{{data.messageTo}}</div>
+                        </div>
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <h5 class="ui header">
+                        <i class="share icon"></i>
+                        <div class="content">
+                            Recipient Account Number
+                            <div class="sub header">{{data.accountTo}}</div>
+                        </div>
+                    </h5>
+                </div>
+                <div class="column">
+                    <h5 class="ui header">
+                        <i class="dollar icon"></i>
+                        <div class="content">
+                            Transfer Amount
+                            <div class="sub header">{{data.amount | currency}}</div>
+                        </div>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Cancel
+        </div>
+        <div class="ui spaced input">
+            <input type="password" ng-model="data.password" name="transPassword" placeholder="Password confirmation...">
+        </div>
+        <button class="ui positive right labeled icon button">
+            Confirm
+            <i class="checkmark icon"></i>
+        </button>
+    </div>
+</div>

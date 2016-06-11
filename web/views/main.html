@@ -12,13 +12,12 @@
                 {{account.AccountTypeName}}
             </div>
             <div class="description">
-                {{account.Balance | currency}}
-                <span>{{account.Currency}}</span>
+                {{account.Balance | currency : account.Currency}}
             </div>
         </div>
         <div class="extra content">
             <div class="ui two buttons">
-                <a ng-href="#/details/{{account.AccountID}}" class="ui basic green button">Manage</a>
+                <a ng-click="gotoDetails(account)" class="ui basic green button">Manage</a>
             </div>
         </div>
     </div>

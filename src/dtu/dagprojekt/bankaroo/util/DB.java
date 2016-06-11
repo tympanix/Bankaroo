@@ -6,6 +6,7 @@ import dtu.dagprojekt.bankaroo.models.Transaction;
 import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 
+import javax.xml.bind.ValidationException;
 import java.io.IOException;
 import java.sql.*;
 
@@ -20,11 +21,13 @@ public class DB {
 
     static private Connection con;
 
-    public static Connection getConnection(){
-        if (con != null){
-            return con;
-        } else {
+    public static Connection getConnection() throws SQLException {
+        if (con == null){
             return newConnection();
+        } else if (con.isClosed())  {
+            return newConnection();
+        } else {
+            return con;
         }
     }
 
@@ -80,6 +83,26 @@ public class DB {
                 .execute();
     }
 
+    public static Query getAccountsByUser(long userId) throws SQLException {
+        return new Query()
+                .select().all().from(Schema.Account)
+                .where(User.Field.UserID).equal(userId)
+                .execute();
+    }
+
+    public static Account getAccountById(int accountId) throws SQLException {
+        Query q = new Query()
+                .select().all().from(Schema.Account)
+                .where(Account.Field.AccountID).equal(accountId)
+                .execute();
+
+        ResultSet result = q.resultSet();
+        if (!result.next()) throw new SQLException("No account");
+        Account account = new Account(result);
+        q.close();
+        return account;
+    }
+
     public static Query getUser(String name) throws SQLException, IOException {
         return new Query()
                 .select().all().from(Schema.User)
@@ -90,13 +113,6 @@ public class DB {
     public static Query getUser(long id) throws SQLException, IOException {
         return new Query()
                 .select().all().from(Schema.UserView)
-                .where(User.Field.UserID).equal(id)
-                .execute();
-    }
-
-    public static Query getAccounts(long id) throws SQLException {
-        return new Query()
-                .select().all().from(Schema.Account)
                 .where(User.Field.UserID).equal(id)
                 .execute();
     }
@@ -115,7 +131,8 @@ public class DB {
                 .execute().expect(1).close();
     }
 
-    public static User login(Credentials c) throws SQLException {
+    public static User login(Credentials c) throws SQLException, ValidationException {
+        c.validate();
         User user = getUserByCPR(c.getId());
         String hashPass = Utils.hashPassword(c.getPassword(), user.getSalt());
         if (hashPass.equals(user.getHashPassword())){
@@ -173,8 +190,15 @@ public class DB {
         return new Query()
                 .call(Procedure.Transaction)
                 .params(amount, currency, accountFrom, accountTo, messageFrom, messageTo)
-                .execute().expect(1).close();
+                .execute().close();
 
+    }
+
+    public static Query transaction(Transaction transaction) throws SQLException {
+        return new Query()
+                .call(Procedure.Transaction)
+                .params(transaction.getParams())
+                .execute().close();
     }
 
     public static Query changePassword(long cpr, String password) throws SQLException {

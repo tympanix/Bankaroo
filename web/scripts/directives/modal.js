@@ -7,7 +7,8 @@ angular.module('bankaroo').directive('modal', function() {
             title: '@',
             desc: '@',
             approve: '&',
-            deny: '&'
+            deny: '&',
+            data: '='
         },
         restrict: 'E',
         link: link
@@ -29,6 +30,11 @@ angular.module('bankaroo').directive('modal', function() {
             onHidden: function () {
                 clearForm(element);
             }
+        });
+
+        scope.$on("$destroy", function() {
+            element.remove();
+            console.info("Removed modal", element);
         });
     }
 

@@ -72,8 +72,8 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
             })
     };
 
-    $scope.getAccounts = function () {
-        adminService.getAccounts($routeParams.id)
+    $scope.apiAccounts = function () {
+        adminService.apiAccounts($routeParams.id)
             .then(function (data) {
                 console.log("Accounts", data.data);
                 $scope.accounts = data.data;
@@ -100,7 +100,7 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
 
     if ($routeParams.id) {
         $scope.getCustomerByID($routeParams.id);
-        $scope.getAccounts();
+        $scope.apiAccounts();
     }
 
     $scope.formChangePass = function () {

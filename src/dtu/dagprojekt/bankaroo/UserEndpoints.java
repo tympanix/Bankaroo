@@ -1,6 +1,9 @@
 package dtu.dagprojekt.bankaroo;
 
 import dtu.dagprojekt.bankaroo.models.Account;
+import dtu.dagprojekt.bankaroo.models.Transaction;
+import dtu.dagprojekt.bankaroo.models.User;
+import dtu.dagprojekt.bankaroo.param.Credentials;
 import dtu.dagprojekt.bankaroo.util.AuthContext;
 import dtu.dagprojekt.bankaroo.util.DB;
 import dtu.dagprojekt.bankaroo.util.Secured;
@@ -20,7 +23,7 @@ public class UserEndpoints {
     @Secured
     @Path("/accounts")
     public Response getAccounts(@Context AuthContext s) throws IOException, SQLException {
-        return Response.ok(DB.getAccounts(s.getId()).toJson(), MediaType.APPLICATION_JSON).build();
+        return Response.ok(DB.getAccountsByUser(s.getId()).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
@@ -47,5 +50,24 @@ public class UserEndpoints {
             return Response.status(Response.Status.CONFLICT).build();
         }
     }
+
+    @POST
+    @Secured
+    @Path("/transaction")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response newTransaction(@Context AuthContext s, Transaction transaction) {
+        try {
+            Credentials credentials = new Credentials(s.getId(), transaction.getPassword());
+            DB.login(credentials);
+            Account accountFrom = DB.getAccountById(transaction.getAccountFrom());
+            if (accountFrom.getCustomer() != s.getId()) throw new SQLException("Insufficient permission");
+            DB.transaction(transaction);
+            return Response.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
 
 }
