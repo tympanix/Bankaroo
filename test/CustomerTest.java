@@ -39,7 +39,7 @@ public class CustomerTest {
 
     @Test
     public void C_findCustomer() throws SQLException {
-        User user = DB.getUserByCPR(CPR);
+        User user = new User(DB.getUserByCPR(CPR));
         assertEquals(user.getCpr(), CPR);
         assertEquals(user.getName(), NAME);
     }

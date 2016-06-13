@@ -60,7 +60,7 @@ public class UpdateQueryTest {
                 .execute();
 
         q2.resultSet().next();
-        User u = new User(q2.resultSet());
+        User u = new User(q2);
         assertTrue(u.getSalt().equals(salt));
         assertTrue(u.getHashPassword().equals(hashPassword));
         DB.deleteUser(u1.getCpr());
@@ -162,7 +162,7 @@ public class UpdateQueryTest {
                 .equal("1212121234").execute();
 
         q2.resultSet().next();
-        User u2 = new User(q2.resultSet());
+        User u2 = new User(q2);
 
 
         Query q3 = new Query()
@@ -172,7 +172,7 @@ public class UpdateQueryTest {
                 .where()
                 .upperLike(User.Field.UserName, "Tes").execute();
         q3.resultSet().next();
-        User u3 = new User(q3.resultSet());
+        User u3 = new User(q3);
         assertEquals(query, q3.toString().trim());
         assertEquals(u2,u3);
         DB.deleteUser(u1.getCpr());

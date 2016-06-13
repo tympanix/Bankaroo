@@ -5,7 +5,9 @@ angular.module('bankaroo').directive('modal', function() {
         transclude: true,
         scope: {
             title: '@',
-            desc: '@',
+            btnOk: '@',
+            btnCancel: '@',
+            icon: '@',
             approve: '&',
             deny: '&',
             data: '='

@@ -1,4 +1,4 @@
-angular.module('bankaroo').controller("overviewController", ["$scope", "$http", "$routeParams", "$window", "adminService", function ($scope, $http, $routeParams, $window, adminService) {
+angular.module('bankaroo').controller("overviewController", ["$scope", "$http", "$routeParams", "$window", "$location", "adminService", function ($scope, $http, $routeParams, $window, $location, adminService) {
 
     $scope.selectedCustomer = null;
     $scope.customers = null;
@@ -150,6 +150,20 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
                 $('#editUserForm').form('add errors', ['Could not edit user']);
                 $scope.loadingCustomer = false;
             });
+    };
+
+    $scope.showDelUserModal = function () {
+        $('#deleteUserModal').modal('show');
+    };
+
+    $scope.deleteUser = function() {
+        adminService.apiDeleteUser($scope.customerId)
+            .then(function (data) {
+                $location.path('/admin');
+            })
+            .catch(function () {
+
+            })
     };
 
     $scope.getEditFormInputs = function () {

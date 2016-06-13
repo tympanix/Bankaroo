@@ -49,6 +49,19 @@ public class AdminEndpoints {
         }
     }
 
+    @GET
+    @Secured
+    @Path("/delete/user")
+    public Response deleteUser(@QueryParam("id") int id) {
+        try {
+            DB.deleteUser(id);
+            return Response.ok().build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
     @POST
     @Secured
     @Path("/change/password")
@@ -80,9 +93,10 @@ public class AdminEndpoints {
     @Path("/new/user")
     public Response newUser(User user){
         try {
+            user.hashPassword();
             DB.insertUser(user);
             return Response.ok().build();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.CONFLICT).build();
         }

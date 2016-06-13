@@ -1,4 +1,4 @@
-<form class="ui form" validation="transactionValidation" id="transactionForm" ng-submit="showTransModal()">
+<form class="ui form" validation="transactionValidation" id="transactionForm" ng-submit="showTransModal()" novalidate>
     <div class="ui two fields">
         <div class="field">
             <label>Personal Message</label>
@@ -9,18 +9,24 @@
             <input type="text" ng-model="form.messageTo" name="messageTo" placeholder="Recipient message...">
         </div>
     </div>
-    <div class="ui two fields">
+    <div class="ui three fields">
         <div class="field">
             <label>Recipient Account</label>
             <input type="number" ng-model="form.accountTo" name="accountTo" placeholder="Account number...">
         </div>
         <div class="field">
-            <label>Currency</label>
+            <label>Amount</label>
             <div class="ui right labeled input">
-                <div class="ui label">$</div>
                 <input type="number" ng-model="form.amount" name="amount" placeholder="Amount">
                 <div class="ui basic label">.00</div>
             </div>
+        </div>
+        <div class="field">
+            <label>Currency</label>
+            <select dropdown class="ui fluid dropdown" name="currency"
+            ng-options="exchange.Currency for exchange in exchanges" ng-model="form.currency">
+                <option value="">Currency</option>
+            </select>
         </div>
     </div>
     <button type="submit" class="ui positive right labeled icon submit button">

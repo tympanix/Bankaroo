@@ -28,6 +28,14 @@ public class UserEndpoints {
 
     @GET
     @Secured
+    @Path("/user")
+    public Response getUser(@Context AuthContext s) throws IOException, SQLException {
+        return Response.ok(DB.getUserByCPR(s.getId()).toJson(), MediaType.APPLICATION_JSON).build();
+    }
+
+
+    @GET
+    @Secured
     @Path("/history")
     public Response getHistory(@Context AuthContext s, @DefaultValue("-1") @QueryParam("account") int accountId) throws IOException, SQLException {
         return Response.ok(DB.getHistory(accountId).toJson(), MediaType.APPLICATION_JSON).build();

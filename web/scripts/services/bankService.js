@@ -4,10 +4,15 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
     var accounts = [];
     var exchanges = [];
     var selectedAccount = [];
+    var user = [];
 
-    // Getters
+    // Getters & Setters
     this.accounts = function () {
         return accounts;
+    };
+
+    this.user = function () {
+        return user[0];
     };
 
     this.exchanges = function () {
@@ -55,28 +60,44 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
         }
     }
 
-    this.apiAccounts = function () {
-        console.log("Token:", getToken());
-        var req = apiGet('/user/accounts');
+    function userById(id){
+        return function (user) {
+            return user.UserId == id;
+        }
+    }
 
+    this.apiAccounts = function () {
+        var req = apiGet('/user/accounts');
         req.then(function (data) {
             accounts = data.data;
+        }).catch(function (err) {
+            console.error("Accounts", err)
         });
 
         return req;
     };
 
 
-    this.getAccount = function (id) {
+    this.fetchAccount = function (id) {
         return $fetchElement(accounts, accountById(id), this.apiAccounts);
     };
 
-    this.getExchange = function (currency) {
-        return $fetchElement(exchanges, exchangeByCurrency(currency), this.apiExchanges())
+    this.fetchExchange = function (currency) {
+        return $fetchElement(exchanges, exchangeByCurrency(currency), this.apiExchanges)
     };
 
-    this.getAllExchanges = function (currency) {
+    this.fetchAllExchanges = function () {
         return $fetchArray(exchanges, this.apiExchanges);
+    };
+
+    this.fetchUser = function () {
+        return $fetchElement(user, function () {
+            return true; // Always first element
+        }, this.apiUser)
+    };
+
+    this.fetchAccounts = function () {
+        return $fetchArray(accounts, this.apiAccounts)
     };
 
 
@@ -120,6 +141,17 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
 
     this.getHistory = function (accountId) {
         return apiGet('/user/history', {account: accountId})
+    };
+
+    this.apiUser = function () {
+        var req = apiGet("/user/user");
+        req.then(function (data) {
+                user = data.data
+            })
+            .catch(function (err) {
+                console.error("Get user details", err);
+            });
+        return req;
     };
 
     this.newAccount = function (accountName, accountType, accountCurrency) {

@@ -1,10 +1,19 @@
 angular.module('bankaroo').filter('currency', ["$injector", "bankService", function ($injector, bankService) {
-    return function (amount, currency) {
+    return function (amount, currency, keeplocal) {
         var $filter = $injector.get('$filter');
         var numberFilter = $filter('number');
 
+        if (!isNumeric(amount)) amount = 0;
+
         var rate = bankService.getExchangeRate(currency);
-        var localAmount = (amount*100)/rate;
+
+        var localAmount;
+        if (!keeplocal) {
+            localAmount = (amount*100)/rate;
+        } else {
+            localAmount = amount;
+        }
+
 
         var number = numberFilter(localAmount, 2);
 
@@ -13,5 +22,9 @@ angular.module('bankaroo').filter('currency', ["$injector", "bankService", funct
         localCurrency += (currency || "DKK");
 
         return localCurrency;
+
+        function isNumeric(n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        }
     }
 }]);

@@ -1,21 +1,23 @@
-<h1>{{hello}}</h1>
+<h2 class="ui header">
+    <div class="content">{{account.AccountName}}</div>
+</h2>
+<div class="ui divider"></div>
 
 <div class="ui two column stackable grid">
     <div class="column four wide sidebar">
-        <div class="ui vertical fluid menu">
-            <a class="item" ng-class="isPage('history')" ng-click="gotoPage('history')">
-                History
-            </a>
-            <a class="item" ng-class="isPage('transaction')" ng-click="gotoPage('transaction')">
-                New Transaction
-            </a>
-            <a class="item">
-                Settings
-            </a>
-            <div class="item">
-                <div class="ui transparent icon input">
-                    <input type="text" placeholder="Search history...">
-                    <i class="search icon"></i>
+        <div class="ui fluid vertical steps">
+            <div class="link step" ng-class="isPage('history')" ng-click="gotoPage('history')">
+                <i class="payment icon"></i>
+                <div class="content">
+                    <div class="title">History</div>
+                    <div class="description">View transactions</div>
+                </div>
+            </div>
+            <div class="link step" ng-class="isPage('transaction')" ng-click="gotoPage('transaction')">
+                <i class="dollar icon"></i>
+                <div class="content">
+                    <div class="title">Transaction</div>
+                    <div class="description">Start a new transaction</div>
                 </div>
             </div>
         </div>

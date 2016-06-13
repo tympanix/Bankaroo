@@ -43,6 +43,7 @@ public class Endpoints extends Application {
             User user = DB.login(credentials);
             return Token.tokenResponse(user);
         } catch (Exception e){
+            e.printStackTrace();
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
     }

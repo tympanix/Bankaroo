@@ -12,52 +12,33 @@
                     <div class="sub header">A list of accounts</div>
                 </div>
             </h2>
-
-            <!--<table class="ui segment single line table" ng-show="accounts.length != 0">-->
-            <!--<thead>-->
-            <!--<tr>-->
-            <!--<th>Name</th>-->
-            <!--<th>Type</th>-->
-            <!--<th>Balance</th>-->
-            <!--<th>Currency</th>-->
-            <!--</tr>-->
-            <!--</thead>-->
-            <!--<tbody>-->
-            <!--<tr ng-repeat="account in accounts">-->
-            <!--<td>{{account.AccountName}}</td>-->
-            <!--<td>{{account.AccountTypeName}}</td>-->
-            <!--<td>{{account.Balance | currency}}</td>-->
-            <!--<td>{{account.Currency}}</td>-->
-            <!--</tr>-->
-            <!--</tbody>-->
-            <!--</table>-->
-            <div class="ui segment">
-                <h2 class="ui centered header">
-                    <div class="sub header" ng-show="accounts.length == 0">The user has no accounts yet</div>
-                </h2>
-                <table class="ui very basic celled table" ng-hide="accounts.length == 0">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Balance</th>
-                        <th>Currency</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="account in accounts">
-                        <td>{{account.AccountName}}</td>
-                        <td>{{account.AccountTypeName}}</td>
-                        <td>{{account.Balance | currency}}</td>
-                        <td>{{account.Currency}}</td>
-                        <td><a class="ui tiny basic button"
-                               ng-click="showDelAccountModal($index)">Delete</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <h2 class="ui centered header" ng-if="accounts.length == 0">
+                <div class="sub header">The user has no accounts yet</div>
+            </h2>
+            <table class="ui tablet stackable table" ng-hide="accounts.length == 0">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Balance</th>
+                    <th>Currency</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="account in accounts">
+                    <td>{{account.AccountName}}</td>
+                    <td>{{account.AccountTypeName}}</td>
+                    <td>{{account.Balance | currency}}</td>
+                    <td>{{account.Currency}}</td>
+                    <td>
+                        <button class="ui mini basic red icon button" ng-click="showDelAccountModal($index)">
+                            <i class="ban icon"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <div class="column">
             <h2 class="ui header">
@@ -72,7 +53,7 @@
                     <h3 class="header">
                         {{selectedCustomer.UserName}}
                     </h3>
-                    <div class="ui two column grid">
+                    <div class="ui two column grid" style="overflow: hidden;">
                         <div class="row">
                             <div class="column">
                                 <h5 class="ui header">
@@ -123,7 +104,7 @@
                     <div class="ui three buttons">
                         <div class="ui basic green button" ng-click="showEditModal()">Edit Customer</div>
                         <div class="ui basic yellow button" ng-click="showPassModal()">Change Password</div>
-                        <div class="ui red button">Delete Customer</div>
+                        <div class="ui red button" ng-click="showDelUserModal()">Delete Customer</div>
                     </div>
                 </div>
             </div>
@@ -131,21 +112,22 @@
     </div>
 </div>
 
-<modal title="Change Password"" approve="formChangePass()" deny="" id="changePassModal" template-url="./views/modals/basic.html">
-<form class="ui form" id="changePassForm" validation="changePassValidation" novalidate onsubmit="return false;">
-    <div class="field">
-        <label>Password</label>
-        <input type="password" name="password" ng-model="passForm.password" placeholder="Password...">
-    </div>
-    <div class="field">
-        <label>Repeat password</label>
-        <input type="password" name="password_rep" placeholder="Repeat password...">
-    </div>
-    <div class="ui error message"></div>
-</form>
+<modal title="Change Password" approve="formChangePass()" deny="" id="changePassModal"
+       template-url="./views/modals/basic.html" btn-ok="Change Password">
+    <form class="ui form" id="changePassForm" validation="changePassValidation" novalidate onsubmit="return false;">
+        <div class="field">
+            <label>Password</label>
+            <input type="password" name="password" ng-model="passForm.password" placeholder="Password...">
+        </div>
+        <div class="field">
+            <label>Repeat password</label>
+            <input type="password" name="password_rep" placeholder="Repeat password...">
+        </div>
+        <div class="ui error message"></div>
+    </form>
 </modal>
 
-<modal title="Edit Customer" approve="formEditUser()" deny="" id="editUserModal"
+<modal title="Edit Customer" approve="formEditUser()" deny="" id="editUserModal" btn-ok="Save User"
        template-url="./views/modals/basic.html">
     <form class="ui form" id="editUserForm" name="editUserForm" validation="editFormValidation" novalidate
           onsubmit="return false;">
@@ -184,9 +166,15 @@
     </form>
 </modal>
 
-<modal title="Delete Account" approve="deleteAccount()" deny="" id="deleteAccountModal"
+<modal title="Delete Account" approve="deleteAccount()" deny="" id="deleteAccountModal" icon="archive"
        template-url="./views/modals/confirm.html">
     <p>The account will be deleted and all currency will be lost</p>
+</modal>
+
+<modal title="Delete User" approve="deleteUser()" deny="" id="deleteUserModal" icon="warning sign"
+       template-url="./views/modals/confirm.html">
+    <p>You are about to delete a user. This will delete all user information and bank accounts associated with the user.
+    Any currency on existing bank accounts will be lost. This action is not reversible. Are you sure you want to continue?</p>
 </modal>
 
 

@@ -1,43 +1,92 @@
-<h2>Accounts</h2>
+<div class="ui active centered large inline loader" ng-hide="ready"></div>
 
-<div class="ui active centered large inline loader" ng-show="!accounts"></div>
+<div ng-show="ready">
+    <h2>{{user.UserName}}</h2>
 
-<div class="ui four cards stackable" ng-show="accounts">
-    <div class="ui card" ng-repeat="account in accounts">
-        <div class="content">
-            <div class="header">
-                {{account.AccountName}}
+    <div class="ui segment">
+        <div class="ui stackable four columns centered grid">
+            <div class="column">
+                <h5 class="ui header">
+                    <i class="privacy icon"></i>
+                    <div class="content">
+                        CPR Number
+                        <div class="sub header">{{user.UserID}}</div>
+                    </div>
+                </h5>
             </div>
-            <div class="meta">
-                {{account.AccountTypeName}}
+            <div class="column">
+                <h5 class="ui header">
+                    <i class="mail icon"></i>
+                    <div class="content">
+                        Email
+                        <div class="sub header">{{user.Email}}</div>
+                    </div>
+                </h5>
             </div>
-            <div class="description">
-                {{account.Balance | currency : account.Currency}}
+            <div class="column">
+                <h5 class="ui header">
+                    <i class="home icon"></i>
+                    <div class="content">
+                        Address
+                        <div class="sub header">
+                            {{user.Address}},
+                            {{user.PostalCode}},
+                            {{user.City}}
+                        </div>
+                    </div>
+                </h5>
             </div>
-        </div>
-        <div class="extra content">
-            <div class="ui two buttons">
-                <a ng-click="gotoDetails(account)" class="ui basic green button">Manage</a>
+            <div class="column">
+                <h5 class="ui header">
+                    <i class="phone icon"></i>
+                    <div class="content">
+                        Phone
+                        <div class="sub header">{{user.Phone}}</div>
+                    </div>
+                </h5>
             </div>
         </div>
     </div>
 
-    <div class="ui card">
-        <div class="content">
-            <div class="header">
-                New Account
-            </div>
-            <div class="description">
-                Want to create a new account?
-            </div>
-        </div>
-        <div class="extra content">
-            <div class="ui two buttons">
-                <a class="ui green button" href="#/new/account">New Account</a>
-            </div>
-        </div>
-    </div>
+    <div class="ui section divider"></div>
 
+    <h2>Accounts</h2>
+
+    <div class="ui four cards stackable">
+        <div class="ui card" ng-repeat="account in accounts">
+            <div class="content">
+                <div class="header">
+                    {{account.AccountName}}
+                </div>
+                <div class="meta">
+                    {{account.AccountTypeName}}
+                </div>
+                <div class="description">
+                    {{account.Balance | currency : account.Currency}}
+                </div>
+            </div>
+            <div class="extra content">
+                <div class="ui two buttons">
+                    <a ng-click="gotoDetails(account)" class="ui basic green button">Manage</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui card">
+            <div class="content">
+                <div class="header">
+                    New Account
+                </div>
+                <div class="description">
+                    Want to create a new account?
+                </div>
+            </div>
+            <div class="extra content">
+                <div class="ui two buttons">
+                    <a class="ui green icon button" href="#/new/account">New Account</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
-
-<div class="ui section divider"></div>

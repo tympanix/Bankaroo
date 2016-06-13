@@ -1,14 +1,16 @@
 package dtu.dagprojekt.bankaroo.util;
 
 import dtu.dagprojekt.bankaroo.models.Account;
-import dtu.dagprojekt.bankaroo.models.History;
 import dtu.dagprojekt.bankaroo.models.Transaction;
 import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 
 import javax.xml.bind.ValidationException;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DB {
 
@@ -133,8 +135,11 @@ public class DB {
 
     public static User login(Credentials c) throws SQLException, ValidationException {
         c.validate();
-        User user = getUserByCPR(c.getId());
+        User user = new User(getUserByCPR(c.getId()));
         String hashPass = Utils.hashPassword(c.getPassword(), user.getSalt());
+        System.out.println("PLain: " + c.getPassword());
+        System.out.println("User pass1: " + hashPass);
+        System.out.println("User pass2: " + user.getHashPassword());
         if (hashPass.equals(user.getHashPassword())){
             return user;
         } else {
@@ -165,17 +170,11 @@ public class DB {
         deleteAccount(id);
     }
 
-    public static User getUserByCPR(long cpr) throws SQLException {
-        Query q = new Query()
-                .select().all().from(Schema.User)
+    public static Query getUserByCPR(long cpr) throws SQLException {
+        return new Query()
+                .select().all().from(Schema.UserView)
                 .where(User.Field.UserID).equal(cpr)
                 .execute();
-
-        ResultSet result = q.resultSet();
-        if (!result.next()) throw new SQLException("No user");
-        User user = new User(result);
-        q.close();
-        return user;
     }
 
     public static Query getHistory(int accountId) throws SQLException, IOException {

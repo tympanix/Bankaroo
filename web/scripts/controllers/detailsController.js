@@ -1,4 +1,4 @@
-angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "$routeParams", "$q", "bankService", function($scope, $http, $routeParams, $q, bankService){
+angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "$routeParams", "$q", "bankService", function ($scope, $http, $routeParams, $q, bankService) {
 
     console.log("Params", $routeParams);
     $scope.accountId = $routeParams.id;
@@ -14,21 +14,19 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
         messageFrom: '',
         messageTo: '',
         accountTo: '',
-        amount: ''
+        amount: '',
+        currency: '',
+        loading: false
     };
 
     $q.all([
-        bankService.getAccount($scope.accountId),
-        bankService.getAllExchanges()
+        bankService.fetchAccount($scope.accountId),
+        bankService.fetchAllExchanges()
     ]).then(function (data) {
         console.log("Account promise", data[0]);
         $scope.account = data[0];
         $scope.exchanges = data[1];
     });
-
-    $scope.get = function () {
-        console.log("Customers!!!")
-    };
 
     $scope.test = function () {
         $scope.timeMode = 1;
@@ -53,7 +51,7 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
             })
     };
 
-    $scope.$on('currencyUpdate', function(event) {
+    $scope.$on('currencyUpdate', function (event) {
         if ($scope.account == null) return;
         var exchange = $scope.account.Currency;
         console.log("Exchange", exchange);
@@ -99,10 +97,16 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
             console.error("FORM IS NOT VALID");
             return false;
         }
+
+        console.log("Currency", $scope.form.currency);
+
         $('#confirmTransModal').modal('show');
     };
 
     $scope.transaction = function () {
+        if ($scope.form.loading) return;
+        $scope.form.loading = true;
+
         var isValid = $('#transactionForm').form('is valid');
         if (!isValid) {
             console.error("FORM IS NOT VALID");
@@ -114,14 +118,23 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
             $scope.form.accountTo,
             $scope.form.messageFrom,
             $scope.form.messageTo,
-            $scope.form.amount, "DKK",
+            $scope.form.amount,
+            $scope.form.currency.Currency,
             $scope.form.password)
             .then(function (data) {
                 console.log("Transaction complete", data);
-                $('#confirmTransModal').form('hide')
+                $scope.getHistory();
+                $('#confirmTransModal').modal('hide');
+                $scope.form.messageFrom = '';
+                $scope.form.messageTo = '';
+                $scope.form.accountTo = '';
+                $scope.form.amount = '';
+                $scope.form.loading = false;
+                $scope.page = 'history'
             })
             .catch(function (err) {
                 console.error("Transaction error", err);
+                $scope.form.loading = false;
             });
 
         return false;
@@ -182,7 +195,7 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
                         prompt: 'The account number is too short'
                     },
                     {
-                        type: 'not['+$scope.accountId+']',
+                        type: 'not[' + $scope.accountId + ']',
                         prompt: 'You can\'t send money to your own account'
                     }
                 ]

@@ -35,7 +35,7 @@
     </tbody>
 </table>
 
-<modal title="Add New Customer" approve="newCustomer()" deny="" id="newUserModal"
+<modal title="Add New Customer" approve="newCustomer()" deny="" id="newUserModal" btn-ok="Add"
        template-url="./views/modals/basic.html">
     <form class="ui form" id="newUserForm" name="newUserForm" validation="editFormValidation" novalidate
           onsubmit="return false;">
@@ -68,6 +68,16 @@
             <div class="field">
                 <label>Phone Number</label>
                 <input id="formNewPhone" type="number" name="phone" ng-model="newForm.phone" placeholder="Phone...">
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>Password</label>
+                <input id="formNewPassword" type="password" name="password" ng-model="newForm.password" placeholder="Password...">
+            </div>
+            <div class="field">
+                <label>Repeat Password</label>
+                <input id="formNewRepPassword" type="password" name="repPassword" ng-model="newForm.repPassword" placeholder="Repeat Password...">
             </div>
         </div>
     </form>

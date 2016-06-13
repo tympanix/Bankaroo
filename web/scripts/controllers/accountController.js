@@ -31,6 +31,7 @@ angular.module('bankaroo').controller("accountController", ["$scope", "$http", "
         console.log("Currency:", $scope.accountCurrency);
         bankService.newAccount($scope.accountName, $scope.accountType, $scope.accountCurrency)
             .then(function () {
+                bankService.apiAccounts();
                 $window.location.href = '#/';
             })
             .catch(function (err) {

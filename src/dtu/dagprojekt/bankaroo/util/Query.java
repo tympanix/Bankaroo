@@ -226,7 +226,7 @@ public class Query {
             @Override
             public void write(OutputStream os) {
                 try {
-                    Writer out = new BufferedWriter(new OutputStreamWriter(os));
+                    Writer out = new BufferedWriter(new OutputStreamWriter(os, "UTF8"));
                     writeJson(out);
                     out.flush();
                     close();

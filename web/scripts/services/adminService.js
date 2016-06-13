@@ -66,6 +66,10 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
         return req;
     };
 
+    this.apiDeleteUser = function (id) {
+        return apiGet("/admin/delete/user", {id: id})
+    };
+
     function apiPub(url) {
         var req = {
             method: 'GET',

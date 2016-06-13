@@ -30,8 +30,8 @@
                     <h5 class="ui header">
                         <i class="share icon"></i>
                         <div class="content">
-                            Recipient Account Number
-                            <div class="sub header">{{data.accountTo}}</div>
+                            Recipient
+                            <div class="sub header">Account No.: {{data.accountTo}}</div>
                         </div>
                     </h5>
                 </div>
@@ -40,7 +40,7 @@
                         <i class="dollar icon"></i>
                         <div class="content">
                             Transfer Amount
-                            <div class="sub header">{{data.amount | currency}}</div>
+                            <div class="sub header">{{data.amount | currency : data.currency.Currency : true}}</div>
                         </div>
                     </h5>
                 </div>
@@ -54,7 +54,7 @@
         <div class="ui spaced input">
             <input type="password" ng-model="data.password" name="transPassword" placeholder="Password confirmation...">
         </div>
-        <button class="ui positive right labeled icon button">
+        <button class="ui positive right labeled icon button" ng-class="{loading: data.loading}">
             Confirm
             <i class="checkmark icon"></i>
         </button>

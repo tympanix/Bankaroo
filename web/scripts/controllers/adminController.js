@@ -80,7 +80,8 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
             address: f.form('get value', 'address'),
             zip: f.form('get value', 'zip'),
             email: f.form('get value', 'email'),
-            phone: f.form('get value', 'phone')
+            phone: f.form('get value', 'phone'),
+            password: f.form('get value', 'password')
         };
 
         adminService.newCustomer(param)
@@ -361,6 +362,34 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
                     {
                         type: 'length[8]',
                         prompt: "Your phone number is too short"
+                    }
+                ]
+            },
+
+            password: {
+                identifier: 'password',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter your password'
+                    },
+                    {
+                        type: 'length[6]',
+                        prompt: 'Your password must be at least 6 characters'
+                    }
+                ]
+            },
+
+            repPassword: {
+                identifier: 'repPassword',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please repeat your password'
+                    },
+                    {
+                        type: 'match[password]',
+                        prompt: "The passwords does not match"
                     }
                 ]
             }

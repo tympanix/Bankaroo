@@ -1,7 +1,9 @@
 package dtu.dagprojekt.bankaroo.models;
 
+import dtu.dagprojekt.bankaroo.util.Query;
 import dtu.dagprojekt.bankaroo.util.Utils;
 
+import javax.xml.bind.ValidationException;
 import javax.xml.bind.annotation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -64,7 +66,10 @@ public class User {
     public User() {
     }
 
-    public User(ResultSet resultSet) throws SQLException {
+    public User(Query q) throws SQLException {
+        ResultSet resultSet = q.resultSet();
+        if (!resultSet.next()) throw new SQLException("No user in result set");
+
         this.cpr = resultSet.getInt(Field.UserID.toString());
         this.name = resultSet.getString(Field.UserName.toString());
         this.zip = resultSet.getInt(Field.PostalCode.toString());
@@ -87,6 +92,15 @@ public class User {
         this.email = email;
         this.salt = salt;
         this.plainPassword = plainPassword;
+        this.hashPassword = hashedPassword;
+    }
+
+    public void hashPassword() throws ValidationException {
+        if (plainPassword == null) throw new ValidationException("User has no password");
+        String salt = Utils.newSalt();
+        String hashedPassword = Utils.hashPassword(plainPassword, salt);
+
+        this.salt = salt;
         this.hashPassword = hashedPassword;
     }
 
