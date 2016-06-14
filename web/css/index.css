@@ -7,8 +7,13 @@
     background-size: cover !important;
 }
 
+.ui.container.logo {
+    padding-bottom: 75px;
+    padding-top: 75px
+}
+
 .masthead.segment {
-    min-height: 700px;
+    min-height: 650px;
     padding: 1em 0em;
 }
 .masthead .logo.item img {

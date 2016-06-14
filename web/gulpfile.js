@@ -55,13 +55,18 @@ gulp.task('build:images', function () {
         .pipe(browsersync.reload({ stream:true }))
 });
 
+gulp.task('build:icons', function () {
+    return gulp.src('./icons/**')
+        .pipe(gulp.dest('./dist'))
+});
+
 gulp.task('build:assets' , function () {
    return gulp.src('./bower_components/semantic/dist/themes/default/assets/**')
        .pipe(gulp.dest('./dist/css/themes/default/assets'))
 });
 
 gulp.task('build', function () {
-    runSequence('clean', ['build:concat', 'build:views', 'build:images', 'build:assets'])
+    runSequence('clean', ['build:concat', 'build:views', 'build:images', 'build:assets', 'build:icons'])
 });
 
 gulp.task('watch', function () {
