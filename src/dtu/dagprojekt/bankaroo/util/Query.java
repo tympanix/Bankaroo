@@ -1,6 +1,7 @@
 package dtu.dagprojekt.bankaroo.util;
 
 import com.google.gson.stream.JsonWriter;
+import dtu.dagprojekt.bankaroo.models.User;
 
 
 import javax.ws.rs.core.StreamingOutput;
@@ -180,6 +181,11 @@ public class Query {
         return this;
     }
 
+    public Query startsLike(Object value) {
+        sql.append("LIKE ? ");
+        sqlParams.add(value+"%");
+        return this;
+    }
 
     public String getQuery(){
         return sql.toString();
@@ -203,12 +209,16 @@ public class Query {
     private void replaceValues(PreparedStatement statement) throws SQLException {
         int i = 1;
         for (Object value : sqlParams){
-            if (value instanceof String){
+            if (value == null){
+                statement.setNull(i, Types.VARCHAR);
+            }else if (value instanceof String){
                 statement.setString(i, String.valueOf(value));
             } else if (value instanceof Integer){
                 statement.setInt(i, (Integer) value);
-            } else if (value instanceof Double){
+            } else if (value instanceof Double) {
                 statement.setDouble(i, (Double) value);
+            } else if (value instanceof Long) {
+                statement.setLong(i, (Long) value);
             } else {
                 statement.setObject(i, value);
             }
@@ -277,6 +287,23 @@ public class Query {
         // ORDER BY "field" order
         sql.append("ORDER BY \"").append(field).append("\" ");
         sql.append(order).append(" ");
+        return this;
+    }
+
+    public Query or() {
+        sql.append("OR ");
+        return this;
+    }
+
+    public Query cast(Enum field, JDBCType type, int length) {
+        sql.append("CAST(\"").append(field).append("\" AS ");
+        sql.append(type.getName());
+
+        if (length > -1){
+            sql.append("(").append(length).append(")");
+        }
+
+        sql.append(") ");
         return this;
     }
 }

@@ -70,7 +70,7 @@ public class User {
         ResultSet resultSet = q.resultSet();
         if (!resultSet.next()) throw new SQLException("No user in result set");
 
-        this.cpr = resultSet.getInt(Field.UserID.toString());
+        this.cpr = resultSet.getLong(Field.UserID.toString());
         this.name = resultSet.getString(Field.UserName.toString());
         this.zip = resultSet.getInt(Field.PostalCode.toString());
         this.address = resultSet.getString(Field.Address.toString());

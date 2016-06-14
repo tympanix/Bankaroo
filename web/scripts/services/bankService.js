@@ -1,10 +1,10 @@
 angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 'localStorageService', function ($resource, $http, $q, localStorageService) {
 
     const BASE = '/Bankaroo';
-    var accounts = [];
-    var exchanges = [];
-    var selectedAccount = [];
-    var user = [];
+    var accounts = null;
+    var exchanges = null;
+    var selectedAccount = null;
+    var user = null;
 
     // Getters & Setters
     this.accounts = function () {
@@ -12,7 +12,8 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
     };
 
     this.user = function () {
-        return user[0];
+        if (!user) return null;
+        if (0 in user) return user[0];
     };
 
     this.exchanges = function () {
@@ -29,21 +30,24 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
 
     function asyncFind(array, compare){
         return $q(function (resolve, reject) {
-            var found = array.find(compare);
-            if (found !== undefined){
-                console.log("Retrieve async find", found);
-                resolve(found);
+            if (!array){
+                reject('Array is null/undefined');
             } else {
-                console.log("Retrieve async find: no result");
-                reject("Array item not found")
+                var found = array.find(compare);
+                if (found !== undefined){
+                    console.log("Retrieve async find", found);
+                    resolve(found);
+                } else {
+                    console.log("Retrieve async find: no result");
+                    reject("Array item not found")
+                }
             }
         })
     }
 
     function asyncArray(array){
         return $q(function (resolve, reject) {
-            if (array === undefined) reject();
-            else if (array.length == 0) reject();
+            if (!array) reject('Array is null/undefined');
             else resolve(array);
         })
     }
@@ -57,12 +61,6 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
     function exchangeByCurrency(currency){
         return function (currency) {
             return currency.Currency == currency;
-        }
-    }
-
-    function userById(id){
-        return function (user) {
-            return user.UserId == id;
         }
     }
 

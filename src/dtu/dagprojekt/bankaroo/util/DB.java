@@ -7,10 +7,7 @@ import dtu.dagprojekt.bankaroo.param.Credentials;
 
 import javax.xml.bind.ValidationException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DB {
 
@@ -105,10 +102,11 @@ public class DB {
         return account;
     }
 
-    public static Query getUser(String name) throws SQLException, IOException {
+    public static Query searchUser(String search) throws SQLException, IOException {
         return new Query()
                 .select().all().from(Schema.User)
-                .where().upperLike(User.Field.UserName, name)
+                .where().upperLike(User.Field.UserName, search)
+                .or().cast(User.Field.UserID, JDBCType.VARCHAR, 10).startsLike(search)
                 .execute();
     }
 

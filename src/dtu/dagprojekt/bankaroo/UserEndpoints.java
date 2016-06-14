@@ -48,7 +48,6 @@ public class UserEndpoints {
     public Response newAccount(@Context AuthContext s, Account account) {
         account.setCustomer(s.getId());
         account.setBalance(0);
-
         try {
             System.out.println("Insert Account:");
             DB.insertAccount(account);

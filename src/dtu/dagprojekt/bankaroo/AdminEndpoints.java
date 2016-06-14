@@ -24,7 +24,7 @@ public class AdminEndpoints {
         if (id > 0){
             out = DB.getUser(id);
         } else {
-            out = DB.getUser(name);
+            out = DB.searchUser(name);
         }
         return Response.ok(out.toJson(), MediaType.APPLICATION_JSON).build();
     }
