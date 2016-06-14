@@ -15,6 +15,7 @@ public class Account {
     @XmlElement(name="type", required = true) private String accountType;
     @XmlElement(name="currency", required = true) private String currency;
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

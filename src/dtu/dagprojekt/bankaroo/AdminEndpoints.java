@@ -1,5 +1,6 @@
 package dtu.dagprojekt.bankaroo;
 
+import dtu.dagprojekt.bankaroo.models.Role;
 import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 import dtu.dagprojekt.bankaroo.util.DB;
@@ -14,10 +15,10 @@ import java.sql.SQLException;
 
 @ApplicationPath("api")
 @Path("/admin")
+@Secured({Role.Employee})
 public class AdminEndpoints {
 
     @GET
-    @Secured
     @Path("/customers")
     public Response getCustomers(@DefaultValue("") @QueryParam("name") String name, @DefaultValue("-1") @QueryParam("id") long id) throws IOException, SQLException {
         Query out;
@@ -30,14 +31,12 @@ public class AdminEndpoints {
     }
 
     @GET
-    @Secured
     @Path("/accounts")
     public Response getAccounts(@QueryParam("id") long id) throws IOException, SQLException {
         return Response.ok(DB.getAccountsByUser(id).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
-    @Secured
     @Path("/delete/account")
     public Response deleteAccount(@QueryParam("id") int id) {
         try {
@@ -50,7 +49,6 @@ public class AdminEndpoints {
     }
 
     @GET
-    @Secured
     @Path("/delete/user")
     public Response deleteUser(@QueryParam("id") int id) {
         try {
@@ -63,7 +61,6 @@ public class AdminEndpoints {
     }
 
     @POST
-    @Secured
     @Path("/change/password")
     public Response changePassword(Credentials credentials){
         try {
@@ -76,7 +73,6 @@ public class AdminEndpoints {
     }
 
     @POST
-    @Secured
     @Path("/update/user")
     public Response updateUser(@QueryParam("id") long id, User user){
         try {
@@ -89,7 +85,6 @@ public class AdminEndpoints {
     }
 
     @POST
-    @Secured
     @Path("/new/user")
     public Response newUser(User user){
         try {

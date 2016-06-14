@@ -28,7 +28,7 @@ public class Authentication implements ContainerRequestFilter {
             throw new NotAuthorizedException("Authorization header must be provided");
         }
 
-        // Authorize token
+        // Authenticate token
         try {
             Map<String, Object> map = Token.authenticate(token);
             requestContext.setSecurityContext(new AuthContext(map));

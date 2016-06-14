@@ -3,6 +3,7 @@ package dtu.dagprojekt.bankaroo.util;
 import dtu.dagprojekt.bankaroo.models.Account;
 import dtu.dagprojekt.bankaroo.models.Transaction;
 import dtu.dagprojekt.bankaroo.models.User;
+import dtu.dagprojekt.bankaroo.models.UserRoles;
 import dtu.dagprojekt.bankaroo.param.Credentials;
 
 import javax.xml.bind.ValidationException;
@@ -135,14 +136,19 @@ public class DB {
         c.validate();
         User user = new User(getUserByCPR(c.getId()));
         String hashPass = Utils.hashPassword(c.getPassword(), user.getSalt());
-        System.out.println("PLain: " + c.getPassword());
-        System.out.println("User pass1: " + hashPass);
-        System.out.println("User pass2: " + user.getHashPassword());
+
         if (hashPass.equals(user.getHashPassword())){
             return user;
         } else {
             throw new SQLException("Incorrect username/password");
         }
+    }
+
+    public static Query getPermissions(User user) throws SQLException {
+        return new Query()
+                .select().all().from(Schema.UserRoles)
+                .where(UserRoles.Field.UserID).equal(user.getCpr())
+                .execute();
     }
 
     public static void deleteUser(long cpr) throws SQLException {

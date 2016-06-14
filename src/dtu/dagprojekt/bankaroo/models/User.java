@@ -1,5 +1,6 @@
 package dtu.dagprojekt.bankaroo.models;
 
+import dtu.dagprojekt.bankaroo.util.DB;
 import dtu.dagprojekt.bankaroo.util.Query;
 import dtu.dagprojekt.bankaroo.util.Utils;
 
@@ -8,6 +9,7 @@ import javax.xml.bind.annotation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -56,6 +58,19 @@ public class User {
         result = 31 * result + (getSalt() != null ? getSalt().hashCode() : 0);
         result = 31 * result + (getHashPassword() != null ? getHashPassword().hashCode() : 0);
         return result;
+    }
+
+    public LinkedList<String> getPermissionsFromDB() throws SQLException {
+        LinkedList<String> permissions = new LinkedList<String>();
+        Query q = DB.getPermissions(this);
+
+        while (q.resultSet().next()){
+            String p = q.resultSet().getString(UserRoles.Field.PermissionName.toString());
+            permissions.add(p);
+        }
+
+        q.close();
+        return permissions;
     }
 
     public enum Field {

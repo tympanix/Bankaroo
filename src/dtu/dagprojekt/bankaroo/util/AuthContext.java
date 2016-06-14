@@ -2,14 +2,17 @@ package dtu.dagprojekt.bankaroo.util;
 
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 public class AuthContext implements SecurityContext {
 
     private Map<String, Object> map;
+    private List permissions;
 
     public AuthContext(Map<String, Object> map){
         this.map = map;
+        this.permissions = (List) map.get("permissions");
     }
 
     public long getId(){
@@ -28,13 +31,14 @@ public class AuthContext implements SecurityContext {
 
     @Override
     public boolean isUserInRole(String s) {
-        return false;
+        return permissions.contains(s);
     }
 
     @Override
     public boolean isSecure() {
         return false;
     }
+
 
     @Override
     public String getAuthenticationScheme() {
