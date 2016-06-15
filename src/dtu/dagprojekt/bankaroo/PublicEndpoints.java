@@ -1,4 +1,4 @@
-package dtu.dagprojekt.bankaroo.endpoints;
+package dtu.dagprojekt.bankaroo;
 
 import dtu.dagprojekt.bankaroo.database.DB;
 import dtu.dagprojekt.bankaroo.models.Credentials;

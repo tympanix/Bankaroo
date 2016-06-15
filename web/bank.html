@@ -47,7 +47,7 @@
 <div class="ui vertical sidebar labeled icon menu left" ng-controller="navbarController">
     <a class="menu item" ng-class="main()" href="#/"><i class="archive icon"></i>Accounts</a>
     <a class="menu item" ng-class="route('/settings')"><i class="settings icon"></i>Settings</a>
-    <a class="menu item" ng-class="route('/admin')" href="#/admin"><i class="cubes icon"></i>Administration</a>
+    <a class="menu item" ng-class="route('/admin')" href="#/admin" ng-if="isEmployee()"><i class="cubes icon"></i>Administration</a>
 </div>
 
 <!-- Page Contents -->
@@ -58,7 +58,7 @@
                 <a class="toc item"><i class="sidebar icon"></i></a>
                 <a class="menu item" ng-class="main()" href="#/">Accounts</a>
                 <a class="menu item" ng-class="route('/settings')">Settings</a>
-                <a class="menu item" ng-class="route('/admin')" href="#/admin">Administration</a>
+                <a class="menu item" ng-class="route('/admin')" href="#/admin" ng-if="isEmployee()">Administration</a>
                 <div class="right item">
                     <a class="ui button" href="login.html">Log out</a>
                 </div>

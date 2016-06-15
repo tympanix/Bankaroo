@@ -1,4 +1,4 @@
-package dtu.dagprojekt.bankaroo.endpoints;
+package dtu.dagprojekt.bankaroo;
 
 import dtu.dagprojekt.bankaroo.models.Account;
 import dtu.dagprojekt.bankaroo.models.Transaction;

@@ -39,7 +39,6 @@ public class AuthContext implements SecurityContext {
         return false;
     }
 
-
     @Override
     public String getAuthenticationScheme() {
         return null;

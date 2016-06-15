@@ -1,5 +1,6 @@
 package dtu.dagprojekt.bankaroo.security;
 
+
 import com.sun.jersey.core.util.Priority;
 import dtu.dagprojekt.bankaroo.util.Token;
 
@@ -7,6 +8,8 @@ import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -17,6 +20,9 @@ import java.util.Map;
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class Authentication implements ContainerRequestFilter {
+
+    @Context
+    private ResourceInfo resourceInfo;
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {

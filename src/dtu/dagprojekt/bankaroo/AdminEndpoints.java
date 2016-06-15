@@ -1,4 +1,4 @@
-package dtu.dagprojekt.bankaroo.endpoints;
+package dtu.dagprojekt.bankaroo;
 
 import dtu.dagprojekt.bankaroo.models.Role;
 import dtu.dagprojekt.bankaroo.models.User;

@@ -10,7 +10,7 @@
     <table name="Account" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="AccountID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4" def="SURFTlRJVFkgR0VORVJBVEVEIEFMV0FZUw=="/>
       <column name="AccountName" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
-      <column name="Balance" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
+      <column name="Balance" sqlType="DECIMAL" precision="16" scale="4" nullable="false" jdbcType="3"/>
       <column name="UserID" sqlType="DECIMAL" precision="10" scale="0" nullable="false" jdbcType="3"/>
       <column name="AccountTypeName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <column name="Currency" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
@@ -18,47 +18,63 @@
       <foreign-key name="AccountIsType" columns="AccountTypeName" ref-table="AccountType" ref-schema="DTUGRP09" ref-catalog="" ref-columns="AccountTypeName" update-rule="3" delete-rule="0" deferrability="2"/>
       <foreign-key name="AccountExchange" columns="Currency" ref-table="Exchange" ref-schema="DTUGRP09" ref-catalog="" ref-columns="Currency" update-rule="3" delete-rule="0" deferrability="2"/>
       <foreign-key name="CustomerAccount" columns="UserID" ref-table="User" ref-schema="DTUGRP09" ref-catalog="" ref-columns="UserID" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="AccountA_#_W39" unique="true" columns="AccountID"/>
+      <index name="AccountA_#_9XF" unique="true" columns="AccountID"/>
       <index name="Account_PK" unique="true" columns="AccountID"/>
     </table>
     <table name="AccountType" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="AccountTypeName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
-      <column name="Interest" sqlType="DOUBLE" precision="53" scale="0" nullable="false" jdbcType="8"/>
+      <column name="Interest" sqlType="DECIMAL" precision="5" scale="4" nullable="false" jdbcType="3"/>
       <primary-key columns="AccountTypeName"/>
-      <index name="AccountT_#_F7B" unique="true" columns="AccountTypeName"/>
+      <index name="AccountT_#_V1K" unique="true" columns="AccountTypeName"/>
       <index name="AccountType_PK" unique="true" columns="AccountTypeName"/>
+    </table>
+    <table name="BackupHistory" schema="DTUGRP09" catalog="" type="TABLE">
+      <column name="TransactionID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="Balance" sqlType="DECIMAL" precision="16" scale="4" nullable="false" jdbcType="3"/>
+      <column name="AccountID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="AmountLocal" sqlType="DECIMAL" precision="16" scale="4" nullable="false" jdbcType="3"/>
+      <column name="TransactionType" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1"/>
+      <column name="Message" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="BackupTransaction" schema="DTUGRP09" catalog="" type="TABLE">
+      <column name="TransactionID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="TransactionTime" sqlType="TIMESTAMP" precision="22" scale="2" nullable="false" jdbcType="93"/>
+      <column name="AccountIDFrom" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="AccountIDTo" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="AmountForeign" sqlType="DECIMAL" precision="16" scale="4" nullable="false" jdbcType="3"/>
+      <column name="Currency" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
     </table>
     <table name="City" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="PostalCode" sqlType="DECIMAL" precision="4" scale="0" nullable="false" jdbcType="3"/>
       <column name="City" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <primary-key columns="PostalCode"/>
-      <index name="CityABCD_#_E6G" unique="true" columns="PostalCode"/>
+      <index name="CityABCD_#_HCO" unique="true" columns="PostalCode"/>
       <index name="City_PK" unique="true" columns="PostalCode"/>
     </table>
     <table name="Exchange" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="Currency" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
-      <column name="Rate" sqlType="DOUBLE" precision="53" scale="0" nullable="false" jdbcType="8"/>
+      <column name="Rate" sqlType="DECIMAL" precision="6" scale="2" nullable="false" jdbcType="3"/>
       <primary-key columns="Currency"/>
-      <index name="Exchange_#_UMK" unique="true" columns="Currency"/>
+      <index name="Exchange_#_YZT" unique="true" columns="Currency"/>
       <index name="Exchange_PK" unique="true" columns="Currency"/>
     </table>
     <table name="History" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="TransactionID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="Balance" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
+      <column name="Balance" sqlType="DECIMAL" precision="16" scale="4" nullable="false" jdbcType="3"/>
       <column name="AccountID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="AmountLocal" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
+      <column name="AmountLocal" sqlType="DECIMAL" precision="16" scale="4" nullable="false" jdbcType="3"/>
       <column name="TransactionType" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1"/>
       <column name="Message" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
       <primary-key columns="TransactionID,AccountID"/>
       <foreign-key name="AccountHistory" columns="AccountID" ref-table="Account" ref-schema="DTUGRP09" ref-catalog="" ref-columns="AccountID" update-rule="3" delete-rule="0" deferrability="2"/>
       <foreign-key name="HistoryTransaction" columns="TransactionID" ref-table="Transaction" ref-schema="DTUGRP09" ref-catalog="" ref-columns="TransactionID" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="HistoryA_#_GIP" unique="true" columns="TransactionID,AccountID"/>
+      <index name="HistoryA_#_Y3Y" unique="true" columns="TransactionID,AccountID"/>
       <index name="History_PK" unique="true" columns="TransactionID,AccountID"/>
     </table>
     <table name="HistoryView" schema="DTUGRP09" catalog="" type="VIEW">
       <column name="AccountID" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="Balance" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
-      <column name="AmountLocal" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
+      <column name="Balance" sqlType="DECIMAL" precision="16" scale="4" nullable="false" jdbcType="3"/>
+      <column name="AmountLocal" sqlType="DECIMAL" precision="16" scale="4" nullable="false" jdbcType="3"/>
       <column name="TransactionType" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1"/>
       <column name="Message" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
       <column name="TransactionTime" sqlType="TIMESTAMP" precision="22" scale="2" nullable="false" jdbcType="93"/>
@@ -67,7 +83,7 @@
       <column name="PermissionName" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
       <column name="Description" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
       <primary-key columns="PermissionName"/>
-      <index name="Permissi_#_ZHU" unique="true" columns="PermissionName"/>
+      <index name="Permissi_#_XB2" unique="true" columns="PermissionName"/>
       <index name="Permissions_PK" unique="true" columns="PermissionName"/>
     </table>
     <table name="Transaction" schema="DTUGRP09" catalog="" type="TABLE">
@@ -75,17 +91,17 @@
       <column name="TransactionTime" sqlType="TIMESTAMP" precision="22" scale="2" nullable="false" jdbcType="93"/>
       <column name="AccountIDFrom" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="AccountIDTo" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="AmountForeign" sqlType="DECIMAL" precision="12" scale="4" nullable="false" jdbcType="3"/>
+      <column name="AmountForeign" sqlType="DECIMAL" precision="16" scale="4" nullable="false" jdbcType="3"/>
       <column name="Currency" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
       <primary-key columns="TransactionID"/>
       <foreign-key name="TransactionExchange" columns="Currency" ref-table="Exchange" ref-schema="DTUGRP09" ref-catalog="" ref-columns="Currency" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="Transact_#_7ZY" unique="true" columns="TransactionID"/>
+      <index name="Transact_#_E57" unique="true" columns="TransactionID"/>
       <index name="Transaction_PK" unique="true" columns="TransactionID"/>
     </table>
     <table name="User" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="UserID" sqlType="DECIMAL" precision="10" scale="0" nullable="false" jdbcType="3"/>
       <column name="UserName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
-      <column name="PostalCode" sqlType="DECIMAL" precision="4" scale="0" nullable="true" jdbcType="3"/>
+      <column name="PostalCode" sqlType="DECIMAL" precision="4" scale="0" nullable="false" jdbcType="3"/>
       <column name="Address" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
       <column name="Phone" sqlType="DECIMAL" precision="8" scale="0" nullable="true" jdbcType="3"/>
       <column name="Email" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
@@ -94,7 +110,7 @@
       <primary-key columns="UserID"/>
       <foreign-key name="CityFromPostalCode" columns="PostalCode" ref-table="City" ref-schema="DTUGRP09" ref-catalog="" ref-columns="PostalCode" update-rule="3" delete-rule="0" deferrability="2"/>
       <index name="Customer_PK" unique="true" columns="UserID"/>
-      <index name="UserABCD_#_BX3" unique="true" columns="UserID"/>
+      <index name="UserABCD_#_9WZ" unique="true" columns="UserID"/>
     </table>
     <table name="UserRoles" schema="DTUGRP09" catalog="" type="TABLE">
       <column name="UserID" sqlType="DECIMAL" precision="10" scale="0" nullable="false" jdbcType="3"/>
@@ -102,13 +118,13 @@
       <primary-key columns="UserID,PermissionName"/>
       <foreign-key name="PermissionsForRoles" columns="PermissionName" ref-table="Permissions" ref-schema="DTUGRP09" ref-catalog="" ref-columns="PermissionName" update-rule="3" delete-rule="0" deferrability="2"/>
       <foreign-key name="UserRoles" columns="UserID" ref-table="User" ref-schema="DTUGRP09" ref-catalog="" ref-columns="UserID" update-rule="3" delete-rule="0" deferrability="2"/>
-      <index name="UserRole_#_VU8" unique="true" columns="UserID,PermissionName"/>
+      <index name="UserRole_#_VDD" unique="true" columns="UserID,PermissionName"/>
       <index name="UserRoles_PK" unique="true" columns="UserID,PermissionName"/>
     </table>
     <table name="UserView" schema="DTUGRP09" catalog="" type="VIEW">
       <column name="UserID" sqlType="DECIMAL" precision="10" scale="0" nullable="false" jdbcType="3"/>
       <column name="UserName" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
-      <column name="PostalCode" sqlType="DECIMAL" precision="4" scale="0" nullable="true" jdbcType="3"/>
+      <column name="PostalCode" sqlType="DECIMAL" precision="4" scale="0" nullable="false" jdbcType="3"/>
       <column name="City" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <column name="Address" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
       <column name="Phone" sqlType="DECIMAL" precision="8" scale="0" nullable="true" jdbcType="3"/>
@@ -116,9 +132,18 @@
       <column name="Salt" sqlType="CHAR" precision="64" scale="0" nullable="false" jdbcType="1"/>
       <column name="Password" sqlType="CHAR" precision="64" scale="0" nullable="false" jdbcType="1"/>
     </table>
+    <procedure name="BACKUP" schema="DTUGRP09" catalog="" type="1">
+      <prototype/>
+    </procedure>
+    <procedure name="DELETEACCOUNT" schema="DTUGRP09" catalog="" type="1">
+      <prototype>
+        <parameter name="VACCOUNTIDFROM" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="1"/>
+        <parameter name="VACCOUNTIDTO" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="2"/>
+      </prototype>
+    </procedure>
     <procedure name="TRANSACTION" schema="DTUGRP09" catalog="" type="1">
       <prototype>
-        <parameter name="VAMOUNTFOREIGN" sqlType="DECIMAL" precision="12" scale="4" nullable="true" jdbcType="3" type="1" index="1"/>
+        <parameter name="VAMOUNTFOREIGN" sqlType="DECIMAL" precision="16" scale="4" nullable="true" jdbcType="3" type="1" index="1"/>
         <parameter name="VCURRENCY" sqlType="CHAR" precision="3" scale="0" nullable="true" jdbcType="1" type="1" index="2"/>
         <parameter name="VACCOUNTIDFROM" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="3"/>
         <parameter name="VACCOUNTIDTO" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="4"/>
