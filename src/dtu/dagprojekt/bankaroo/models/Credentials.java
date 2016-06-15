@@ -1,4 +1,4 @@
-package dtu.dagprojekt.bankaroo.param;
+package dtu.dagprojekt.bankaroo.models;
 
 import javax.xml.bind.ValidationException;
 import javax.xml.bind.annotation.XmlAccessType;

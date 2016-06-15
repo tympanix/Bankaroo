@@ -1,14 +1,14 @@
-package dtu.dagprojekt.bankaroo;
+package dtu.dagprojekt.bankaroo.endpoints;
 
 import dtu.dagprojekt.bankaroo.models.Account;
 import dtu.dagprojekt.bankaroo.models.Transaction;
-import dtu.dagprojekt.bankaroo.models.User;
-import dtu.dagprojekt.bankaroo.param.Credentials;
-import dtu.dagprojekt.bankaroo.util.AuthContext;
-import dtu.dagprojekt.bankaroo.util.DB;
-import dtu.dagprojekt.bankaroo.util.Secured;
+import dtu.dagprojekt.bankaroo.models.Credentials;
+import dtu.dagprojekt.bankaroo.security.AuthContext;
+import dtu.dagprojekt.bankaroo.database.DB;
+import dtu.dagprojekt.bankaroo.security.Secured;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 
 @ApplicationPath("api")
 @Path("/user")
-public class UserEndpoints {
+public class UserEndpoints extends Application {
 
     @GET
     @Secured

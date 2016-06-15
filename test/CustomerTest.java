@@ -1,6 +1,6 @@
 import dtu.dagprojekt.bankaroo.models.User;
-import dtu.dagprojekt.bankaroo.param.Credentials;
-import dtu.dagprojekt.bankaroo.util.DB;
+import dtu.dagprojekt.bankaroo.models.Credentials;
+import dtu.dagprojekt.bankaroo.database.DB;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;

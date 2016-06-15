@@ -1,4 +1,4 @@
-package dtu.dagprojekt.bankaroo.util;
+package dtu.dagprojekt.bankaroo.database;
 
 public enum Schema {
     // Database schemas

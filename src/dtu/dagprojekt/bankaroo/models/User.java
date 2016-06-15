@@ -1,7 +1,7 @@
 package dtu.dagprojekt.bankaroo.models;
 
-import dtu.dagprojekt.bankaroo.util.DB;
-import dtu.dagprojekt.bankaroo.util.Query;
+import dtu.dagprojekt.bankaroo.database.DB;
+import dtu.dagprojekt.bankaroo.database.Query;
 import dtu.dagprojekt.bankaroo.util.Utils;
 
 import javax.xml.bind.ValidationException;

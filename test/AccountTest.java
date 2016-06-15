@@ -1,5 +1,5 @@
 import dtu.dagprojekt.bankaroo.models.Account;
-import dtu.dagprojekt.bankaroo.util.DB;
+import dtu.dagprojekt.bankaroo.database.DB;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;

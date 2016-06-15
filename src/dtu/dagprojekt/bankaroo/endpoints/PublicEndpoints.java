@@ -1,23 +1,20 @@
-package dtu.dagprojekt.bankaroo;
+package dtu.dagprojekt.bankaroo.endpoints;
 
-import com.sun.xml.internal.ws.client.ResponseContext;
+import dtu.dagprojekt.bankaroo.database.DB;
+import dtu.dagprojekt.bankaroo.models.Credentials;
 import dtu.dagprojekt.bankaroo.models.User;
-import dtu.dagprojekt.bankaroo.param.Credentials;
-import dtu.dagprojekt.bankaroo.util.DB;
-import dtu.dagprojekt.bankaroo.util.Secured;
 import dtu.dagprojekt.bankaroo.util.Token;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.sql.SQLException;
 
 @ApplicationPath("api")
 @Path("/")
-public class Endpoints extends Application {
-
-    @Context
-    ResponseContext context;
+public class PublicEndpoints extends Application {
 
 //    @Resource(name = "jdbc/exampleDS")
 //    DataSource ds1;

@@ -1,6 +1,7 @@
-package dtu.dagprojekt.bankaroo.util;
+package dtu.dagprojekt.bankaroo.security;
 
 import com.sun.jersey.core.util.Priority;
+import dtu.dagprojekt.bankaroo.util.Token;
 
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Priorities;

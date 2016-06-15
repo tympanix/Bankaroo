@@ -1,4 +1,4 @@
-package dtu.dagprojekt.bankaroo.util;
+package dtu.dagprojekt.bankaroo.security;
 
 import com.sun.jersey.core.util.Priority;
 import dtu.dagprojekt.bankaroo.models.Role;

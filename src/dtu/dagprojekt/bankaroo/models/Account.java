@@ -49,7 +49,7 @@ public class Account {
         AccountID, AccountName, Balance, UserID, AccountTypeName, Currency
     }
 
-    public Account(int id, String name, double balance, int customer, String accountType, String currency) {
+    public Account(int id, String name, double balance, long customer, String accountType, String currency) {
         this.id = id;
         this.name = name;
         this.balance = balance;
@@ -58,7 +58,7 @@ public class Account {
         this.currency = currency;
     }
 
-    public Account(String name, int customer, String accountType, String currency) {
+    public Account(String name, long customer, String accountType, String currency) {
         this.id = -1;
         this.name = name;
         this.balance = 0;

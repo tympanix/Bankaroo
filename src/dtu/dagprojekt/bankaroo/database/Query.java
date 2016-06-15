@@ -1,7 +1,6 @@
-package dtu.dagprojekt.bankaroo.util;
+package dtu.dagprojekt.bankaroo.database;
 
 import com.google.gson.stream.JsonWriter;
-import dtu.dagprojekt.bankaroo.models.User;
 
 
 import javax.ws.rs.core.StreamingOutput;

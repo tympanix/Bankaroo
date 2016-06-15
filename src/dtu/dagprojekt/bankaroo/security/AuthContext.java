@@ -1,4 +1,4 @@
-package dtu.dagprojekt.bankaroo.util;
+package dtu.dagprojekt.bankaroo.security;
 
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
@@ -7,16 +7,16 @@ import java.util.Map;
 
 public class AuthContext implements SecurityContext {
 
-    private Map<String, Object> map;
+    private Map<String, Object> payload;
     private List permissions;
 
-    public AuthContext(Map<String, Object> map){
-        this.map = map;
-        this.permissions = (List) map.get("permissions");
+    public AuthContext(Map<String, Object> payload){
+        this.payload = payload;
+        this.permissions = (List) payload.get("permissions");
     }
 
     public long getId(){
-        return Long.parseLong(map.get("id").toString());
+        return Long.parseLong(payload.get("id").toString());
     }
 
     @Override
@@ -24,7 +24,7 @@ public class AuthContext implements SecurityContext {
         return new Principal() {
             @Override
             public String getName() {
-                return String.valueOf(map.get("id"));
+                return String.valueOf(payload.get("id"));
             }
         };
     }

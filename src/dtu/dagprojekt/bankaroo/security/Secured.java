@@ -1,4 +1,4 @@
-package dtu.dagprojekt.bankaroo.util;
+package dtu.dagprojekt.bankaroo.security;
 
 import dtu.dagprojekt.bankaroo.models.Role;
 

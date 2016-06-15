@@ -1,10 +1,11 @@
-package dtu.dagprojekt.bankaroo.util;
+package dtu.dagprojekt.bankaroo.database;
 
 import dtu.dagprojekt.bankaroo.models.Account;
 import dtu.dagprojekt.bankaroo.models.Transaction;
 import dtu.dagprojekt.bankaroo.models.User;
 import dtu.dagprojekt.bankaroo.models.UserRoles;
-import dtu.dagprojekt.bankaroo.param.Credentials;
+import dtu.dagprojekt.bankaroo.models.Credentials;
+import dtu.dagprojekt.bankaroo.util.Utils;
 
 import javax.xml.bind.ValidationException;
 import java.io.IOException;
@@ -12,14 +13,14 @@ import java.sql.*;
 
 public class DB {
 
-    static final String URL = "jdbc:db2://192.86.32.54:5040/DALLASB";
-    static final String DRIVER = "COM.ibm.db2os390.sqlj.jdbc.DB2SQLJDriver";
-    static final String USER = "DTU24";
-    static final String PASSWORD = "FAGP2016";
+    private static final String URL = "jdbc:db2://192.86.32.54:5040/DALLASB";
+    private static final String DRIVER = "COM.ibm.db2os390.sqlj.jdbc.DB2SQLJDriver";
+    private static final String USER = "DTU24";
+    private static final String PASSWORD = "FAGP2016";
 
     public static final String TABLE = "DTUGRP09";
 
-    static private Connection con;
+    private static Connection con;
 
     public static Connection getConnection() throws SQLException {
         if (con == null){
@@ -108,13 +109,6 @@ public class DB {
                 .select().all().from(Schema.User)
                 .where().upperLike(User.Field.UserName, search)
                 .or().cast(User.Field.UserID, JDBCType.VARCHAR, 10).startsLike(search)
-                .execute();
-    }
-
-    public static Query getUser(long id) throws SQLException, IOException {
-        return new Query()
-                .select().all().from(Schema.UserView)
-                .where(User.Field.UserID).equal(id)
                 .execute();
     }
 

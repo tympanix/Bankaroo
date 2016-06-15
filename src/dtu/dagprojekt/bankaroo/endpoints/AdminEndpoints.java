@@ -1,13 +1,13 @@
-package dtu.dagprojekt.bankaroo;
+package dtu.dagprojekt.bankaroo.endpoints;
 
 import dtu.dagprojekt.bankaroo.models.Role;
 import dtu.dagprojekt.bankaroo.models.User;
-import dtu.dagprojekt.bankaroo.param.Credentials;
-import dtu.dagprojekt.bankaroo.util.DB;
-import dtu.dagprojekt.bankaroo.util.Secured;
-import dtu.dagprojekt.bankaroo.util.Query;
+import dtu.dagprojekt.bankaroo.models.Credentials;
+import dtu.dagprojekt.bankaroo.database.DB;
+import dtu.dagprojekt.bankaroo.security.Secured;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -16,24 +16,18 @@ import java.sql.SQLException;
 @ApplicationPath("api")
 @Path("/admin")
 @Secured({Role.Employee})
-public class AdminEndpoints {
+public class AdminEndpoints extends Application {
 
     @GET
     @Path("/customers")
-    public Response getCustomers(@DefaultValue("") @QueryParam("name") String name, @DefaultValue("-1") @QueryParam("id") long id) throws IOException, SQLException {
-        Query out;
-        if (id > 0){
-            out = DB.getUser(id);
-        } else {
-            out = DB.searchUser(name);
-        }
-        return Response.ok(out.toJson(), MediaType.APPLICATION_JSON).build();
+    public Response getCustomers(@DefaultValue("") @QueryParam("name") String name) throws IOException, SQLException {
+        return Response.ok(DB.searchUser(name).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
     @Path("/accounts")
-    public Response getAccounts(@QueryParam("id") long id) throws IOException, SQLException {
-        return Response.ok(DB.getAccountsByUser(id).toJson(), MediaType.APPLICATION_JSON).build();
+    public Response getAccounts(@QueryParam("id") long cpr) throws IOException, SQLException {
+        return Response.ok(DB.getAccountsByUser(cpr).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
