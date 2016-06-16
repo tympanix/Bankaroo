@@ -26,40 +26,6 @@ public class User {
     private String salt;
     private String hashPassword;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-
-        User user = (User) o;
-
-        if (getCpr() != user.getCpr()) return false;
-        if (getZip() != user.getZip()) return false;
-        if (getPhone() != user.getPhone()) return false;
-        if (getName() != null ? !getName().equals(user.getName()) : user.getName() != null) return false;
-        if (getAddress() != null ? !getAddress().equals(user.getAddress()) : user.getAddress() != null) return false;
-        if (getEmail() != null ? !getEmail().equals(user.getEmail()) : user.getEmail() != null) return false;
-        if (getPlainPassword() != null ? !getPlainPassword().equals(user.getPlainPassword()) : user.getPlainPassword() != null)
-            return false;
-        if (getSalt() != null ? !getSalt().equals(user.getSalt()) : user.getSalt() != null) return false;
-        return getHashPassword() != null ? getHashPassword().equals(user.getHashPassword()) : user.getHashPassword() == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (getCpr() ^ (getCpr() >>> 32));
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
-        result = 31 * result + getZip();
-        result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
-        result = 31 * result + getPhone();
-        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
-        result = 31 * result + (getPlainPassword() != null ? getPlainPassword().hashCode() : 0);
-        result = 31 * result + (getSalt() != null ? getSalt().hashCode() : 0);
-        result = 31 * result + (getHashPassword() != null ? getHashPassword().hashCode() : 0);
-        return result;
-    }
-
     public LinkedList<String> getPermissionsFromDB() throws SQLException {
         LinkedList<String> permissions = new LinkedList<String>();
         Query q = DB.getPermissions(this);

@@ -64,8 +64,8 @@ public class CustomerTest {
         DB.deleteUser(CPR);
     }
 
-    @Test(expected=SQLException.class)
+   /* @Test(expected=SQLException.class)
     public void F_cannotFindCustomer() throws SQLException {
         DB.getUserByCPR(CPR);
-    }
+    }*/
 }

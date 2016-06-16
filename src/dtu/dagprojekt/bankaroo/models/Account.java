@@ -16,35 +16,6 @@ public class Account {
     @XmlElement(name="currency", required = true) private String currency;
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Account)) return false;
-
-        Account account = (Account) o;
-
-        if (Double.compare(account.getBalance(), getBalance()) != 0) return false;
-        if (getCustomer() != account.getCustomer()) return false;
-        if (getName() != null ? !getName().equals(account.getName()) : account.getName() != null) return false;
-        if (getAccountType() != null ? !getAccountType().equals(account.getAccountType()) : account.getAccountType() != null)
-            return false;
-        return getCurrency() != null ? getCurrency().equals(account.getCurrency()) : account.getCurrency() == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        result = getName() != null ? getName().hashCode() : 0;
-        temp = Double.doubleToLongBits(getBalance());
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (int) (getCustomer() ^ (getCustomer() >>> 32));
-        result = 31 * result + (getAccountType() != null ? getAccountType().hashCode() : 0);
-        result = 31 * result + (getCurrency() != null ? getCurrency().hashCode() : 0);
-        return result;
-    }
-
     public enum Field {
         AccountID, AccountName, Balance, UserID, AccountTypeName, Currency
     }

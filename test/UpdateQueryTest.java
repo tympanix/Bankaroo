@@ -9,10 +9,13 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
 public class UpdateQueryTest {
+
+
 
     @Test
     public void test1() throws SQLException {
@@ -35,17 +38,12 @@ public class UpdateQueryTest {
     @Test
     public void testUpdate() throws SQLException {
         //"UPDATE \"DTUGRP09\".\"User\" SET \"Salt\" = '"+salt+"', \"Password\" = '"+hashedPassword+"' WHERE \"UserID\" = '"+cpr+"';"
-        User u1 = new User(1212141212, "Test Person", 2800, "Testtrack", 23232323, "test@testmail.test", "test");
 
-        Query q1 = new Query()
-                .insert(Schema.User)
-                .values(u1.getCpr(), u1.getName(), u1.getZip(), u1.getAddress(), u1.getPhone(), u1.getEmail(), u1.getSalt(), u1.getPlainPassword()).execute();
         String salt = Utils.newSalt();
         String hashPassword = Utils.hashPassword("password", salt);
+        int cpr = 1212141212;
 
-
-        assertFalse(u1.getSalt().equals(salt));
-        assertFalse(u1.getHashPassword().equals(hashPassword));
+        String query = "UPDATE \"DTUGRP09\".\"User\" SET \"Salt\" = ?, \"Password\" = ? WHERE \"UserID\" = ?";
 
         Query q = new Query().update(Schema.User)
                 .set(User.Field.Salt, salt)
@@ -53,139 +51,135 @@ public class UpdateQueryTest {
                 .where(User.Field.UserID)
                 .equal(1212141212);
 
-        q.execute().close();
+        assertEquals(query, q.toString().trim());
+        LinkedList<Object> testParams = new LinkedList<Object>();
+        testParams.add(salt);
+        testParams.add(hashPassword);
+        testParams.add(cpr);
+        LinkedList<Object> params = q.getSqlParams();
+        for (Object p : testParams) {
+            assertEquals(p.toString(), params.pop().toString());
+        }
+        assertTrue(params.isEmpty());
 
-        Query q2 = new Query()
-                .select()
-                .all()
-                .from(Schema.User)
-                .where(User.Field.UserID)
-                .equal("1212141212")
-                .execute();
 
-        q2.resultSet().next();
-        User u = new User(q2);
-        assertTrue(u.getSalt().equals(salt));
-        assertTrue(u.getHashPassword().equals(hashPassword));
-        DB.deleteUser(u1.getCpr());
-        q1.close();
-        q2.close();
     }
 
     @Test
     public void testCallTransactionQuery(){
         // statement.execute("CALL TRANSACTION("+amount+", '"+currency+"', "+accountFrom+",
         // "+accountTo+", '"+messageFrom+"', '"+messageTo+"')");
-        String query = "CALL Transaction('200', 'DKK', '1', '2', 'Hej?', 'Hej!')";
+        String query = "CALL \"DTUGRP09\".Transaction(?, ?, ?, ?, ?, ?)";
         Query q = new Query()
                 .call(Procedure.Transaction)
                 .params(200, "DKK", 1,2,"Hej?","Hej!");
         assertEquals(query, q.toString().trim());
+        LinkedList<Object> testParams = new LinkedList<Object>();
+        testParams.add(200);
+        testParams.add("DKK");
+        testParams.add(1);
+        testParams.add(2);
+        testParams.add("Hej?");
+        testParams.add("Hej!");
+        LinkedList<Object> params = q.getSqlParams();
+        for (Object p : testParams) {
+            assertEquals(p.toString(), params.pop().toString());
+        }
+        assertTrue(params.isEmpty());
+
     }
 
     @Test
     public void testSelectWhere(){
         //Query query = new Query("SELECT * FROM \"DTUGRP09\".\"HistoryView\"
         // WHERE \"AccountID\" = "+accountId+"");
-        String query = "SELECT * FROM \"DTUGRP09\".\"HistoryView\" WHERE \"AccountID\" = '1'";
+        String query = "SELECT * FROM \"DTUGRP09\".\"HistoryView\" WHERE \"AccountID\" = ?";
         Query q = new Query()
                 .select().all().from(Schema.HistoryView)
                 .where(Account.Field.AccountID).equal("1");
 
         assertEquals(query, q.toString().trim());
+        LinkedList<Object> testParams = new LinkedList<Object>();
+        testParams.add(1);
+        LinkedList<Object> params = q.getSqlParams();
+        for (Object p : testParams) {
+            assertEquals(p.toString(), params.pop().toString());
+        }
+        assertTrue(params.isEmpty());
     }
 
     @Test
-    public void insertAccount() throws SQLException {
-        User u1 = new User(1212131212, "Test Person", 2800, "Testtrack", 23232323, "test@testmail.test", "test");
-
-        Query q1 = new Query()
-                .insert(Schema.User)
-                .values(u1.getCpr(), u1.getName(), u1.getZip(), u1.getAddress(), u1.getPhone(), u1.getEmail(), u1.getSalt(), u1.getPlainPassword()).execute();
+    public void testInsert() throws SQLException {
 
         Account a = new Account("My account", 1212131212, "Savings", "DKK");
 
-
-        String query = "INSERT INTO \"DTUGRP09\".\"Account\" VALUES(DEFAULT, 'My account', '0.0', '1212131212', 'Savings', 'DKK') ";
+        String query = "INSERT INTO \"DTUGRP09\".\"Account\" VALUES(DEFAULT, ?, ?, ?, ?, ?) ";
 
         Query q = new Query()
                 .insert(Schema.Account)
                 .values(a.getId(), a.getName(), a.getBalance(), a.getCustomer(), a.getAccountType(), a.getCurrency());
 
+        LinkedList<Object> testParams = new LinkedList<Object>();
+        testParams.add("My account");
+        testParams.add(0.0);
+        testParams.add(1212131212);
+        testParams.add("Savings");
+        testParams.add("DKK");
+        LinkedList<Object> params = q.getSqlParams();
+        for (Object p : testParams) {
+            assertEquals(p.toString(), params.pop().toString());
+        }
+        assertTrue(params.isEmpty());
+
         assertEquals(query, q.getQuery());
-        q.execute().close();
-
-        Query q2 = new Query()
-                .select()
-                .all()
-                .from(Schema.Account)
-                .where(Account.Field.AccountName)
-                .equal("My account")
-                .execute();
-
-        q2.resultSet().next();
-        Account a2 = new Account(q2.resultSet());
-        assertEquals(a, a2);
-
-        Query q3 = new Query()
-                .delete()
-                .from(Schema.Account)
-                .where(Account.Field.AccountName)
-                .equal("My account")
-                .execute();
-
-        DB.deleteUser(u1.getCpr());
-
-        q2.execute();
-        q2.resultSet().next();
-        assertTrue(q2.resultSet().isClosed());
-
-
-        q.close();
-        q1.close();
-        q2.close();
 
     }
 
     @Test
     public void testUpperLikeUpper() throws SQLException {
 
-        User u1 = new User(1212121234, "Test Person", 2800, "Testtrack", 23232323, "test@testmail.test", "test");
-
-        Query q1 = new Query()
-                .insert(Schema.User)
-                .values(u1.getCpr(), u1.getName(), u1.getZip(), u1.getAddress(), u1.getPhone(), u1.getEmail(), u1.getSalt(), u1.getPlainPassword()).execute();
-
-        String query = "SELECT * FROM \"DTUGRP09\".\"User\" WHERE UPPER(\"UserName\") LIKE UPPER('%Tes%')";
-
-        Query q2 = new Query()
-                .select()
-                .all()
-                .from(Schema.User)
-                .where(User.Field.UserID)
-                .equal("1212121234").execute();
-
-        q2.resultSet().next();
-        User u2 = new User(q2);
+        String query = "SELECT * FROM \"DTUGRP09\".\"User\" WHERE UPPER(\"UserName\") LIKE UPPER(?)";
 
 
-        Query q3 = new Query()
+
+        Query q = new Query()
                 .select()
                 .all()
                 .from(Schema.User)
                 .where()
-                .upperLike(User.Field.UserName, "Tes").execute();
-        q3.resultSet().next();
-        User u3 = new User(q3);
-        assertEquals(query, q3.toString().trim());
-        assertEquals(u2,u3);
-        DB.deleteUser(u1.getCpr());
+                .upperLike(User.Field.UserName, "test").execute();
 
-        q2.execute();
-        q2.resultSet().next();
-        assertTrue(q2.resultSet().isClosed());
-        q1.close();
-        q2.close();
-        q3.close();
+        assertEquals(query, q.toString().trim());
+        LinkedList<Object> testParams = new LinkedList<Object>();
+        testParams.add("%test%");
+        LinkedList<Object> params = q.getSqlParams();
+        for (Object p : testParams) {
+            assertEquals(p.toString(), params.pop().toString());
+        }
+        assertTrue(params.isEmpty());
+
+    }
+
+    @Test
+    public void testOrderby() throws SQLException {
+
+        String query = "SELECT * FROM \"DTUGRP09\".\"User\" WHERE \"UserName\" = ?ORDER BY \"UserName\"";
+
+        Query q = new Query()
+                .select()
+                .all()
+                .from(Schema.User)
+                .where(User.Field.UserName)
+                .equal("Test Person").orderBy(User.Field.UserName, "");
+
+        assertEquals(query, q.toString().trim());
+        LinkedList<Object> testParams = new LinkedList<Object>();
+        testParams.add("Test Person");
+        LinkedList<Object> params = q.getSqlParams();
+        for (Object p : testParams) {
+            assertEquals(p.toString(), params.pop().toString());
+        }
+        assertTrue(params.isEmpty());
+
     }
 }
