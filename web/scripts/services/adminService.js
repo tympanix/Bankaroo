@@ -1,6 +1,5 @@
-angular.module('bankaroo').service('adminService', ['$resource', '$http', 'localStorageService', function ($resource, $http, localStorageService) {
+angular.module('bankaroo').service('adminService', ['apiService', function (api) {
 
-    const BASE = "/Bankaroo";
     var selectedCustomer = {};
     var customerSearch = "";
     var customers = null;
@@ -20,17 +19,17 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
     };
 
     this.changePassword = function (cpr, password) {
-        var req = apiPost("/admin/change/password", {id: cpr, password: password});
+        var req = api.post("/admin/change/password", {id: cpr, password: password});
         return req;
     };
 
     this.newCustomer = function (params) {
-        return apiPost("/admin/new/user", params)
+        return api.post("/admin/new/user", params)
     };
 
     this.searchCustomers = function (search) {
         customerSearch = search;
-        var req = apiGet("/admin/search/customers", {search: search});
+        var req = api.get("/admin/search/customers", {search: search});
         req.then(function (data) {
                 console.log("Customers!", data.data);
                 customers = data.data;
@@ -42,21 +41,21 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
     };
 
     this.updateUser = function (id, params) {
-        var req = apiPost("/admin/update/user", params, {id: id});
+        var req = api.post("/admin/update/user", params, {id: id});
         return req;
     };
 
     this.getCustomerByID = function (id) {
-        var req = apiGet("/admin/customers", {id: id});
+        var req = api.get("/admin/customers", {id: id});
         return req;
     };
 
     this.apiAccounts = function (id) {
-        return apiGet("/admin/accounts", {id: id})
+        return api.get("/admin/accounts", {id: id})
     };
 
     this.deleteAccount = function (id, transfer) {
-        var req = apiGet("/admin/delete/account", {id: id, transfer: transfer});
+        var req = api.get("/admin/delete/account", {id: id, transfer: transfer});
         req.then(function (data) {
                 console.log("Deleted account!")
             })
@@ -67,48 +66,13 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
     };
 
     this.apiDeleteUser = function (id) {
-        return apiGet("/admin/delete/user", {id: id})
+        return api.get("/admin/delete/user", {id: id})
     };
 
-    function apiPub(url) {
-        var req = {
-            method: 'GET',
-            url: BASE + '/api' + url
-        };
-
-        return $http(req)
+    this.changeAccountType = function (id, type) {
+        return api.get("/admin/update/account/type", {account: id, type: type})
     }
 
-
-    function apiGet(url, params) {
-        var req = {
-            method: 'GET',
-            params: params,
-            url: BASE + '/api' + url,
-            headers: {
-                'Authorization': getToken()
-            }
-        };
-
-        return $http(req)
-    }
-
-    function apiPost(url, data, params) {
-        var req = {
-            method: 'POST',
-            data: data,
-            params: params,
-            url: BASE + '/api' + url,
-            headers: {
-                'Authorization': getToken()
-            }
-        };
-        return $http(req)
-    }
-
-    function getToken() {
-        return localStorageService.get('token');
-    }
 
 
 }]);

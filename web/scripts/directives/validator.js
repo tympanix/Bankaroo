@@ -1,8 +1,7 @@
 angular.module('bankaroo').directive('validation', function() {
     return {
         scope: {
-            validation: '=',
-            ngSubmit: '&'
+            validation: '='
         },
         restrict: 'A',
         compile: function compile(element, tAttrs, transclude) {

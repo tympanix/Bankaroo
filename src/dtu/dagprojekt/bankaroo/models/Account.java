@@ -43,7 +43,7 @@ public class Account {
         this.id = set.getInt(Field.AccountID.toString());
         this.name = set.getString(Field.AccountName.toString());
         this.balance = set.getDouble(Field.Balance.toString());
-        this.customer = set.getInt(Field.UserID.toString());
+        this.customer = set.getLong(Field.UserID.toString());
         this.accountType = set.getString(Field.AccountTypeName.toString());
         this.currency = set.getString(Field.Currency.toString());
     }

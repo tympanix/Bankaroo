@@ -35,7 +35,6 @@ angular.module('bankaroo').controller("mainController", ["$scope", "$http", "$lo
     };
 
     $scope.gotoDetails = function (account) {
-        bankService.setSelectedAccount(account);
         $location.path('/details/' + account.AccountID)
     }
 

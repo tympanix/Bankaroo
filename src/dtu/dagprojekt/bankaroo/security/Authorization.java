@@ -34,13 +34,13 @@ public class Authorization implements ContainerRequestFilter {
         // Extract the roles declared by it
         Class<?> resourceClass = resourceInfo.getResourceClass();
         List<Role> classRoles = extractRoles(resourceClass);
-        System.out.println("CLASS ROLES: " + classRoles);
+        //System.out.println("CLASS ROLES: " + classRoles);
 
         // Get the resource method which matches with the requested URL
         // Extract the roles declared by it
         Method resourceMethod = resourceInfo.getResourceMethod();
         List<Role> methodRoles = extractRoles(resourceMethod);
-        System.out.println("METHOD ROLES: " + methodRoles);
+        //System.out.println("METHOD ROLES: " + methodRoles);
 
         final SecurityContext securityContext = requestContext.getSecurityContext();
 
@@ -53,7 +53,7 @@ public class Authorization implements ContainerRequestFilter {
                 checkPermissions(methodRoles, securityContext);
             }
 
-            System.out.println("GRANTED!");
+            //System.out.println("GRANTED!");
         } catch (Exception e) {
             e.printStackTrace();
             requestContext.abortWith(

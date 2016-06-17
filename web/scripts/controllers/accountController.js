@@ -26,6 +26,13 @@ angular.module('bankaroo').controller("accountController", ["$scope", "$http", "
 
     // Add new account function
     $scope.addAccount = function () {
+        var f = $('#newAccountForm');
+
+        if (!f.form('is valid')){
+            console.error("New account form is invalid!");
+            return false;
+        }
+
         console.log("Name:", $scope.accountName);
         console.log("Type:", $scope.accountType);
         console.log("Currency:", $scope.accountCurrency);
@@ -37,6 +44,45 @@ angular.module('bankaroo').controller("accountController", ["$scope", "$http", "
             .catch(function (err) {
                 console.log("Error new account", err)
             })
+    };
+
+    $scope.newAccountValidation = {
+        inline: true,
+        fields: {
+            name: {
+                identifier: 'name',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please enter an account name'
+                    },
+                    {
+                        type: 'length[2]',
+                        prompt: 'You account name is too short'
+                    }
+                ]
+            },
+
+            type: {
+                identifier: 'type',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please select an account type'
+                    }
+                ]
+            },
+
+            currency: {
+                identifier: 'currency',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please select an currency type'
+                    }
+                ]
+            }
+        }
     };
 
 }]);

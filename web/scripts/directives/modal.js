@@ -36,7 +36,6 @@ angular.module('bankaroo').directive('modal', function() {
 
         scope.$on("$destroy", function() {
             element.remove();
-            console.info("Removed modal", element);
         });
     }
 

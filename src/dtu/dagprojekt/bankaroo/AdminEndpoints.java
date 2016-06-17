@@ -96,6 +96,19 @@ public class AdminEndpoints extends Application {
         }
     }
 
+    @GET
+    @Path("/update/account/type")
+    @Secured({Role.Employee})
+    public Response deleteUser(@QueryParam("account") int account, @QueryParam("type") String type) {
+        try {
+            DB.changeAccountType(account, type);
+            return Response.ok().build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
     @POST
     @Path("/new/user")
     @Secured({Role.Employee})

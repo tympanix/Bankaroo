@@ -9,24 +9,24 @@ angular.module('bankaroo').service('apiService', ['$http', "$q", "loginService",
             var skip = false;
             find(array, compare)
                 .then(function (found) {
-                    console.log("Retrieved directly", found);
+                    //console.log("Retrieved directly", found);
                     skip = true;
                     return $q.when(found)
                 })
                 .catch(function (err) {
-                    console.log("Not found directly", err);
+                    //console.log("Not found directly", err);
                     return apiCall()
                 })
                 .then(function (data) {
                     if (skip) return $q.when(data);
-                    console.log("Retrieve by API");
+                    //console.log("Retrieve by API");
                     return find(data.data, compare)
                 })
                 .then(function (found) {
                     resolve(found)
                 })
                 .catch(function (err) {
-                    console.log("Retrieve failed from API");
+                    //console.log("Retrieve failed from API");
                     reject(err)
                 })
         });
@@ -39,10 +39,10 @@ angular.module('bankaroo').service('apiService', ['$http', "$q", "loginService",
             } else {
                 var found = array.find(compare);
                 if (found !== undefined){
-                    console.log("Retrieve async find", found);
+                    //console.log("Retrieve async find", found);
                     resolve(found);
                 } else {
-                    console.log("Retrieve async find: no result");
+                    //console.log("Retrieve async find: no result");
                     reject("Array item not found")
                 }
             }
@@ -77,9 +77,10 @@ angular.module('bankaroo').service('apiService', ['$http', "$q", "loginService",
         return $http(req)
     };
 
-    this.post = function(url, data){
+    this.post = function(url, data, params){
         var req = {
             method: 'POST',
+            params: params,
             data: data,
             url: BASE + '/api' + url,
             headers: {

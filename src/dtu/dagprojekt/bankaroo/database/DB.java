@@ -170,6 +170,13 @@ public class DB {
                 .execute().close();
     }
 
+    public static void changeAccountType(int accountId, String type) throws SQLException {
+        new Query()
+                .update(Schema.Account).set(Account.Field.AccountTypeName, type)
+                .where(Account.Field.AccountID).equal(accountId)
+                .execute().expect(1).close();
+    }
+
     public static void deleteAccount(Account a) throws SQLException {
         int id = Integer.parseInt(a.getId());
         deleteAccount(id);

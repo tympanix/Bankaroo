@@ -1,6 +1,6 @@
 <h1>New Account</h1>
 
-<div class="ui form" ng-init="initAccountForm()">
+<form class="ui form" id="newAccountForm" validation="newAccountValidation" ng-submit="addAccount()">
     <div class="field">
         <label>Account Name</label>
         <input ng-model="accountName" type="text" name="name" placeholder="Account Name">
@@ -10,18 +10,18 @@
             <label>Account Type</label>
             <select ng-model="accountType" name="type" class="ui select dropdown">
                 <option value="">Select Type</option>
-                <option ng-repeat="type in accountTypes" value="{{type.AccountTypeName}}">{{type.AccountTypeName}}</option>
+                <option ng-repeat="type in accountTypes" value="{{type.AccountTypeName}}">{{type.AccountTypeName}}
+                </option>
             </select>
         </div>
         <div class="field">
             <label>Currency</label>
-            <select ng-model="accountCurrency" name="curr" class="ui select dropdown">
+            <select ng-model="accountCurrency" name="currency" class="ui select dropdown">
                 <option value="">Select Currency</option>
                 <option ng-repeat="exchange in exchanges" value="{{exchange.Currency}}">{{exchange.Currency}}</option>
             </select>
         </div>
     </div>
-    <button ng-click="addAccount()" class="ui green submit button fluid big" type="submit">Create Account</button>
-
+    <button class="ui green submit button fluid big" type="submit">Create Account</button>
     <div class="ui error message"></div>
-</div>
+</form>

@@ -1,8 +1,8 @@
-angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 'apiService', function ($resource, $http, $q, api) {
+angular.module('bankaroo').service('bankService', ['apiService', function (api) {
 
     var accounts = null;
     var exchanges = null;
-    var selectedAccount = null;
+    var accountTypes = null;
     var user = null;
 
     // Getters & Setters
@@ -15,25 +15,21 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
         if (0 in user) return user[0];
     };
 
+    this.accountTypes = function () {
+        return accountTypes;
+    };
+
     this.exchanges = function () {
         return exchanges;
     };
 
-    this.getSelectedAccount = function () {
-        return selectedAccount;
-    };
-
-    this.setSelectedAccount = function (account) {
-        selectedAccount = account;
-    };
-
-    function accountById(id){
+    function accountById(id) {
         return function (account) {
             return account.AccountID == id;
         }
     }
 
-    function exchangeByCurrency(currency){
+    function exchangeByCurrency(currency) {
         return function (currency) {
             return currency.Currency == currency;
         }
@@ -56,6 +52,10 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
 
     this.fetchExchange = function (currency) {
         return api.$fetchElement(exchanges, exchangeByCurrency(currency), this.apiExchanges)
+    };
+
+    this.fetchAccountTypes = function () {
+        return api.$fetchArray(accountTypes, this.getAccountTypes)
     };
 
     this.fetchAllExchanges = function () {
@@ -104,10 +104,10 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
 
     this.getExchangeRate = function (currency) {
         if (!exchanges) return 0;
-        var exchange = exchanges.filter(function(obj) {
+        var exchange = exchanges.filter(function (obj) {
             return obj.Currency == currency;
         });
-        if (exchange[0]){
+        if (exchange[0]) {
             return exchange[0].Rate;
         } else {
             return 100;
@@ -128,7 +128,11 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
     };
 
     this.getAccountTypes = function () {
-        return api.get('/accounttypes')
+        var req = api.get('/accounttypes');
+        req.then(function (data) {
+            accountTypes = data.data;
+        });
+        return req;
     };
 
     this.apiCloseAccount = function (closeId, transferId) {

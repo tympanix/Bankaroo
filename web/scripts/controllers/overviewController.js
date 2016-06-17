@@ -1,8 +1,9 @@
-angular.module('bankaroo').controller("overviewController", ["$scope", "$http", "$routeParams", "$window", "$location", "adminService", function ($scope, $http, $routeParams, $window, $location, adminService) {
+angular.module('bankaroo').controller("overviewController", ["$scope", "$routeParams", "$location", "$q", "adminService", "bankService", function ($scope, $routeParams, $location, $q, adminService, bankService) {
 
     $scope.selectedCustomer = null;
-    $scope.customers = null;
     $scope.accounts = null;
+    $scope.ready = false;
+    $scope.accountTypes = [];
 
     // Form
     $scope.passForm = {
@@ -27,6 +28,11 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
         phone: ""
     };
 
+    $scope.changeForm = {
+        type: '',
+        account: null
+    };
+
     $scope.delAccountForm = {
         toSelectedAccount: null,
         toAccountNumber: '',
@@ -34,6 +40,24 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
         type: null,
         accounts: getOtherAccounts
     };
+
+    $q.all([
+        adminService.getCustomerByID($routeParams.id),
+        adminService.apiAccounts($routeParams.id),
+        bankService.fetchAllExchanges(),
+        bankService.fetchAccountTypes()
+    ]).then(function (data) {
+        console.log("DATA", data);
+        console.log("CUSTOMER", data[0].data[0]);
+        console.log("ACCOUTNS", data[1].data);
+        console.log("TYPES", data[3]);
+
+        $scope.selectedCustomer = data[0].data[0];
+        $scope.accounts = data[1].data;
+        $scope.accountTypes = data[3];
+        $scope.ready = true;
+
+    });
 
     var deleteAccountIndex = -1;
 
@@ -72,21 +96,6 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
             });
         return false;
     };
-
-    //$scope.deleteAccount = function () {
-    //    var id = deleteAccountIndex;
-    //    console.log("ID!!!!", id);
-    //    console.log("DELETE THIS!!", $scope.accounts[id]);
-    //    var accountId = $scope.accounts[id].AccountID;
-    //    adminService.deleteAccount(accountId)
-    //
-    //        .then(function () {
-    //            $scope.accounts.splice(id, 1);
-    //        })
-    //        .catch(function () {
-    //
-    //        })
-    //};
 
     $scope.getCustomerByID = function (id) {
         $scope.loadingCustomer = true;
@@ -140,10 +149,10 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
             })
     };
 
-    if ($routeParams.id) {
-        $scope.getCustomerByID($routeParams.id);
-        $scope.apiAccounts();
-    }
+    //if ($routeParams.id) {
+    //    $scope.getCustomerByID($routeParams.id);
+    //    $scope.apiAccounts();
+    //}
 
     $scope.formChangePass = function () {
         var modal = $('#changePassModal');
@@ -196,6 +205,31 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
 
     $scope.showDelUserModal = function () {
         $('#deleteUserModal').modal('show');
+    };
+
+    $scope.showChangeAccountModal = function (index) {
+        $scope.changeForm.account = $scope.accounts[index];
+        $('#changeAccountModal').modal('show');
+    };
+
+    $scope.changeAccountType = function () {
+        var f = $('#changeAccountForm');
+        if (!f.form('is valid')) return false;
+
+
+        var accountId = $scope.changeForm.account.AccountID;
+        var type = $scope.changeForm.type.AccountTypeName;
+        adminService.changeAccountType(accountId, type)
+            .then(function(data){
+                console.log("Changed account type", data);
+                adminService.apiAccounts($routeParams.id)
+                    .then(function (data) {
+                        $scope.accounts = data.data;
+                    })
+            })
+            .catch(function (err) {
+                console.log("Change account type", err);
+            })
     };
 
     $scope.deleteUser = function() {
@@ -396,6 +430,21 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
                     {
                         type: 'length[8]',
                         prompt: "Your phone number is too short"
+                    }
+                ]
+            }
+        }
+    };
+
+    $scope.changeAccountValidation = {
+        inline: true,
+        fields: {
+            type: {
+                identifier: 'type',
+                rules: [
+                    {
+                        type: 'empty',
+                        prompt: 'Please chose an account type'
                     }
                 ]
             }

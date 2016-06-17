@@ -3,6 +3,7 @@ angular.module('bankaroo').service('loginService', ['$rootScope', '$http', 'loca
     var payload = null;
 
     this.login = function (id, password) {
+        $scope.loggingIn = true;
         var credentials = {id: id, password: password};
         $http.post('/Bankaroo/api/login', credentials)
             .success(function (data) {
@@ -11,6 +12,8 @@ angular.module('bankaroo').service('loginService', ['$rootScope', '$http', 'loca
                 gotoApp();
             })
             .catch(function (err) {
+                $scope.loggingIn = false;
+                $('#loginForm').form('add errors', ['Incorrect CPR number or password']);
                 console.error("Couln't log in", err)
             })
     };
