@@ -6,6 +6,7 @@ import dtu.dagprojekt.bankaroo.models.Credentials;
 import dtu.dagprojekt.bankaroo.database.DB;
 import dtu.dagprojekt.bankaroo.security.Secured;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
@@ -15,26 +16,40 @@ import java.sql.SQLException;
 
 @ApplicationPath("api")
 @Path("/admin")
-@Secured({Role.Employee})
 public class AdminEndpoints extends Application {
 
     @GET
-    @Path("/customers")
-    public Response getCustomers(@DefaultValue("") @QueryParam("name") String name) throws IOException, SQLException {
+    @Path("/search/customers")
+    @Secured({Role.Employee})
+    public Response getCustomers(@DefaultValue("") @QueryParam("search") String name) throws IOException, SQLException {
         return Response.ok(DB.searchUser(name).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
+    @Path("/customers")
+    @Secured({Role.Employee})
+    public Response getCustomers(@DefaultValue("-1") @QueryParam("id") long cpr) {
+        try {
+            if (String.valueOf(cpr).length() != 10) throw new Exception();
+            return Response.ok(DB.getUserByCPR(cpr).toJson(), MediaType.APPLICATION_JSON).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
+    @GET
     @Path("/accounts")
+    @Secured({Role.Employee})
     public Response getAccounts(@QueryParam("id") long cpr) throws IOException, SQLException {
         return Response.ok(DB.getAccountsByUser(cpr).toJson(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET
     @Path("/delete/account")
-    public Response deleteAccount(@QueryParam("id") int id) {
+    @Secured({Role.Employee})
+    public Response deleteAccount(@QueryParam("id") int id, @QueryParam("transfer") int transfer) {
         try {
-            DB.deleteAccount(id);
+            DB.closeAccount(id, transfer);
             return Response.ok().build();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,6 +59,7 @@ public class AdminEndpoints extends Application {
 
     @GET
     @Path("/delete/user")
+    @Secured({Role.Employee})
     public Response deleteUser(@QueryParam("id") int id) {
         try {
             DB.deleteUser(id);
@@ -56,6 +72,7 @@ public class AdminEndpoints extends Application {
 
     @POST
     @Path("/change/password")
+    @Secured({Role.Employee})
     public Response changePassword(Credentials credentials){
         try {
             DB.changePassword(credentials.getId(), credentials.getPassword());
@@ -68,6 +85,7 @@ public class AdminEndpoints extends Application {
 
     @POST
     @Path("/update/user")
+    @Secured({Role.Employee})
     public Response updateUser(@QueryParam("id") long id, User user){
         try {
             DB.updateUser(id, user);
@@ -80,6 +98,7 @@ public class AdminEndpoints extends Application {
 
     @POST
     @Path("/new/user")
+    @Secured({Role.Employee})
     public Response newUser(User user){
         try {
             user.hashPassword();

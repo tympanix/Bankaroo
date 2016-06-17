@@ -28,9 +28,9 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
         return apiPost("/admin/new/user", params)
     };
 
-    this.getCustomers = function (name) {
-        customerSearch = name;
-        var req = apiGet("/admin/customers", {name: name});
+    this.searchCustomers = function (search) {
+        customerSearch = search;
+        var req = apiGet("/admin/search/customers", {search: search});
         req.then(function (data) {
                 console.log("Customers!", data.data);
                 customers = data.data;
@@ -55,8 +55,8 @@ angular.module('bankaroo').service('adminService', ['$resource', '$http', 'local
         return apiGet("/admin/accounts", {id: id})
     };
 
-    this.deleteAccount = function (id) {
-        var req = apiGet("/admin/delete/account", {id: id});
+    this.deleteAccount = function (id, transfer) {
+        var req = apiGet("/admin/delete/account", {id: id, transfer: transfer});
         req.then(function (data) {
                 console.log("Deleted account!")
             })

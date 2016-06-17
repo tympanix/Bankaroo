@@ -1,6 +1,5 @@
-angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 'localStorageService', function ($resource, $http, $q, localStorageService) {
+angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 'apiService', function ($resource, $http, $q, api) {
 
-    const BASE = '/Bankaroo';
     var accounts = null;
     var exchanges = null;
     var selectedAccount = null;
@@ -28,30 +27,6 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
         selectedAccount = account;
     };
 
-    function asyncFind(array, compare){
-        return $q(function (resolve, reject) {
-            if (!array){
-                reject('Array is null/undefined');
-            } else {
-                var found = array.find(compare);
-                if (found !== undefined){
-                    console.log("Retrieve async find", found);
-                    resolve(found);
-                } else {
-                    console.log("Retrieve async find: no result");
-                    reject("Array item not found")
-                }
-            }
-        })
-    }
-
-    function asyncArray(array){
-        return $q(function (resolve, reject) {
-            if (!array) reject('Array is null/undefined');
-            else resolve(array);
-        })
-    }
-
     function accountById(id){
         return function (account) {
             return account.AccountID == id;
@@ -65,7 +40,7 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
     }
 
     this.apiAccounts = function () {
-        var req = apiGet('/user/accounts');
+        var req = api.get('/user/accounts');
         req.then(function (data) {
             accounts = data.data;
         }).catch(function (err) {
@@ -75,74 +50,34 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
         return req;
     };
 
-
     this.fetchAccount = function (id) {
-        return $fetchElement(accounts, accountById(id), this.apiAccounts);
+        return api.$fetchElement(accounts, accountById(id), this.apiAccounts);
     };
 
     this.fetchExchange = function (currency) {
-        return $fetchElement(exchanges, exchangeByCurrency(currency), this.apiExchanges)
+        return api.$fetchElement(exchanges, exchangeByCurrency(currency), this.apiExchanges)
     };
 
     this.fetchAllExchanges = function () {
-        return $fetchArray(exchanges, this.apiExchanges);
+        return api.$fetchArray(exchanges, this.apiExchanges);
     };
 
     this.fetchUser = function () {
-        return $fetchElement(user, function () {
+        return api.$fetchElement(user, function () {
             return true; // Always first element
         }, this.apiUser)
     };
 
     this.fetchAccounts = function () {
-        return $fetchArray(accounts, this.apiAccounts)
+        return api.$fetchArray(accounts, this.apiAccounts)
     };
 
-
-    /*Returns a promise that the requested element will be found in the array
-     * by retrieving it directly or loading it from the external api call*/
-    function $fetch(find, array, compare, apiCall){
-        return $q(function (resolve, reject) {
-            var skip = false;
-            find(array, compare)
-                .then(function (found) {
-                    console.log("Retrieved directly", found);
-                    skip = true;
-                    return $q.when(found)
-                })
-                .catch(function (err) {
-                    console.log("Not found directly", err);
-                    return apiCall()
-                })
-                .then(function (data) {
-                    if (skip) return $q.when(data);
-                    console.log("Retrieve by API");
-                    return find(data.data, compare)
-                })
-                .then(function (found) {
-                    resolve(found)
-                })
-                .catch(function (err) {
-                    console.log("Retrieve failed from API");
-                    reject(err)
-                })
-        });
-    }
-
-    function $fetchElement(array, compare, apiCall) {
-        return $fetch(asyncFind, array, compare, apiCall);
-    }
-
-    function $fetchArray(array, apiCall){
-        return $fetch(asyncArray, array, null, apiCall)
-    }
-
     this.getHistory = function (accountId) {
-        return apiGet('/user/history', {account: accountId})
+        return api.get('/user/history', {account: accountId})
     };
 
     this.apiUser = function () {
-        var req = apiGet("/user/user");
+        var req = api.get("/user/user");
         req.then(function (data) {
                 user = data.data
             })
@@ -153,11 +88,11 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
     };
 
     this.newAccount = function (accountName, accountType, accountCurrency) {
-        return apiPost('/user/new/account', {name: accountName, type: accountType, currency: accountCurrency})
+        return api.post('/user/new/account', {name: accountName, type: accountType, currency: accountCurrency})
     };
 
     this.apiExchanges = function () {
-        var req = apiPub('/exchange');
+        var req = api.get('/exchange');
         req.then(function (data) {
                 exchanges = data.data;
             })
@@ -168,6 +103,7 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
     };
 
     this.getExchangeRate = function (currency) {
+        if (!exchanges) return 0;
         var exchange = exchanges.filter(function(obj) {
             return obj.Currency == currency;
         });
@@ -188,51 +124,15 @@ angular.module('bankaroo').service('bankService' , ['$resource', '$http', '$q', 
             currency: currency,
             password: password
         };
-        return apiPost('/user/transaction', param)
+        return api.post('/user/transaction', param)
     };
 
     this.getAccountTypes = function () {
-        return apiPub('/accounttypes')
+        return api.get('/accounttypes')
     };
 
-    function apiPub(url){
-        var req = {
-            method: 'GET',
-            url: BASE + '/api' + url
-        };
-
-        return $http(req)
-    }
-
-
-    function apiGet(url, params){
-        var req = {
-            method: 'GET',
-            params: params,
-            url: BASE + '/api' + url,
-            headers: {
-                'Authorization': getToken()
-            }
-        };
-
-        return $http(req)
-    }
-
-    function apiPost(url, data){
-        var req = {
-            method: 'POST',
-            data: data,
-            url: BASE + '/api' + url,
-            headers: {
-                'Authorization': getToken()
-            }
-        };
-        return $http(req)
-    }
-
-    function getToken(){
-        return localStorageService.get('token');
-    }
-
+    this.apiCloseAccount = function (closeId, transferId) {
+        return api.get("/user/close/account", {account: closeId, transfer: transferId})
+    };
 
 }]);

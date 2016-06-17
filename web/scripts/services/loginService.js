@@ -19,6 +19,10 @@ angular.module('bankaroo').service('loginService', ['$rootScope', '$http', 'loca
         return localStorageService.get('token');
     }
 
+    this.getToken = function() {
+        return getToken();
+    };
+
     function getPayload() {
         if (!payload) {
             payload = jwtHelper.decodeToken(getToken())

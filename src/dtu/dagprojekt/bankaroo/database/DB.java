@@ -108,7 +108,7 @@ public class DB {
         return new Query()
                 .select().all().from(Schema.User)
                 .where().upperLike(User.Field.UserName, search)
-                .or().cast(User.Field.UserID, JDBCType.VARCHAR, 10).startsLike(search)
+                .or().cast(User.Field.UserID, "VARCHAR", 10).startsLike(search)
                 .execute();
     }
 
@@ -161,6 +161,13 @@ public class DB {
                 .delete().from(Schema.Account)
                 .where(Account.Field.AccountID).equal(id)
                 .execute().expect(1).close();
+    }
+
+    public static void closeAccount(int closeId, int transferId) throws SQLException {
+        new Query()
+                .call(Procedure.Deleteaccount)
+                .params(closeId, transferId)
+                .execute().close();
     }
 
     public static void deleteAccount(Account a) throws SQLException {

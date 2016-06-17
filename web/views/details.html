@@ -20,6 +20,13 @@
                     <div class="description">Start a new transaction</div>
                 </div>
             </div>
+            <div class="link step" ng-class="isPage('settings')" ng-click="gotoPage('settings')">
+                <i class="settings icon"></i>
+                <div class="content">
+                    <div class="title">Settings</div>
+                    <div class="description">Change account settings</div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="column twelve wide" ng-switch="page">
@@ -28,6 +35,9 @@
         </div>
         <div ng-switch-when="transaction">
             <div ng-include="'./views/transaction.html'"></div>
+        </div>
+        <div ng-switch-when="settings">
+            <div ng-include="'./views/accountsettings.html'"></div>
         </div>
     </div>
 </div>

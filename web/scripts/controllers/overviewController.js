@@ -27,9 +27,66 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
         phone: ""
     };
 
+    $scope.delAccountForm = {
+        toSelectedAccount: null,
+        toAccountNumber: '',
+        select: null,
+        type: null,
+        accounts: getOtherAccounts
+    };
+
     var deleteAccountIndex = -1;
 
     $scope.customerId = $routeParams.id;
+
+    function getOtherAccounts() {
+        if (!$scope.accounts) return null;
+        if (!(deleteAccountIndex in $scope.accounts)) return null;
+        return $scope.accounts.filter(function (account) {
+            return account.AccountID != $scope.accounts[deleteAccountIndex].AccountID;
+        })
+    }
+
+    $scope.deleteAccount = function () {
+        console.log("Delete account", $scope.delAccountForm);
+
+        $scope.delAccountForm.closing = true;
+        var accountId = $scope.accounts[deleteAccountIndex].AccountID;
+
+        var transfer;
+        if ($scope.delAccountForm.select){
+            transfer = $scope.delAccountForm.toSelectedAccount.AccountID;
+        } else if ($scope.delAccountForm.type){
+            transfer = $scope.delAccountForm.toAccountNumber;
+        }
+
+        adminService.deleteAccount(accountId, transfer)
+            .then(function () {
+                $scope.delAccountForm.closing = false;
+                $('#deleteAccountModal').modal('hide');
+                $scope.accounts.splice(deleteAccountIndex, 1);
+                $scope.apiAccounts();
+            })
+            .catch(function () {
+                $scope.delAccountForm.closing = false;
+            });
+        return false;
+    };
+
+    //$scope.deleteAccount = function () {
+    //    var id = deleteAccountIndex;
+    //    console.log("ID!!!!", id);
+    //    console.log("DELETE THIS!!", $scope.accounts[id]);
+    //    var accountId = $scope.accounts[id].AccountID;
+    //    adminService.deleteAccount(accountId)
+    //
+    //        .then(function () {
+    //            $scope.accounts.splice(id, 1);
+    //        })
+    //        .catch(function () {
+    //
+    //        })
+    //};
 
     $scope.getCustomerByID = function (id) {
         $scope.loadingCustomer = true;
@@ -80,21 +137,6 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
             })
             .catch(function (err) {
                 console.log("ACCOUNTS err", err)
-            })
-    };
-
-    $scope.deleteAccount = function () {
-        var id = deleteAccountIndex;
-        console.log("ID!!!!", id);
-        console.log("DELETE THIS!!", $scope.accounts[id]);
-        var accountId = $scope.accounts[id].AccountID;
-        adminService.deleteAccount(accountId)
-
-            .then(function () {
-                $scope.accounts.splice(id, 1);
-            })
-            .catch(function () {
-
             })
     };
 
@@ -196,6 +238,10 @@ angular.module('bankaroo').controller("overviewController", ["$scope", "$http", 
 
     $scope.showDelAccountModal = function (id) {
         deleteAccountIndex = id;
+        $scope.delAccountForm.toSelectedAccount = null;
+        $scope.delAccountForm.toAccountNumber = '';
+        $scope.delAccountForm.select = null;
+        $scope.delAccountForm.type = null;
         $('#deleteAccountModal').modal('show');
     };
 

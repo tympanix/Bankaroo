@@ -166,9 +166,13 @@
     </form>
 </modal>
 
-<modal title="Delete Account" approve="deleteAccount()" deny="" id="deleteAccountModal" icon="archive"
-       template-url="./views/modals/confirm.html">
-    <p>The account will be deleted and all currency will be lost</p>
+<!--<modal title="Delete Account" approve="deleteAccount()" deny="" id="deleteAccountModal" icon="archive"-->
+       <!--template-url="./views/modals/confirm.html">-->
+    <!--<p>The account will be deleted and all currency will be lost</p>-->
+<!--</modal>-->
+
+<modal title="Delete Account" approve="deleteAccount()" deny="" id="deleteAccountModal" data="delAccountForm"
+       template-url="./views/modals/deleteaccount.html">
 </modal>
 
 <modal title="Delete User" approve="deleteUser()" deny="" id="deleteUserModal" icon="warning sign"

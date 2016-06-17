@@ -1,0 +1,42 @@
+<div class="ui small modal">
+    <i class="close icon"></i>
+    <div class="header">
+        {{title}}
+    </div>
+    <div class="content">
+        <form class="ui form" id="newUserForm" name="newUserForm" validation="editFormValidation" novalidate
+              onsubmit="return false;">
+            <div class="ui two column middle aligned very relaxed stackable grid">
+                <div class="column">
+                    <div class="field" ng-class="{disabled: data.type}">
+                        <label>Transfer to your other account</label>
+                        <select dropdown class="ui fluid dropdown" name="currency" ng-change="data.select = true"
+                                ng-options="account.AccountName for account in data.accounts()" ng-model="data.toSelectedAccount">
+                            <option value="">Account</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="ui vertical divider">
+                    Or
+                </div>
+                <div class="column">
+                    <div class="field" ng-class="{disabled: data.select}">
+                        <label>Transfer to account number</label>
+                        <input id="transferToAccount" type="number" name="toAccount" ng-model="data.toAccountNumber"
+                               ng-change="data.type = true"
+                               placeholder="Account number...">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Cancel
+        </div>
+        <button class="ui positive right labeled red icon button">
+            Delete Account
+            <i class="checkmark icon"></i>
+        </button>
+    </div>
+</div>

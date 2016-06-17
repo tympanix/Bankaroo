@@ -1,0 +1,23 @@
+<h2 class="ui header center aligned">Account Settings</h2>
+
+<div class="ui divider"></div>
+
+<div class="ui middle aligned divided list">
+    <div class="item">
+        <div class="right floated content">
+            <div class="ui labeled red icon button" ng-click="showCloseAccountModal()">
+                <i class="ban icon"></i>
+                Delete account</div>
+        </div>
+        <div class="content">
+            <h3 class="ui header">
+                Close Account
+            </h3>
+            <span>Close this account and transfer any remaining currency to your own or another account</span>
+        </div>
+    </div>
+</div>
+
+<modal title="Close Account" approve="closeAccount()" deny="" id="closeAccountModal" data="closeForm"
+       template-url="./views/modals/deleteaccount.html">
+</modal>

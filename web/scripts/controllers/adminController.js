@@ -2,22 +2,8 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
 
     // Customer search form
     $scope.customerSearch = adminService.customerSearch();
-    $scope.selectedCustomer = null;
+    $scope.customers = null;
     $scope.searching = false;
-
-    // Form
-    $scope.passForm = {
-        password: ""
-    };
-
-    $scope.editForm = {
-        cpr: "",
-        name: "",
-        address: "",
-        zip: "",
-        email: "",
-        phone: ""
-    };
 
     $scope.newForm = {
         cpr: "",
@@ -28,36 +14,15 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
         phone: ""
     };
 
-    var deleteAccountIndex = -1;
-
-    $scope.customerId = $routeParams.id;
-
-    $scope.customers = null;
-    $scope.accounts = null;
-
-    $scope.getCustomers = function () {
+    $scope.searchCustomers = function () {
         if ($scope.searching) return;
         $scope.searching = true;
         console.log("Changed!", $scope.customerSearch);
-        adminService.getCustomers($scope.customerSearch)
+        adminService.searchCustomers($scope.customerSearch)
             .then(function () {
                 $scope.searching = false;
             });
-        adminService.customerSearch($scope.customerSearch);
-    };
-
-    $scope.getCustomerByID = function (id) {
-        $scope.loadingCustomer = true;
-        adminService.getCustomerByID(id)
-            .then(function (data) {
-                console.log("Selected customer", data.data[0]);
-                $scope.selectedCustomer = data.data[0];
-                $scope.loadingCustomer = false;
-            })
-            .catch(function (err) {
-                console.log("Error", err);
-                $scope.loadingCustomer = false;
-            })
+        //adminService.customerSearch($scope.customerSearch);
     };
 
     $scope.$watch(function () {
@@ -93,185 +58,21 @@ angular.module('bankaroo').controller("adminController", ["$scope", "$http", "$r
             })
     };
 
-    $scope.apiAccounts = function () {
-        adminService.apiAccounts($routeParams.id)
-            .then(function (data) {
-                console.log("Accounts", data.data);
-                $scope.accounts = data.data;
-            })
-            .catch(function (err) {
-                console.log("ACCOUNTS err", err)
-            })
-    };
-
     $scope.gotoCustomer = function (id) {
         var customer = $scope.customers[id];
         adminService.selectedCustomer(customer);
         $window.location.href = '#/admin/' + customer.UserID;
     };
 
-    $scope.deleteAccount = function () {
-        var id = deleteAccountIndex;
-        console.log("ID!!!!", id);
-        console.log("DELETE THIS!!", $scope.accounts[id]);
-        var accountId = $scope.accounts[id].AccountID;
-        adminService.deleteAccount(accountId)
-
-            .then(function () {
-                $scope.accounts.splice(id, 1);
-            })
-            .catch(function () {
-
-            })
-    };
-
-    if ($routeParams.id) {
-        $scope.getCustomerByID($routeParams.id);
-        $scope.apiAccounts();
-    }
-
-    $scope.formChangePass = function () {
-        var modal = $('#changePassModal');
-        modal.modal('refresh');
-        var isValid = $('#changePassForm').form('is valid');
-        if (!isValid) {
-            console.error("FORM IS NOT VALID");
-            return false;
-        }
-        console.log("CHANGE PASS!");
-        adminService.changePassword($scope.selectedCustomer.UserID, $scope.passForm.password)
-            .then(function (data) {
-                console.log("PASS WAS CHANGED");
-                modal.modal('hide');
-            })
-            .catch(function (err) {
-                $('#changePassForm').form('add errors', ['Could not change password'])
-            });
-    };
-
-    $scope.formEditUser = function () {
-        var modal = $('#editUserModal');
-        modal.modal('refresh');
-        var isValid = $('#editUserForm').form('is valid');
-        if (!isValid) {
-            console.error("FORM IS NOT VALID");
-            return false;
-        }
-        //console.log('Form', $scope.editUserForm);
-        //var pristine = $scope.editUserForm.$pristine;
-        //if (pristine){
-        //    console.log("No changes to form");
-        //    return true;
-        //}
-
-        console.log("Starting update...");
-        $scope.loadingCustomer = true;
-        adminService.updateUser($scope.selectedCustomer.UserID, $scope.getEditFormInputs())
-            .then(function (data) {
-                $scope.getCustomerByID($routeParams.id);
-                modal.modal('hide');
-            })
-            .catch(function (err) {
-                console.log('Update user', err);
-                $('#editUserForm').form('add errors', ['Could not edit user']);
-                $scope.loadingCustomer = false;
-            });
-    };
-
-    $scope.getEditFormInputs = function () {
-        var f = $('#editUserForm');
-
-        var param = {
-            name: f.form('get value', 'name'),
-            address: f.form('get value', 'address'),
-            zip: f.form('get value', 'zip'),
-            email: f.form('get value', 'email'),
-            phone: f.form('get value', 'phone')
-        };
-
-        console.log("fields", param);
-        return param;
-    };
-
-    $scope.saveEditForm = function (form) {
-        $scope.editUserForm = form;
-    };
-
     $scope.saveNewUserForm = function (form) {
         $scope.newUserForm = form;
-    };
-
-    $scope.updateUser = function () {
-        adminService.updateUser($scope.selectedCustomer.UserID, $scope.getEditFormInputs())
-    };
-
-
-    $scope.showDelAccountModal = function (id) {
-        deleteAccountIndex = id;
-        $('#deleteAccountModal').modal('show');
     };
 
     $scope.showNewUserModal = function () {
         $('#newUserModal').modal('show');
     };
 
-    $scope.showPassModal = function () {
-        $('#changePassModal').modal('show');
-    };
-
-    $scope.showEditModal = function () {
-        console.log('Showing user', $scope.selectedCustomer);
-        if ($scope.selectedCustomer){
-            populateEditForm();
-        }
-        $('#editUserModal').modal('show');
-    };
-
-    function populateEditForm(){
-        $('#editUserForm').form('set values', {
-            formEditCPR: $scope.selectedCustomer.UserID,
-            formEditName: $scope.selectedCustomer.UserName,
-            formEditAddress: $scope.selectedCustomer.Address,
-            formEditZip: $scope.selectedCustomer.PostalCode,
-            formEditEmail: $scope.selectedCustomer.Email,
-            formEditPhone: $scope.selectedCustomer.Phone
-        });
-    }
-
-    $scope.changePassValidation = {
-        inline: true,
-        fields: {
-            password: {
-                identifier: 'password',
-                rules: [
-                    {
-                        type: 'empty',
-                        prompt: 'Please enter your password'
-                    },
-                    {
-                        type: 'length[6]',
-                        prompt: 'Your password must be at least 6 characters'
-                    }
-                ]
-            },
-
-            passwordRep: {
-                identifier: 'password_rep',
-                rules: [
-                    {
-                        type: 'empty',
-                        prompt: 'Please repeat your password'
-                    },
-                    {
-                        type: 'match[password]',
-                        prompt: "The passwords does not match"
-                    }
-                ]
-            }
-        }
-    };
-
-    $scope.editFormValidation = {
+    $scope.newCustomerValidation = {
         inline: true,
         fields: {
             name: {

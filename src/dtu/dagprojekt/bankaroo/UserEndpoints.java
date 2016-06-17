@@ -1,10 +1,10 @@
 package dtu.dagprojekt.bankaroo;
 
-import dtu.dagprojekt.bankaroo.models.Account;
-import dtu.dagprojekt.bankaroo.models.Transaction;
-import dtu.dagprojekt.bankaroo.models.Credentials;
-import dtu.dagprojekt.bankaroo.security.AuthContext;
 import dtu.dagprojekt.bankaroo.database.DB;
+import dtu.dagprojekt.bankaroo.models.Account;
+import dtu.dagprojekt.bankaroo.models.Credentials;
+import dtu.dagprojekt.bankaroo.models.Transaction;
+import dtu.dagprojekt.bankaroo.security.AuthContext;
 import dtu.dagprojekt.bankaroo.security.Secured;
 
 import javax.ws.rs.*;
@@ -12,7 +12,6 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.sql.SQLException;
 
 @ApplicationPath("api")
@@ -22,23 +21,52 @@ public class UserEndpoints extends Application {
     @GET
     @Secured
     @Path("/accounts")
-    public Response getAccounts(@Context AuthContext s) throws IOException, SQLException {
-        return Response.ok(DB.getAccountsByUser(s.getId()).toJson(), MediaType.APPLICATION_JSON).build();
+    public Response getAccounts(@Context AuthContext s) {
+        try {
+            return Response.ok(DB.getAccountsByUser(s.getId()).toJson(), MediaType.APPLICATION_JSON).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
     }
 
     @GET
     @Secured
     @Path("/user")
-    public Response getUser(@Context AuthContext s) throws IOException, SQLException {
-        return Response.ok(DB.getUserByCPR(s.getId()).toJson(), MediaType.APPLICATION_JSON).build();
+    public Response getUser(@Context AuthContext s) {
+        try {
+            return Response.ok(DB.getUserByCPR(s.getId()).toJson(), MediaType.APPLICATION_JSON).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
+    @GET
+    @Secured
+    @Path("/close/account")
+    public Response closeAccount(@Context AuthContext s,
+                                 @QueryParam("account") int closeId,
+                                 @QueryParam("transfer") int transferId) {
+        try {
+            Account accountClose = DB.getAccountById(closeId);
+            if (accountClose.getCustomer() != s.getId()) throw new SQLException("Insufficient permission");
+            DB.closeAccount(closeId, transferId);
+            return Response.ok().build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.CONFLICT).build();
+        }
     }
 
 
     @GET
     @Secured
     @Path("/history")
-    public Response getHistory(@Context AuthContext s, @DefaultValue("-1") @QueryParam("account") int accountId) throws IOException, SQLException {
-        return Response.ok(DB.getHistory(accountId).toJson(), MediaType.APPLICATION_JSON).build();
+    public Response getHistory(@Context AuthContext s, @DefaultValue("-1") @QueryParam("account") int accountId) {
+        try {
+            return Response.ok(DB.getHistory(accountId).toJson(), MediaType.APPLICATION_JSON).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
     }
 
     @POST

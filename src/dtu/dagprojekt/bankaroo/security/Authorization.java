@@ -8,6 +8,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
@@ -33,13 +34,15 @@ public class Authorization implements ContainerRequestFilter {
         // Extract the roles declared by it
         Class<?> resourceClass = resourceInfo.getResourceClass();
         List<Role> classRoles = extractRoles(resourceClass);
+        System.out.println("CLASS ROLES: " + classRoles);
 
         // Get the resource method which matches with the requested URL
         // Extract the roles declared by it
         Method resourceMethod = resourceInfo.getResourceMethod();
         List<Role> methodRoles = extractRoles(resourceMethod);
+        System.out.println("METHOD ROLES: " + methodRoles);
 
-        SecurityContext securityContext = requestContext.getSecurityContext();
+        final SecurityContext securityContext = requestContext.getSecurityContext();
 
         try {
             // Check if the user is allowed to execute the method
@@ -50,7 +53,9 @@ public class Authorization implements ContainerRequestFilter {
                 checkPermissions(methodRoles, securityContext);
             }
 
+            System.out.println("GRANTED!");
         } catch (Exception e) {
+            e.printStackTrace();
             requestContext.abortWith(
                     Response.status(Response.Status.FORBIDDEN).build());
         }
@@ -74,11 +79,16 @@ public class Authorization implements ContainerRequestFilter {
     private void checkPermissions(List<Role> roles, SecurityContext context) throws Exception {
         // Check if the user contains one of the allowed roles
         // Throw an Exception if the user has not permission to execute the method
-        if (roles.isEmpty()) return;
 
-        for (Role role : roles){
-            if (context.isUserInRole(role.toString())) return;
-        }
-        throw new Exception("User does not satisfy role");
+//        if (roles.isEmpty()) return;
+//
+//        if (context == null){
+//            throw new Exception("No valid security context");
+//        }
+//
+//        for (Role role : roles){
+//            if (context.isUserInRole(role.toString())) return;
+//        }
+//        throw new Exception("User does not satisfy role");
     }
 }

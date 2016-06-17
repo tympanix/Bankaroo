@@ -294,11 +294,11 @@ public class Query {
         return this;
     }
 
-    public Query cast(Enum field, JDBCType type, int length) {
+    public Query cast(Enum field, String type, int length) {
         sql.append("CAST(\"").append(field).append("\" AS ");
-        sql.append(type.getName());
+        sql.append(type);
 
-        if (length > -1){
+        if (length >= 0){
             sql.append("(").append(length).append(")");
         }
 

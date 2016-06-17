@@ -1,4 +1,4 @@
-angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "$routeParams", "$q", "bankService", function ($scope, $http, $routeParams, $q, bankService) {
+angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "$routeParams", "$q", "$location", "bankService", function ($scope, $http, $routeParams, $q, $location, bankService) {
 
     console.log("Params", $routeParams);
     $scope.accountId = $routeParams.id;
@@ -19,6 +19,14 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
         loading: false
     };
 
+    $scope.closeForm = {
+        toSelectedAccount: null,
+        toAccountNumber: '',
+        select: null,
+        type: null,
+        accounts: bankService.accounts
+    };
+
     $q.all([
         bankService.fetchAccount($scope.accountId),
         bankService.fetchAllExchanges()
@@ -27,6 +35,10 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
         $scope.account = data[0];
         $scope.exchanges = data[1];
     });
+
+    $scope.getAccounts = function () {
+        return bankService.accounts();
+    };
 
     $scope.test = function () {
         $scope.timeMode = 1;
@@ -135,6 +147,43 @@ angular.module('bankaroo').controller("detailsController", ["$scope", "$http", "
             .catch(function (err) {
                 console.error("Transaction error", err);
                 $scope.form.loading = false;
+            });
+
+        return false;
+    };
+
+    $scope.showCloseAccountModal = function () {
+        $scope.closeForm.toSelectedAccount = null;
+        $scope.closeForm.toAccountNumber = '';
+        $scope.closeForm.select = null;
+        $scope.closeForm.type = null;
+        $('#closeAccountModal').modal('show');
+
+    };
+
+    $scope.closeAccount = function () {
+        $scope.closeForm.closing = true;
+        console.log("Selected account", $scope.closeForm.toSelectedAccount);
+        console.log("Selected acc. no.:", $scope.closeForm.toAccountNumber);
+        console.log("Select", $scope.closeForm.select);
+        console.log("Type", $scope.closeForm.type);
+
+        var transfer;
+        if ($scope.closeForm.select){
+            transfer = $scope.closeForm.toSelectedAccount.AccountID;
+        } else if ($scope.closeForm.type){
+            transfer = $scope.closeForm.toAccountNumber;
+        }
+
+        bankService.apiCloseAccount($scope.accountId, transfer)
+            .then(function () {
+                $scope.closeForm.closing = false;
+                $('#closeAccountModal').modal('hide');
+                bankService.apiAccounts();
+                $location.path('/');
+            })
+            .catch(function () {
+                $scope.closeForm.closing = false;
             });
 
         return false;
